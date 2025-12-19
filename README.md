@@ -38,38 +38,19 @@ Create functional markdown documents for product collaboration - live specs, int
 /plugin install reactive-md@million-views-skills
 ```
 
-### For Claude.ai Users (Pro, Max, Team, Enterprise)
+### For Other AI Agents (VS Code, etc.)
 
-1. Download the skill package: `reactive-md.zip`
-2. Go to Settings > Features
-3. Upload the skill zip file
-4. The skill is now available in your conversations
+While Agent Skills are natively understood by Claude Code, they can be used by other AI agents in different environments. For example, in VS Code with GitHub Copilot or other AI assistants, reference the skill folder in your workspace's `AGENTS.md` file:
 
-### For Claude API Users
+```markdown
+# AGENTS.md
 
-```bash
-# Upload the skill (one-time)
-curl -X POST https://api.anthropic.com/v1/skills \
-  -H "x-api-key: $ANTHROPIC_API_KEY" \
-  -H "anthropic-version: 2023-06-01" \
-  -H "anthropic-beta: skills-2025-10-02" \
-  -F "file=@reactive-md.zip"
+## Available Skills
 
-# Use in API requests
-curl -X POST https://api.anthropic.com/v1/messages \
-  -H "x-api-key: $ANTHROPIC_API_KEY" \
-  -H "anthropic-beta: code-execution-2025-08-25,skills-2025-10-02" \
-  --data '{
-    "model": "claude-sonnet-4-20250514",
-    "container": {
-      "type": "code_execution",
-      "skill_id": "reactive-md"
-    },
-    "messages": [...]
-  }'
+- [Reactive MD Skill](./path/to/skills/reactive-md/) - Create functional markdown documents for product collaboration
 ```
 
-See [Claude Skills API documentation](https://platform.claude.com/docs/en/build-with-claude/skills-guide) for details.
+The AI agent can then read the skill's SKILL.md and references/ to understand the methodology and patterns.
 
 ---
 
@@ -115,15 +96,14 @@ Claude will:
 
 ---
 
-## Contributing
+## Internal Development
 
-We welcome contributions! Whether it's:
-- Bug fixes in existing skills
-- New skills for Million Views products
-- Improved documentation and examples
-- Pattern refinements
+This marketplace is maintained internally by Million Views for our product team. If you're part of the team and need to:
+- Add a new skill for a Million Views product
+- Update existing skill patterns
+- Improve documentation
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for internal guidelines.
 
 ---
 

@@ -1,6 +1,6 @@
-# Contributing to Million Views Skills
+# Internal Skills Development Guide
 
-Thank you for your interest in contributing to the Million Views Skills Marketplace! This guide will help you add new skills or improve existing ones.
+This guide is for Million Views team members developing Agent Skills for our products. It covers how to add new skills or improve existing ones in our internal marketplace.
 
 ---
 
@@ -335,23 +335,15 @@ You can load data using JSON imports or fetch APIs. Both work but have different
 
 ## Getting Help
 
-### Questions About Contributing
+### Questions About Skills Development
 
-- [GitHub Discussions](https://github.com/million-views/skills/discussions) - Ask questions
-- [Existing Skills](./reactive-md/) - See examples
+- **Team Slack**: #ai-skills channel for quick questions
+- [Existing Skills](./reactive-md/) - See examples and patterns
 
 ### Questions About Agent Skills Spec
 
 - [Anthropic Agent Skills Documentation](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview)
 - [Agent Skills Best Practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
-
----
-
-## Code of Conduct
-
-This project follows the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
-
-Be respectful, constructive, and helpful. We're all here to make better tools.
 
 ---
 
