@@ -10,14 +10,26 @@ Generate functional markdown documents with embedded interactive React component
 
 ## When to Use This Skill
 
-Use reactive-md when the user asks to:
-- Create product specs with working prototypes
-- Generate design system documentation with live examples  
-- Build user flow wireframes with interactive demos
-- Prototype features with visual concepts
-- Create A/B test mockups with interactivity
-- Make wireframes, dashboards, or component galleries
-- "Create a reactive-md spec/doc/file" (explicit invocation)
+Use reactive-md when the user asks to create:
+
+**Primary Use Cases:**
+- Product specs with working prototypes
+- Design system documentation with live examples  
+- User flow wireframes with interactive demos
+- Feature prototypes with visual concepts
+- A/B test mockups with interactivity
+- Wireframes, dashboards, or component galleries
+- Interactive documentation or living specifications
+
+**Recognized Keywords & Aliases:**
+
+This skill responds to requests using any of these terms:
+- **"reactive-md"** / **"reactive md"** (canonical name)
+- **"live doc"** / **"living doc"** / **"live document"** (documentation style)
+- **"prototype"** / **"proof-of-concept"** / **"POC"** (prototyping)
+- **"interactive spec"** / **"interactive prototype"** (specification style)
+
+All these terms refer to creating primary document types (`.md` or `.jsx/.tsx`) with embedded interactive components.
 
 **Do NOT use** for production code, testing, deployment, or backend integration.
 
