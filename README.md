@@ -1,6 +1,6 @@
 # Million Views Skills Marketplace
 
-Claude Agent Skills for Million Views products and tools. This marketplace provides domain-specific expertise that extends Claude's capabilities for product development, design systems, and interactive documentation.
+Internal Agent Skills marketplace for Million Views products and tools. Each skill provides domain-specific expertise that extends AI agents' capabilities for specific workflows, tools, or methodologies used by our team.
 
 ---
 
@@ -11,18 +11,20 @@ Claude Agent Skills for Million Views products and tools. This marketplace provi
 **Category**: Productivity  
 **Version**: 1.0.0
 
-Create functional markdown documents for product collaboration - live specs, interactive prototypes, and design system documentation.
+Create functional markdown documents for product collaboration - live specs, interactive prototypes, and design system documentation using the Reactive MD VS Code extension.
 
-**Use it for:**
-- Product specs with working prototypes
-- Design system documentation with live examples
-- User flow wireframes with interactive demos
-- Feature proposals with visual concepts
-- A/B test mockups with real interactivity
+[Read skill documentation →](./reactive-md/SKILL.md)
 
-**Requires**: [Reactive MD VS Code Extension](https://marketplace.visualstudio.com/items?itemName=million-views.reactive-md)
+---
 
-[Read full skill documentation →](./reactive-md/SKILL.md)
+## Adding New Skills
+
+As we develop more tools and establish consistent methodologies, new skills can be added to this marketplace. Each skill should:
+- Focus on a specific Million Views product or workflow
+- Provide clear patterns and examples
+- Know when to refuse requests outside its scope
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for internal development guidelines.
 
 ---
 
@@ -34,29 +36,31 @@ Create functional markdown documents for product collaboration - live specs, int
 # Add this marketplace
 /plugin marketplace add million-views/skills
 
-# Install the reactive-md skill
+# Install specific skills
 /plugin install reactive-md@million-views-skills
+/plugin install another-skill@million-views-skills
 ```
 
 ### For Other AI Agents (VS Code, etc.)
 
-While Agent Skills are natively understood by Claude Code, they can be used by other AI agents in different environments. For example, in VS Code with GitHub Copilot or other AI assistants, reference the skill folder in your workspace's `AGENTS.md` file:
+While Agent Skills are natively understood by Claude Code, they can be used by other AI agents in different environments. For example, in VS Code with GitHub Copilot or other AI assistants, reference skill folders in your workspace's `AGENTS.md` file:
 
 ```markdown
 # AGENTS.md
 
 ## Available Skills
 
-- [Reactive MD Skill](./path/to/skills/reactive-md/) - Create functional markdown documents for product collaboration
+- [Reactive MD Skill](./path/to/skills/reactive-md/) - Create functional markdown documents
+- [Another Skill](./path/to/skills/another-skill/) - Description of another skill
 ```
 
-The AI agent can then read the skill's SKILL.md and references/ to understand the methodology and patterns.
+The AI agent can then read each skill's SKILL.md and references/ to understand the methodology and patterns.
 
 ---
 
 ## Using Skills
 
-Skills are automatically activated when Claude recognizes your request matches the skill's domain. You don't need to explicitly invoke them.
+Skills are automatically activated when the AI agent recognizes your request matches a skill's domain. You don't need to explicitly invoke them.
 
 **Example requests:**
 
@@ -65,18 +69,14 @@ Skills are automatically activated when Claude recognizes your request matches t
 ```
 
 ```
-"Prototype a checkout flow with cart persistence"
+"Use [skill-name] to [accomplish task]"
 ```
 
-```
-"Generate a design system color tokens reference"
-```
-
-Claude will:
-1. Recognize the request relates to reactive-md
+The agent will:
+1. Recognize the request relates to a specific skill
 2. Load the skill's instructions
-3. Generate appropriate reactive-md documents
-4. Follow the skill's best practices and patterns
+3. Apply the skill's patterns and best practices
+4. Know when to refuse requests outside the skill's scope
 
 ---
 
@@ -111,19 +111,19 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for internal guidelines.
 
 ### For Skill-Specific Issues
 
-Each skill has its own documentation:
-- [reactive-md skill documentation](./reactive-md/)
+Each skill has its own documentation and troubleshooting:
+- [reactive-md skill](./reactive-md/)
+- [another-skill](./another-skill/) (when added)
 
-### For Extension Issues
+### For Product/Extension Issues
 
-If you encounter issues with the underlying VS Code extensions:
-- [Reactive MD Extension](https://github.com/million-views/reactive-md/issues)
+If you encounter issues with the underlying products:
+- [Reactive MD Extension Issues](https://github.com/million-views/reactive-md/issues)
+- Other product issue trackers as added
 
 ### For Marketplace Issues
 
-For problems with the marketplace itself:
-- [GitHub Issues](https://github.com/million-views/skills/issues)
-- [GitHub Discussions](https://github.com/million-views/skills/discussions)
+**Team Slack**: #ai-skills channel for marketplace questions or skill development discussions
 
 ---
 
@@ -137,12 +137,11 @@ Individual skills may have additional licensing information in their respective 
 
 ## About Million Views
 
-[Million Views](https://m5nv.com) builds tools for product teams who believe in rapid iteration and living documentation. Our extensions and skills help teams move from static specs to interactive prototypes without leaving their development environment.
+[Million Views](https://m5nv.com) builds tools for product teams who believe in rapid iteration and living documentation. This skills marketplace helps our team leverage AI agents effectively across our products and workflows.
 
-**Other Million Views Projects:**
+**Current Million Views Projects:**
 - [Reactive MD VS Code Extension](https://marketplace.visualstudio.com/items?itemName=million-views.reactive-md)
-- [Product Documentation](https://m5nv.com/docs)
 
 ---
 
-**Ready to try?** Install the marketplace and start creating live documents! 🚀
+**Need to add a skill?** See [CONTRIBUTING.md](./CONTRIBUTING.md) for internal development guidelines.
