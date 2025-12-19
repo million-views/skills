@@ -1,0 +1,33 @@
+{
+  "name": "million-views-skills",
+  "owner": {
+    "name": "Million Views",
+    "email": "skills@m5nv.com",
+    "url": "https://m5nv.com"
+  },
+  "metadata": {
+    "description": "Claude Agent Skills for Million Views products and tools",
+    "version": "1.0.0",
+    "pluginRoot": "."
+  },
+  "plugins": [
+    {
+      "name": "reactive-md",
+      "source": "./reactive-md",
+      "description": "Create functional markdown documents for product collaboration - live specs, interactive prototypes, and design system documentation",
+      "version": "1.0.0",
+      "category": "productivity",
+      "keywords": [
+        "reactive-md",
+        "product-specs",
+        "wireframes",
+        "prototypes",
+        "design-systems",
+        "markdown",
+        "interactive-docs"
+      ],
+      "strict": false,
+      "agents": ["./reactive-md/SKILL.md"]
+    }
+  ]
+}

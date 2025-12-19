@@ -1,0 +1,33 @@
+# Node.js artifacts
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+*.tgz
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Test artifacts
+coverage/
+.nyc_output/
+*.lcov
+
+# Build artifacts
+dist/
+build/
+*.zip
+
+# Temporary files
+tmp/
+*.tmp
