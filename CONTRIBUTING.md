@@ -1,6 +1,6 @@
-# Internal Skills Development Guide
+# Skills Development Guide
 
-This guide is for Million Views team members developing Agent Skills for our products. It covers how to add new skills or improve existing ones in our internal marketplace.
+Guide for developing Agent Skills for Million Views products.
 
 ---
 

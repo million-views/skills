@@ -1,6 +1,6 @@
-# Million Views Skills Marketplace
+# Where AI learns to do more
 
-Internal Agent Skills marketplace for Million Views products and tools. Each skill provides domain-specific expertise that extends AI agents' capabilities for specific workflows, tools, or methodologies used by our team.
+Agent Skills for Million Views products and tools. Each skill provides domain-specific expertise that extends AI agents' capabilities for specific workflows, tools, and methodologies.
 
 ---
 
@@ -17,14 +17,11 @@ Create functional markdown documents for product collaboration - live specs, int
 
 ---
 
-## Adding New Skills
+## Adding Skills
 
-As we develop more tools and establish consistent methodologies, new skills can be added to this marketplace. Each skill should:
-- Focus on a specific Million Views product or workflow
-- Provide clear patterns and examples
-- Know when to refuse requests outside its scope
+As we develop more tools and establish consistent methodologies, skills can be added to this marketplace. Each skill should focus on a specific product or workflow, provide clear patterns and examples, and know when to refuse requests outside its scope.
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for internal development guidelines.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for development guidelines.
 
 ---
 
@@ -43,7 +40,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for internal development guidelines.
 
 ### For Other AI Agents (VS Code, etc.)
 
-While Agent Skills are natively understood by Claude Code, they can be used by other AI agents in different environments. For example, in VS Code with GitHub Copilot or other AI assistants, reference skill folders in your workspace's `AGENTS.md` file:
+While Agent Skills are natively understood by Claude Code, they can be used with other AI agents in different environments. For example, in VS Code with GitHub Copilot or other AI assistants, reference skill folders in your workspace's `AGENTS.md` file:
 
 ```markdown
 # AGENTS.md
@@ -65,11 +62,11 @@ Skills are automatically activated when the AI agent recognizes your request mat
 **Example requests:**
 
 ```
-"Create a reactive-md spec for a dark mode toggle"
+Create a reactive-md spec for a dark mode toggle
 ```
 
 ```
-"Use [skill-name] to [accomplish task]"
+Use [skill-name] to [accomplish task]
 ```
 
 The agent will:
@@ -82,7 +79,7 @@ The agent will:
 
 ## About Agent Skills
 
-[Agent Skills](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) are modular capabilities that extend Claude's expertise in specific domains. Skills use progressive disclosure:
+[Agent Skills](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) are modular capabilities that extend Claude's expertise in specific domains. They use progressive disclosure:
 
 1. **Level 1 (Metadata)**: Claude loads skill name, description, and when to use it
 2. **Level 2 (Instructions)**: When relevant, Claude loads the full SKILL.md instructions
@@ -96,34 +93,17 @@ The agent will:
 
 ---
 
-## Internal Development
-
-This marketplace is maintained internally by Million Views for our product team. If you're part of the team and need to:
-- Add a new skill for a Million Views product
-- Update existing skill patterns
-- Improve documentation
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for internal guidelines.
-
----
-
 ## Support
 
-### For Skill-Specific Issues
+### Skill-Specific Issues
 
 Each skill has its own documentation and troubleshooting:
 - [reactive-md skill](./reactive-md/)
-- [another-skill](./another-skill/) (when added)
 
-### For Product/Extension Issues
+### Product/Extension Issues
 
-If you encounter issues with the underlying products:
+For issues with the underlying products:
 - [Reactive MD Extension Issues](https://github.com/million-views/reactive-md/issues)
-- Other product issue trackers as added
-
-### For Marketplace Issues
-
-**Team Slack**: #ai-skills channel for marketplace questions or skill development discussions
 
 ---
 
@@ -137,11 +117,7 @@ Individual skills may have additional licensing information in their respective 
 
 ## About Million Views
 
-[Million Views](https://m5nv.com) builds tools for product teams who believe in rapid iteration and living documentation. This skills marketplace helps our team leverage AI agents effectively across our products and workflows.
+[Million Views](https://m5nv.com) is a research and product development firm exploring ideas worth pursuing.
 
-**Current Million Views Projects:**
+**Projects:**
 - [Reactive MD VS Code Extension](https://marketplace.visualstudio.com/items?itemName=million-views.reactive-md)
-
----
-
-**Need to add a skill?** See [CONTRIBUTING.md](./CONTRIBUTING.md) for internal development guidelines.
