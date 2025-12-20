@@ -453,17 +453,56 @@ Good output must:
 
 ---
 
-## Common Patterns
+## Reference Documentation
 
-For detailed code examples, see [references/patterns.md](references/patterns.md).
+**When to dive into Level 3 (references/):**
+- User needs specific code patterns or templates
+- Request matches a document category (PRD, wireframe, user journey, component pattern)
+- User asks "show me an example of..."
+- Implementation requires detailed patterns beyond this overview
 
-**Key patterns to know:**
+### Available References
+
+**[Technical Patterns](references/patterns.md)** - Low-level code patterns
 - State persistence with localStorage
-- SVG data visualization without libraries
-- Theme systems with CSS custom properties
+- SVG data visualization without charting libraries
+- Theme systems with CSS custom properties and light-dark()
 - Remote data fetching from mock APIs
 - Component extraction strategies
 - Form handling with FormData
+- Animation patterns with motion/react
+- Icon usage with lucide-react
+- JSON data loading patterns
+
+**[PRD Templates](references/prd-templates.md)** - Product requirement documents
+- Feature specifications with interactive prototypes
+- User flow documentation (multi-step processes)
+- Competitive analysis with side-by-side demos
+- A/B test proposals with variant switching
+
+**[Wireframes](references/wireframes.md)** - Page layouts and structure
+- Landing pages (hero sections, feature grids, pricing tables)
+- Dashboards (metrics, data tables)
+- Onboarding flows (wizards, progress indicators)
+- Settings pages (tabbed interfaces, form layouts)
+- Empty states (zero data, errors, loading states)
+
+**[User Journeys](references/user-journeys.md)** - Multi-step flows
+- Signup flows (registration → verification → onboarding)
+- Checkout sequences (cart → shipping → payment → confirmation)
+- Search-to-purchase journeys
+- Support ticket flows with state tracking
+
+**[Design Patterns](references/design-patterns.md)** - Reusable components
+- Navigation patterns (navbars, sidebars, breadcrumbs, tabs)
+- Data tables (sortable, filterable, paginated)
+- Modal patterns (basic modals, confirmation dialogs)
+- Card layouts (grid, list, masonry)
+- Feedback states (loading spinners, toast notifications)
+
+**For AI Agents:** When user requests match a category above, load that reference file and use its detailed patterns to generate accurate output. The references contain complete working examples you should adapt, not generic patterns you should recreate from scratch.
+
+**For Humans:** Viewing this on GitHub? See the [reactive-md extension documentation](https://github.com/million-views/reactive-md) and [recipe examples](https://github.com/million-views/reactive-md/tree/main/recipes) for user-facing guides and tutorials.
 
 ---
 
