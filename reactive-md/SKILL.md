@@ -44,9 +44,9 @@ Reactive-md documents support:
 2. **Interactive Preview** (`Cmd+K P`): Browser-based webview, supports CDN packages and platform APIs
 
 **Live Fences:**
-- ` ```jsx live ` - JavaScript + JSX components
-- ` ```tsx live ` - TypeScript + JSX components  
-- ` ```css live ` - CSS stylesheets (custom properties, imports)
+- `` ```jsx live `` - JavaScript + JSX components
+- `` ```tsx live `` - TypeScript + JSX components  
+- `` ```css live `` - CSS stylesheets (custom properties, imports)
 
 **File Types:**
 - Markdown (`.md`) - Primary document only (entry point)
@@ -220,7 +220,7 @@ function Card() {
 
 **When:** Simple concepts, manifestos, quick demos
 
-```markdown
+````markdown
 # Button Variants
 
 ## Buttons
@@ -244,7 +244,7 @@ function Button({ children, variant = 'primary' }) {
   <Button variant="secondary">Secondary</Button>
 </div>
 ```
-```
+````
 
 ### Folder Structure
 
@@ -260,7 +260,7 @@ notification-system/
 ```
 
 **In spec.md:**
-```markdown
+````markdown
 # Notification System
 
 ```jsx live
@@ -271,7 +271,7 @@ function Demo() {
   return <NotificationBell items={notifications} />;
 }
 ```
-```
+````
 
 **Naming Convention:** Kebab-case, hierarchical context
 - `checkout-flow-payment-form.jsx` (grandparent-parent-child)
@@ -289,7 +289,7 @@ function Demo() {
 
 Follow this pattern for primary documents:
 
-```markdown
+````markdown
 # [Title]
 
 ## Problem Statement
@@ -331,7 +331,7 @@ function Demo() {
 
 - [ ] Action item 1
 - [ ] Action item 2
-```
+````
 
 **Key Elements:**
 1. Problem → Solution → Live Code → Next Steps
