@@ -110,7 +110,15 @@ function PricingWireframe() {
 ### Metrics Overview
 
 ```jsx live
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
+
 function DashboardMetrics() {
+  const lastUpdated = dayjs().subtract(2, 'hours');
+  const dataPeriod = dayjs().subtract(7, 'days');
+  
   const metrics = [
     { label: 'Revenue', value: '$45,231', change: '+12%', positive: true },
     { label: 'Users', value: '2,345', change: '+8%', positive: true },
@@ -119,21 +127,32 @@ function DashboardMetrics() {
   ];
   
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', padding: '2rem' }}>
-      {metrics.map((m, i) => (
-        <div key={i} style={{ 
-          padding: '1.5rem', 
-          background: 'white', 
-          borderRadius: '8px', 
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)' 
-        }}>
-          <div style={{ fontSize: '0.875rem', color: '#666', marginBottom: '0.5rem' }}>{m.label}</div>
-          <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>{m.value}</div>
-          <div style={{ fontSize: '0.875rem', color: m.positive ? '#22c55e' : '#ef4444' }}>
-            {m.change}
-          </div>
+    <div style={{ padding: '2rem' }}>
+      {/* Header with time info */}
+      <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold' }}>Dashboard Overview</h2>
+        <div style={{ fontSize: '0.875rem', color: '#666' }}>
+          Last updated {lastUpdated.fromNow()} • Data from {dataPeriod.format('MMM D')} - {dayjs().format('MMM D')}
         </div>
-      ))}
+      </div>
+      
+      {/* Metrics grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+        {metrics.map((m, i) => (
+          <div key={i} style={{ 
+            padding: '1.5rem', 
+            background: 'white', 
+            borderRadius: '8px', 
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)' 
+          }}>
+            <div style={{ fontSize: '0.875rem', color: '#666', marginBottom: '0.5rem' }}>{m.label}</div>
+            <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>{m.value}</div>
+            <div style={{ fontSize: '0.875rem', color: m.positive ? '#22c55e' : '#ef4444' }}>
+              {m.change}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

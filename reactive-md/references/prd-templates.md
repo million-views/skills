@@ -251,7 +251,7 @@ function OurApproach() {
 
 ## A/B Test Proposal
 
-Document test variants with interactive previews.
+Document test variants with interactive previews and time-aware results.
 
 ### Structure
 
@@ -287,12 +287,66 @@ function VariantB() {
 }
 ```
 
+## Test Results
+
+```jsx live
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import duration from 'dayjs/plugin/duration';
+
+dayjs.extend(relativeTime);
+dayjs.extend(duration);
+
+function TestResults() {
+  const testStart = dayjs().subtract(14, 'days');
+  const testEnd = dayjs().subtract(2, 'days');
+  const testDuration = dayjs.duration(testEnd.diff(testStart));
+  
+  const results = {
+    variantA: { conversions: 1247, rate: '2.4%', confidence: '95%' },
+    variantB: { conversions: 1389, rate: '2.7%', confidence: '95%' }
+  };
+  
+  const improvement = ((results.variantB.conversions - results.variantA.conversions) / results.variantA.conversions * 100).toFixed(1);
+  
+  return (
+    <div style={{ padding: '1.5rem', background: '#f8fafc', borderRadius: '8px' }}>
+      <h3 style={{ margin: '0 0 1rem 0', color: '#1e293b' }}>Test Results Summary</h3>
+      
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+        <div style={{ padding: '1rem', background: 'white', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
+          <div style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '0.5rem' }}>Variant A (Control)</div>
+          <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1e293b' }}>{results.variantA.rate}</div>
+          <div style={{ fontSize: '0.875rem', color: '#64748b' }}>{results.variantA.conversions} conversions</div>
+        </div>
+        
+        <div style={{ padding: '1rem', background: 'white', borderRadius: '6px', border: '2px solid #22c55e' }}>
+          <div style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '0.5rem' }}>Variant B (Treatment)</div>
+          <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#22c55e' }}>{results.variantB.rate}</div>
+          <div style={{ fontSize: '0.875rem', color: '#64748b' }}>{results.variantB.conversions} conversions</div>
+        </div>
+      </div>
+      
+      <div style={{ background: 'white', padding: '1rem', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+          <span style={{ fontWeight: 'bold', color: '#1e293b' }}>+{improvement}% improvement</span>
+          <span style={{ fontSize: '0.875rem', color: '#64748b' }}>{results.variantB.confidence} confidence</span>
+        </div>
+        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+          Test ran for {testDuration.days()} days • Completed {testEnd.fromNow()}
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
 ## Analysis
 
 | Aspect | Variant A | Variant B |
 |--------|-----------|-----------|
-| Pros | ... | ... |
-| Cons | ... | ... |
+| Pros | Familiar UX, lower risk | Better conversion, modern design |
+| Cons | Lower performance | Learning curve for users |
 | Risk | Low | Medium |
 
 ## Test Plan

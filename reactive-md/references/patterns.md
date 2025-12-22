@@ -419,6 +419,99 @@ function IconNav() {
 
 ---
 
+## Date/Time Patterns with dayjs
+
+Create time-aware prototypes with dayjs (includes relativeTime, duration, utc, timezone plugins):
+
+### Relative Time Display
+
+```jsx live
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
+
+function ActivityFeed() {
+  const activities = [
+    { action: 'User signed up', timestamp: dayjs().subtract(2, 'hours') },
+    { action: 'Order placed', timestamp: dayjs().subtract(1, 'day') },
+    { action: 'Payment processed', timestamp: dayjs().subtract(3, 'days') },
+    { action: 'Email sent', timestamp: dayjs().subtract(1, 'week') },
+  ];
+
+  return (
+    <div className="space-y-3">
+      <h3 className="font-bold">Recent Activity</h3>
+      {activities.map((activity, i) => (
+        <div key={i} className="flex justify-between items-center p-2 bg-gray-50 rounded">
+          <span>{activity.action}</span>
+          <span className="text-sm text-gray-500">
+            {activity.timestamp.fromNow()}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+### Duration Calculations
+
+```jsx live
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+
+dayjs.extend(duration);
+
+function TestDuration() {
+  const testStart = dayjs().subtract(2, 'hours').subtract(30, 'minutes');
+  const now = dayjs();
+  const testDuration = dayjs.duration(now.diff(testStart));
+
+  return (
+    <div className="p-4 bg-blue-50 rounded-lg">
+      <h3 className="font-bold mb-2">A/B Test Results</h3>
+      <div className="space-y-1 text-sm">
+        <div>Test started: {testStart.format('MMM D, h:mm A')}</div>
+        <div>Duration: {testDuration.hours()}h {testDuration.minutes()}m</div>
+        <div>Status: <span className="text-green-600 font-semibold">Running</span></div>
+      </div>
+    </div>
+  );
+}
+```
+
+### Timezone Handling
+
+```jsx live
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+function GlobalLaunch() {
+  const launchTime = dayjs().add(1, 'week').hour(14).minute(0); // 2 PM next week
+  
+  return (
+    <div className="p-4 bg-green-50 rounded-lg">
+      <h3 className="font-bold mb-3">Global Product Launch</h3>
+      <div className="space-y-2 text-sm">
+        <div>🕐 New York: {launchTime.tz('America/New_York').format('MMM D, h:mm A')}</div>
+        <div>🕐 London: {launchTime.tz('Europe/London').format('MMM D, h:mm A')}</div>
+        <div>🕐 Tokyo: {launchTime.tz('Asia/Tokyo').format('MMM D, h:mm A')}</div>
+        <div>🕐 Sydney: {launchTime.tz('Australia/Sydney').format('MMM D, h:mm A')}</div>
+      </div>
+    </div>
+  );
+}
+```
+
+**When to use:** Activity feeds, test durations, global launch schedules, time-sensitive notifications, dashboard timestamps
+
+---
+
 ## JSON Data Loading (Local Files)
 
 **✅ USE THIS for loading local JSON files:**

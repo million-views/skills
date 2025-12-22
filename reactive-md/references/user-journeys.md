@@ -76,10 +76,20 @@ function SignupJourney() {
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📧</div>
             <h2 style={{ margin: '0 0 0.5rem 0' }}>Check Your Email</h2>
-            <p style={{ color: '#666', marginBottom: '2rem' }}>
+            <p style={{ color: '#666', marginBottom: '1rem' }}>
               We sent a verification link to<br />
               <strong>{email || 'your@email.com'}</strong>
             </p>
+            <div style={{ 
+              background: '#fef3c7', 
+              color: '#92400e', 
+              padding: '0.75rem', 
+              borderRadius: '4px', 
+              marginBottom: '1.5rem',
+              fontSize: '0.875rem'
+            }}>
+              ⏰ Link expires in 15 minutes for security
+            </div>
             <button 
               onClick={() => setStage('onboard')}
               style={{ padding: '0.75rem 2rem', background: '#22c55e', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}

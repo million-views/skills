@@ -615,15 +615,20 @@ function LoadingStates() {
 ### Toast Notifications
 
 ```jsx live
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
+
 function ToastNotifications() {
   const [toasts, setToasts] = React.useState([]);
   
   const addToast = (type, message) => {
     const id = Date.now();
-    setToasts(prev => [...prev, { id, type, message }]);
+    setToasts(prev => [...prev, { id, type, message, timestamp: dayjs() }]);
     setTimeout(() => {
       setToasts(prev => prev.filter(t => t.id !== id));
-    }, 3000);
+    }, 5000);
   };
   
   const colors = {
@@ -634,14 +639,14 @@ function ToastNotifications() {
   
   return (
     <div style={{ padding: '2rem' }}>
-      <div style={{ display: 'flex', gap: '1rem' }}>
-        <button onClick={() => addToast('success', 'Action completed!')} style={{ padding: '0.75rem 1rem', background: '#22c55e', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+      <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
+        <button onClick={() => addToast('success', 'Payment processed successfully!')} style={{ padding: '0.75rem 1rem', background: '#22c55e', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
           Success
         </button>
-        <button onClick={() => addToast('error', 'Something went wrong')} style={{ padding: '0.75rem 1rem', background: '#ef4444', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+        <button onClick={() => addToast('error', 'Failed to save changes')} style={{ padding: '0.75rem 1rem', background: '#ef4444', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
           Error
         </button>
-        <button onClick={() => addToast('info', 'Here\'s some info')} style={{ padding: '0.75rem 1rem', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+        <button onClick={() => addToast('info', 'New message received')} style={{ padding: '0.75rem 1rem', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
           Info
         </button>
       </div>
@@ -660,12 +665,17 @@ function ToastNotifications() {
               display: 'flex',
               alignItems: 'center',
               gap: '0.75rem',
-              minWidth: '300px',
+              minWidth: '320px',
               animation: 'slideIn 0.3s ease-out'
             }}
           >
             <span style={{ fontSize: '1.25rem' }}>{colors[toast.type].icon}</span>
-            <span>{toast.message}</span>
+            <div style={{ flex: 1 }}>
+              <div>{toast.message}</div>
+              <div style={{ fontSize: '0.75rem', opacity: 0.8, marginTop: '0.25rem' }}>
+                {toast.timestamp.fromNow()}
+              </div>
+            </div>
           </div>
         ))}
       </div>
