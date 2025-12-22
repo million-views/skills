@@ -63,7 +63,7 @@ Reactive-md documents support:
 ### Bundled Packages (Always Available, Offline)
 
 Use these in both preview modes:
-- `dayjs` - Date manipulation
+- `dayjs` - Date manipulation (includes relativeTime, duration, utc, timezone plugins)
 - `motion/react` - Animations (framer-motion)
 - `lucide-react` - Icon library
 - `clsx` - Class name utilities
@@ -78,6 +78,8 @@ Require internet connection, only work in Interactive Preview:
 - `jotai` - Atomic state
 - `tailwind-merge` - Tailwind utilities
 - `react-hook-form` - Form handling
+
+**Pro tip:** When you try unsupported packages, clear error messages show available alternatives, helping teams prototype within the tool's capabilities.
 
 ### Known Broken (Refuse These)
 
@@ -151,6 +153,23 @@ function BrokenExample() {
 ```jsx
 import products from './data/products.json' with { type: 'json' };  // ✅ WORKS
 ```
+
+---
+
+## Error Handling & Guidance
+
+Reactive MD provides contextual help when code uses unsupported features:
+
+### Error Intercept Placeholders (EIP)
+When code hits limitations, you'll see helpful guidance cards instead of cryptic errors:
+- **Package not bundled?** → "Use Interactive Preview for external packages"
+- **Local file fetch blocked?** → "Use import statements instead"  
+- **Browser APIs unavailable?** → "Use Interactive Preview for localStorage"
+
+### Blank Animation Placeholders (BAP)
+Motion components with `initial={{ opacity: 0 }}` show guidance to use Interactive Preview where animations work fully.
+
+**Why this helps:** Product teams can quickly understand limitations and switch to the right preview mode without getting stuck.
 
 ---
 
