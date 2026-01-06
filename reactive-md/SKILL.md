@@ -644,28 +644,48 @@ Good output must:
 
 ## Teaching Points
 
-Emphasize these concepts:
+Focus on velocity and outcomes, not methodology:
 
-1. **"Recipes replace boilerplate"** - Adapt proven templates instead of generating from scratch
-2. **"Three styling tiers"** - Wireframe for exploration, Elementary for polish, Tailwind for speed
-3. **"Jobs-based organization"** - Choose recipes by what you're trying to accomplish, not file type
-4. **"Live fences" replace Figma** - Teams collaborate on executable specs, not static mockups
-5. **"Mode awareness"** - Understand Static vs Interactive, Bundled vs CDN
-6. **"Progressive enhancement"** - Start simple, add interactivity when validated
+1. **"Start from recipes"** - Templates = faster than blank canvas (2min vs 30min)
+2. **"Executable beats static"** - Working prototype > Figma export for decision-making
+3. **"Version control as truth"** - One `.md` file beats scattered Slack threads and meeting notes
+4. **"Hot reload = think faster"** - See changes instantly, iterate without context switching
+5. **"Literate UI/UX"** - Code + prose + visuals in one artifact = better team communication
+6. **"Prototype to decide, not to ship"** - Validate concepts fast, graduate to production when ready
 
-**Success Metric**: User discovers and adapts recipes rather than requesting generic generation.
+**Success Metric**: Team makes product decisions faster with fewer meetings and clearer communication.
 
 ---
 
 ## Success Criteria
 
-User has succeeded when:
-- They discover existing recipes before requesting new content
-- They understand which design system suits their use case (Wireframe/Elementary/Tailwind)
-- They can structure files appropriately (inline vs folder)
-- They understand which preview mode suits their needs
-- They recognize production boundaries and when to graduate
-- They can iterate on designs without leaving VS Code
-- They're teaching this pattern to their team
+**Tagline: Literate UI/UX for Product Teams**
 
-**Goal:** Make "adapt a reactive-md recipe" the default for product team collaboration.
+### JTBD Completion (Primary Success)
+
+User has succeeded when they can:
+1. **Iterate fast** - Go from idea to interactive prototype in minutes, not days
+2. **Communicate visually** - Replace static mocks with executable specs that run in VS Code
+3. **Collaborate async** - Share `.md` files that PMs/designers/engineers can all edit and preview
+4. **Make decisions faster** - Use working prototypes to resolve debates and validate concepts
+5. **Ship confident specs** - Hand off living documentation that shows exact intended behavior
+
+### Friction Points Eliminated
+
+The SKILL succeeds when it removes these common blockers:
+- ❌ "Wait for designer to mock this up" → ✅ Adapt wireframe recipe in 2 minutes
+- ❌ "Is this technically feasible?" → ✅ Build working prototype to validate
+- ❌ "What did we decide in that meeting?" → ✅ Executable spec captures exact intent
+- ❌ "Figma export is out of sync" → ✅ Single source of truth in version control
+- ❌ "Can you show me how it works?" → ✅ Interactive demo runs on anyone's machine
+
+### Velocity Metrics
+
+**Target**: Complete common JTBDs in <10 minutes:
+- Feature spec with working demo: 5-10 minutes
+- Wireframe for new page layout: 2-5 minutes
+- User flow with multi-step interaction: 10-15 minutes
+- A/B test proposal with variants: 5-10 minutes
+- Component pattern with live examples: 5-10 minutes
+
+**Goal:** Make reactive-md the fastest path from product idea to shared understanding.
