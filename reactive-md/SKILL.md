@@ -194,17 +194,98 @@ Not available:
 
 ---
 
-## CSS Strategy
+## Design System Integration
+
+**CRITICAL**: Never generate design system CSS from assumptions. Always fetch from canonical sources.
+
+### Fetching Design Systems
+
+Before using any design system patterns, fetch the actual CSS files from the public repository:
+
+**Canonical Source**: `https://github.com/million-views/reactive-md/tree/main/design-systems`
+
+**Available Systems:**
+1. **Wireframe Design System** - Low-fidelity structural mockups
+   - Tokens: `design-systems/wireframe/tokens.css`
+   - Classes: `wireframes/wireframe.css`
+   - Use for: Early exploration, structural communication
+
+2. **Elementary Design System** - High-fidelity themeable components
+   - Tokens: `design-systems/elementary/tokens.css`
+   - Use for: Polished demos, themeable UIs, dark mode support
+
+3. **Tailwind CSS** - Utility-first styling
+   - Loaded via CDN (no fetch needed)
+   - Use for: Quick prototypes, one-off examples
+
+**Fetch Workflow:**
+```bash
+# Fetch design system files
+curl -o design-systems/wireframe/tokens.css \
+  https://raw.githubusercontent.com/million-views/reactive-md/main/design-systems/wireframe/tokens.css
+
+curl -o design-systems/elementary/tokens.css \
+  https://raw.githubusercontent.com/million-views/reactive-md/main/design-systems/elementary/tokens.css
+
+curl -o wireframes/wireframe.css \
+  https://raw.githubusercontent.com/million-views/reactive-md/main/wireframes/wireframe.css
+```
+
+Once fetched, use `@import` statements in your markdown:
+
+```css live
+@import './design-systems/elementary/tokens.css';
+```
+
+### System Selection Guide
 
 Choose styling approach based on use case:
 
-### Use Tailwind When:
-- Quick wireframes or throwaway prototypes
-- No theming requirements
-- Speed is priority over customization
+**Use Wireframe System When:**
+- Early-stage wireframes or low-fidelity mockups
+- Structural communication without visual polish
+- Speed is priority, aesthetics are secondary
 
 ```jsx live
-function Card() {
+function WireframeCard() {
+  return (
+    <div className="wf-card">
+      <h3 className="title">Card Title</h3>
+      <p className="description">Description</p>
+    </div>
+  );
+}
+```
+
+**Use Elementary System When:**
+- High-fidelity feature demos
+- Themeable components (light/dark mode)
+- Brand-specific prototypes
+- Polished visual communication
+
+```jsx live
+function ThemedCard() {
+  return (
+    <div style={{ 
+      padding: 'var(--p-card)', 
+      background: 'var(--bg-surface)',
+      color: 'var(--c-text)',
+      borderRadius: 'var(--r-card)'
+    }}>
+      <h3>Card Title</h3>
+      <p>Description</p>
+    </div>
+  );
+}
+```
+
+**Use Tailwind CSS When:**
+- Quick throwaway prototypes
+- No theming requirements
+- Speed is absolute priority
+
+```jsx live
+function TailwindCard() {
   return (
     <div className="p-4 bg-white border rounded-lg shadow-md">
       <h3 className="text-lg font-bold mb-2">Card Title</h3>
@@ -214,104 +295,10 @@ function Card() {
 }
 ```
 
-### Use CSS Custom Properties When:
-- Building design systems
-- Need theming (light/dark mode)
-- Brand-specific components
-- Maintainable token system
-
-```css live
-:root {
-  /* --- 1. PRIMITIVE TOKENS   --- */
-  /* NEUTRAL SCALE */
-  --c-slate-50:  oklch(98% 0.01 260);
-  --c-slate-100: oklch(96% 0.01 260);
-  --c-slate-400: oklch(70% 0.04 260);
-  --c-slate-500: oklch(55% 0.04 260);
-  --c-slate-800: oklch(28% 0.05 260);
-  --c-slate-900: oklch(20% 0.05 260);
-  --c-slate-950: oklch(15% 0.05 260);
-
-  /* BRAND SCALES */
-  --c-blue-400:    oklch(70% 0.18 260);
-  --c-blue-500:    oklch(62% 0.22 260);
-  --c-emerald-400: oklch(75% 0.16 150);
-  --c-emerald-500: oklch(65% 0.18 150);
-  --c-violet-400:  oklch(70% 0.18 295);
-  --c-violet-500:  oklch(62% 0.22 295);
-
-  /* UTILITIES */
-  --c-white: oklch(100% 0 0);
-  --c-black: oklch(0% 0 0);
-
-  /* SPACING SCALE */
-  --s-1: 0.25rem;
-  --s-2: 0.5rem;
-  --s-3: 0.75rem;
-  --s-4: 1rem;
-  --s-6: 1.5rem;
-  --s-8: 2rem;
-  --s-12: 3rem;
-
-  /* TYPOGRAPHY PRIMITIVES */
-  --f-sans: system-ui, sans-serif;
-  --f-bold: 700;
-  --f-semi: 600;
-  --f-black: 900;
-
-  /* --- 2. SEMANTIC TOKENS   --- */
-  /* INK: PRIMARY (--c-) */
-  --c-primary:       light-dark(var(--c-violet-500), var(--c-emerald-500));
-  --c-primary-hover: light-dark(var(--c-violet-400), var(--c-emerald-400));
-  --c-on-primary:    light-dark(var(--c-white), var(--c-slate-50));
-
-  /* INK: TEXT (--c-) */
-  --c-text:          light-dark(var(--c-slate-800), var(--c-slate-50));
-  --c-muted:         light-dark(var(--c-slate-500), var(--c-slate-400));
-
-  /* PAPER: SURFACES (--bg-) */
-  --bg-app: linear-gradient(135deg,
-      light-dark(var(--c-slate-50), var(--c-slate-900)),
-      light-dark(var(--c-slate-100), var(--c-slate-800))
-  );
-  
-  --bg-surface: light-dark(
-    var(--c-white), 
-    oklch(from var(--c-white) l c h / 0.1)
-  );
-
-  /* FRAME: BORDERS (--b-) */
-  --b-standard: 1px solid light-dark(
-    oklch(from var(--c-black) l c h / 0.1), 
-    oklch(from var(--c-white) l c h / 0.1)
-  );
-
-  /* EFFECTS: ATMOSPHERE (--fx-) */
-  --fx-card-shadow: 0 10px 20px -5px light-dark(
-    oklch(from var(--c-slate-800) l c h / 0.1), 
-    oklch(from var(--c-black) l c h / 0.5)
-  );
-  
-  --fx-primary-glow: 0 4px 6px -4px light-dark(transparent, var(--c-primary));
-  --fx-glass: blur(10px);
-  --fx-ease: 0.2s ease;
-  
-  /* LAYOUT: SHARED DECISIONS */
-  --p-card: var(--s-8);
-  --p-btn:  var(--s-3);
-  --r-card: var(--s-4);
-  --r-btn:  var(--s-2);
-  --g-standard: var(--s-2);
-}
-
-.card {
-  padding: var(--p-card);
-  color: var(--c-text);
-  background: var(--c-primary);
-}
-```
-
-**If ambiguous:** Ask the user which approach they prefer.
+**Documentation Links:**
+- Elementary Design System: https://github.com/million-views/reactive-md/tree/main/design-systems/elementary
+- Wireframe Design System: https://github.com/million-views/reactive-md/tree/main/design-systems/wireframe
+- Design Systems Overview: https://github.com/million-views/reactive-md/blob/main/design-systems/README.md
 
 ---
 
