@@ -642,21 +642,6 @@ Good output must:
 
 ---
 
-## Teaching Points
-
-Focus on velocity and outcomes, not methodology:
-
-1. **"Start from recipes"** - Templates = faster than blank canvas (2min vs 30min)
-2. **"Executable beats static"** - Working prototype > Figma export for decision-making
-3. **"Version control as truth"** - One `.md` file beats scattered Slack threads and meeting notes
-4. **"Hot reload = think faster"** - See changes instantly, iterate without context switching
-5. **"Literate UI/UX"** - Code + prose + visuals in one artifact = better team communication
-6. **"Prototype to decide, not to ship"** - Validate concepts fast, graduate to production when ready
-
-**Success Metric**: Team makes product decisions faster with fewer meetings and clearer communication.
-
----
-
 ## Success Criteria
 
 **Tagline: Literate UI/UX for Product Teams**
