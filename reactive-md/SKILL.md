@@ -575,7 +575,7 @@ Good output must:
 3. ✅ **Run without errors** - Code executes in appropriate preview mode
 4. ✅ **Follow conventions** - File organization, naming, import patterns match reactive-md style
 5. ✅ **Respect boundaries** - Uses allowed packages, refuses production requests
-6. ✅ **Teach methodology** - Explains rationale, not just generates code
+6. ✅ **Explain decisions** - Provide context for choices to enable faster iteration
 7. ✅ **Complete structure** - Problem → Solution → Live Code → Next Steps
 8. ✅ **Readable fences** - Short code blocks (< 50 lines), clear imports, semantic naming
 9. ✅ **Include attribution** - Link to recipe sources when adapting existing templates
