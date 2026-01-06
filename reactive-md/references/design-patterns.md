@@ -85,26 +85,6 @@ function SidebarNav() {
     </div>
   );
 }
-              borderRadius: '4px',
-              cursor: 'pointer',
-              textAlign: 'left',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1rem',
-              marginBottom: '0.5rem'
-            }}
-          >
-            <span style={{ fontSize: '1.25rem' }}>{item.icon}</span>
-            {!collapsed && <span>{item.label}</span>}
-          </button>
-        ))}
-      </div>
-      <div style={{ flex: 1, padding: '2rem', background: '#f5f5f5' }}>
-        <h2 style={{ margin: 0 }}>{items.find(i => i.id === active)?.label}</h2>
-      </div>
-    </div>
-  );
-}
 ```
 
 ### Breadcrumb Navigation

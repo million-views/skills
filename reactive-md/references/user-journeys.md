@@ -90,13 +90,13 @@ function SignupJourney() {
         
         {stage === 'onboard' && (
           <div>
-            <h2 style={{ margin: '0 0 1rem 0' }}>Tell Us About Yourself</h2>
+            <h2 className="text-2xl font-bold mb-4">Tell Us About Yourself</h2>
             <input 
               type="text" 
               placeholder="Full Name" 
-              style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem', border: '1px solid #ddd', borderRadius: '4px' }} 
+              className="w-full px-3 py-2 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <select style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem', border: '1px solid #ddd', borderRadius: '4px' }}>
+            <select className="w-full px-3 py-2 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
               <option>What describes you best?</option>
               <option>Developer</option>
               <option>Designer</option>
@@ -104,7 +104,7 @@ function SignupJourney() {
             </select>
             <button 
               onClick={() => setStage('complete')}
-              style={{ width: '100%', padding: '0.75rem', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+              className="w-full px-3 py-2 bg-blue-600 text-white rounded font-bold hover:bg-blue-700 transition-colors"
             >
               Complete Setup
             </button>
@@ -112,10 +112,10 @@ function SignupJourney() {
         )}
         
         {stage === 'complete' && (
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🎉</div>
-            <h2 style={{ margin: '0 0 0.5rem 0' }}>Welcome!</h2>
-            <p style={{ color: '#666', marginBottom: '2rem' }}>
+          <div className="text-center">
+            <div className="text-6xl mb-4">🎉</div>
+            <h2 className="text-2xl font-bold mb-2">Welcome!</h2>
+            <p className="text-gray-600 mb-8">
               Your account is ready to use
             </p>
             <button 

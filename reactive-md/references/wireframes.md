@@ -85,9 +85,6 @@ function PricingWireframe() {
     </div>
   );
 }
-    </div>
-  );
-}
 ```
 
 ---
