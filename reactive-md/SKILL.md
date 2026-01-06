@@ -1,6 +1,6 @@
 ---
 name: reactive-md
-description: Create functional markdown documents with embedded interactive components for product team collaboration using the reactive-md VS Code extension. Use when generating product specs, design prototypes, feature wireframes, user flows, or interactive documentation. Specializes in teaching the 'live fence' methodology (css|jsx|tsx live) to replace Figma/Storybook workflows. NOT for production code—only for idea communication and rapid prototyping.
+description: Literate UI/UX for product teams - accelerate from idea to working prototype in minutes using markdown with embedded interactive React components. Use for fast iteration on product specs, wireframes, user flows, feature demos, and design documentation. Replaces Figma/Storybook with executable specs in version control. Optimizes for velocity and async collaboration, not production code. VS Code extension enables hot-reload prototyping without leaving the editor.
 license: MIT
 ---
 
