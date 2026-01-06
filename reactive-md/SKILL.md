@@ -12,14 +12,16 @@ Generate functional markdown documents with embedded interactive React component
 
 Use reactive-md when the user asks to create:
 
-**Primary Use Cases:**
-- Product specs with working prototypes
-- Design system documentation with live examples  
-- User flow wireframes with interactive demos
-- Feature prototypes with visual concepts
-- A/B test mockups with interactivity
-- Wireframes, dashboards, or component galleries
-- Interactive documentation or living specifications
+**Primary Use Cases** (with recipe categories):
+- Product specs with working prototypes → [PRD Templates](https://github.com/million-views/reactive-md/tree/main/recipes/prd-templates)
+- Design system documentation with live examples → [Design Patterns](https://github.com/million-views/reactive-md/tree/main/recipes/design-patterns)
+- User flow wireframes with interactive demos → [User Journeys](https://github.com/million-views/reactive-md/tree/main/recipes/user-journeys)
+- Feature prototypes with visual concepts → [Feature Concepts](https://github.com/million-views/reactive-md/tree/main/recipes/feature-concepts)
+- A/B test mockups with interactivity → [PRD Templates/A-B Test](https://github.com/million-views/reactive-md/blob/main/recipes/prd-templates/a-b-test-proposal.md)
+- Wireframes, dashboards, or component galleries → [Wireframes](https://github.com/million-views/reactive-md/tree/main/recipes/wireframes)
+- Interactive documentation or living specifications → [Case Studies](https://github.com/million-views/reactive-md/tree/main/recipes/case-studies)
+
+**Workflow**: Before generating content, check if a recipe exists for the job. Adapt existing recipes rather than creating from scratch.
 
 **Recognized Keywords & Aliases:**
 
@@ -102,7 +104,7 @@ Do NOT suggest:
 import products from './data/products.json' with { type: 'json' };
 
 function ProductList() {
-  return <div>{products.map(p => <div key={p.id}>{p.name}</div>)}</div>;
+  return <ul>{products.map(p => <li key={p.id}>{p.name}</li>)}</ul>;
 }
 ```
 
@@ -131,6 +133,7 @@ function Posts() {
 ✅ Works in Interactive Preview only
 ✅ Requires internet connection
 ✅ Use mock APIs: jsonplaceholder.typicode.com, reqres.in
+✅ Or user specified REST API
 
 ### ❌ Runtime Fetch to Local Files (BLOCKED)
 
@@ -180,7 +183,9 @@ Available in `Cmd+K P` mode:
 - ✅ `setTimeout`, `setInterval` - Timers
 - ✅ `fetch('https://...')` - **REMOTE URLs ONLY** (not local files)
 - ✅ `FormData`, `URLSearchParams` - Form handling
-- ✅ `Canvas`, `SVG` - Data visualization
+- ✅ `Canvas` - Data visualization
+
+NOTE: `SVG` renders in both Static and Interactive preview modes.
 
 Not available:
 - ❌ WebSockets, Service Workers, Notifications API
@@ -217,15 +222,92 @@ function Card() {
 
 ```css live
 :root {
-  --color-primary: #3b82f6;
-  --color-text: #1f2937;
-  --spacing-md: 1rem;
+  /* --- 1. PRIMITIVE TOKENS   --- */
+  /* NEUTRAL SCALE */
+  --c-slate-50:  oklch(98% 0.01 260);
+  --c-slate-100: oklch(96% 0.01 260);
+  --c-slate-400: oklch(70% 0.04 260);
+  --c-slate-500: oklch(55% 0.04 260);
+  --c-slate-800: oklch(28% 0.05 260);
+  --c-slate-900: oklch(20% 0.05 260);
+  --c-slate-950: oklch(15% 0.05 260);
+
+  /* BRAND SCALES */
+  --c-blue-400:    oklch(70% 0.18 260);
+  --c-blue-500:    oklch(62% 0.22 260);
+  --c-emerald-400: oklch(75% 0.16 150);
+  --c-emerald-500: oklch(65% 0.18 150);
+  --c-violet-400:  oklch(70% 0.18 295);
+  --c-violet-500:  oklch(62% 0.22 295);
+
+  /* UTILITIES */
+  --c-white: oklch(100% 0 0);
+  --c-black: oklch(0% 0 0);
+
+  /* SPACING SCALE */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-6: 1.5rem;
+  --s-8: 2rem;
+  --s-12: 3rem;
+
+  /* TYPOGRAPHY PRIMITIVES */
+  --f-sans: system-ui, sans-serif;
+  --f-bold: 700;
+  --f-semi: 600;
+  --f-black: 900;
+
+  /* --- 2. SEMANTIC TOKENS   --- */
+  /* INK: PRIMARY (--c-) */
+  --c-primary:       light-dark(var(--c-violet-500), var(--c-emerald-500));
+  --c-primary-hover: light-dark(var(--c-violet-400), var(--c-emerald-400));
+  --c-on-primary:    light-dark(var(--c-white), var(--c-slate-50));
+
+  /* INK: TEXT (--c-) */
+  --c-text:          light-dark(var(--c-slate-800), var(--c-slate-50));
+  --c-muted:         light-dark(var(--c-slate-500), var(--c-slate-400));
+
+  /* PAPER: SURFACES (--bg-) */
+  --bg-app: linear-gradient(135deg,
+      light-dark(var(--c-slate-50), var(--c-slate-900)),
+      light-dark(var(--c-slate-100), var(--c-slate-800))
+  );
+  
+  --bg-surface: light-dark(
+    var(--c-white), 
+    oklch(from var(--c-white) l c h / 0.1)
+  );
+
+  /* FRAME: BORDERS (--b-) */
+  --b-standard: 1px solid light-dark(
+    oklch(from var(--c-black) l c h / 0.1), 
+    oklch(from var(--c-white) l c h / 0.1)
+  );
+
+  /* EFFECTS: ATMOSPHERE (--fx-) */
+  --fx-card-shadow: 0 10px 20px -5px light-dark(
+    oklch(from var(--c-slate-800) l c h / 0.1), 
+    oklch(from var(--c-black) l c h / 0.5)
+  );
+  
+  --fx-primary-glow: 0 4px 6px -4px light-dark(transparent, var(--c-primary));
+  --fx-glass: blur(10px);
+  --fx-ease: 0.2s ease;
+  
+  /* LAYOUT: SHARED DECISIONS */
+  --p-card: var(--s-8);
+  --p-btn:  var(--s-3);
+  --r-card: var(--s-4);
+  --r-btn:  var(--s-2);
+  --g-standard: var(--s-2);
 }
 
 .card {
-  padding: var(--spacing-md);
-  color: var(--color-text);
-  background: var(--color-primary);
+  padding: var(--p-card);
+  color: var(--c-text);
+  background: var(--c-primary);
 }
 ```
 
@@ -301,6 +383,44 @@ function Demo() {
 - < 50 lines → Keep inline
 - 50-100 lines → Extract to `.jsx` file
 - \> 100 lines → Create folder structure
+
+---
+
+## Recipe-First Approach
+
+**Before generating from scratch**, check if a recipe exists:
+
+### Recipe Categories
+
+The [public recipes repository](https://github.com/million-views/reactive-md/tree/main/recipes) contains proven templates organized by job type:
+
+| Job To Be Done | Recipe Category | When To Use |
+|----------------|----------------|-------------|
+| **Define features** | [PRD Templates](https://github.com/million-views/reactive-md/tree/main/recipes/prd-templates) | Feature specs, A/B tests, competitive analysis, user flows |
+| **Design layouts** | [Wireframes](https://github.com/million-views/reactive-md/tree/main/recipes/wireframes) | Landing pages, dashboards, empty states, settings |
+| **Map user flows** | [User Journeys](https://github.com/million-views/reactive-md/tree/main/recipes/user-journeys) | Signup flows, checkout, search-to-purchase, support tickets |
+| **Prototype features** | [Feature Concepts](https://github.com/million-views/reactive-md/tree/main/recipes/feature-concepts) | Notifications, dark mode, infinite scroll, drag-drop, real-time |
+| **Build UI libraries** | [Design Patterns](https://github.com/million-views/reactive-md/tree/main/recipes/design-patterns) | Navigation, tables, modals, cards, feedback states |
+| **Document products** | [Case Studies](https://github.com/million-views/reactive-md/tree/main/recipes/case-studies) | E-commerce PDPs, SaaS dashboards, social feeds, mobile concepts |
+
+### Workflow Guidance
+
+1. **Check for existing recipe**: Browse category matching user's job
+2. **Adapt, don't generate**: Modify existing recipe rather than creating from scratch
+3. **Preserve design system**: Keep original styling approach unless user specifies otherwise
+4. **Reference recipe URLs**: Include GitHub links for attribution and further exploration
+
+**Example Response Pattern**:
+```
+I found an existing recipe that matches your request:
+[Recipe Name](URL)
+
+Let me adapt this for your specific needs:
+- [Modification 1]
+- [Modification 2]
+
+Would you like me to generate this adapted version?
+```
 
 ---
 
@@ -463,12 +583,15 @@ Would you like me to simplify this to a demo-able concept?
 
 Good output must:
 
-1. ✅ **Run without errors** - Code executes in appropriate preview mode
-2. ✅ **Follow conventions** - File organization, naming, import patterns match reactive-md style
-3. ✅ **Respect boundaries** - Uses allowed packages, refuses production requests
-4. ✅ **Teach methodology** - Explains rationale, not just generates code
-5. ✅ **Complete structure** - Problem → Solution → Live Code → Next Steps
-6. ✅ **Readable fences** - Short code blocks (< 50 lines), clear imports, semantic naming
+1. ✅ **Use existing recipes** - Adapt proven templates before generating from scratch
+2. ✅ **Preserve design systems** - Keep Elementary/Wireframe imports from original recipes
+3. ✅ **Run without errors** - Code executes in appropriate preview mode
+4. ✅ **Follow conventions** - File organization, naming, import patterns match reactive-md style
+5. ✅ **Respect boundaries** - Uses allowed packages, refuses production requests
+6. ✅ **Teach methodology** - Explains rationale, not just generates code
+7. ✅ **Complete structure** - Problem → Solution → Live Code → Next Steps
+8. ✅ **Readable fences** - Short code blocks (< 50 lines), clear imports, semantic naming
+9. ✅ **Include attribution** - Link to recipe sources when adapting existing templates
 
 ---
 
@@ -519,9 +642,16 @@ Good output must:
 - Card layouts (grid, list, masonry)
 - Feedback states (loading spinners, toast notifications)
 
-**For AI Agents:** When user requests match a category above, load that reference file and use its detailed patterns to generate accurate output. The references contain complete working examples you should adapt, not generic patterns you should recreate from scratch.
+**For AI Agents:** 
+1. **Check public recipes first**: Browse [recipes repository](https://github.com/million-views/reactive-md/tree/main/recipes) for existing templates matching the job
+2. **Use references for patterns**: Load reference files when adapting recipes or building from scratch
+3. **Preserve design systems**: Keep Elementary/Wireframe imports from original recipes
+4. **Generate recipe URLs**: Include GitHub links for user attribution and exploration
 
-**For Humans:** Viewing this on GitHub? See the [reactive-md extension documentation](https://github.com/million-views/reactive-md) and [recipe examples](https://github.com/million-views/reactive-md/tree/main/recipes) for user-facing guides and tutorials.
+**For Humans:** 
+- **Recipe Repository**: [recipes/](https://github.com/million-views/reactive-md/tree/main/recipes) - Browse complete templates by job type
+- **Design Systems**: [design-systems/README.md](https://github.com/million-views/reactive-md/blob/main/recipes/design-systems/README.md) - Complete styling guide with decision framework
+- **Extension Docs**: [README.md](https://github.com/million-views/reactive-md) - Installation and configuration
 
 ---
 
@@ -529,23 +659,26 @@ Good output must:
 
 Emphasize these concepts:
 
-1. **"Live fences" replace Figma** - Teams collaborate on executable specs, not static mockups
-2. **Two-dimension iteration** - Edit copy (JSX) AND style (CSS) in same document
-3. **Progressive enhancement** - Start static, add interactivity when needed, graduate to production
-4. **Git-native workflow** - No export/import cycles, version control friendly
-5. **Component extraction** - Start inline, extract when reused or complex
-6. **Mode awareness** - Understand Static vs Interactive, Bundled vs CDN
+1. **"Recipes replace boilerplate"** - Adapt proven templates instead of generating from scratch
+2. **"Three styling tiers"** - Wireframe for exploration, Elementary for polish, Tailwind for speed
+3. **"Jobs-based organization"** - Choose recipes by what you're trying to accomplish, not file type
+4. **"Live fences" replace Figma** - Teams collaborate on executable specs, not static mockups
+5. **"Mode awareness"** - Understand Static vs Interactive, Bundled vs CDN
+6. **"Progressive enhancement"** - Start simple, add interactivity when validated
+
+**Success Metric**: User discovers and adapts recipes rather than requesting generic generation.
 
 ---
 
 ## Success Criteria
 
 User has succeeded when:
-- They understand which preview mode suits their needs
+- They discover existing recipes before requesting new content
+- They understand which design system suits their use case (Wireframe/Elementary/Tailwind)
 - They can structure files appropriately (inline vs folder)
-- They know when to use Tailwind vs custom properties
+- They understand which preview mode suits their needs
 - They recognize production boundaries and when to graduate
 - They can iterate on designs without leaving VS Code
 - They're teaching this pattern to their team
 
-**Goal:** Make "create a reactive-md file" the default for product team collaboration.
+**Goal:** Make "adapt a reactive-md recipe" the default for product team collaboration.
