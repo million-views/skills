@@ -2,7 +2,7 @@
 
 /**
  * Package Claude Skills for Web Upload
- * Usage: ./package-skill.js <skill-name>
+ * Usage: ./package-skill.mjs <skill-name>
  */
 
 import fs from 'fs';
@@ -21,8 +21,8 @@ function log(message, color = 'reset') {
 const skillName = process.argv[2];
 
 if (!skillName) {
-  log('Usage: ./package-skill.js <skill-name>', 'yellow');
-  log('\nExample: ./package-skill.js reactive-md', 'blue');
+  log('Usage: ./package-skill.mjs <skill-name>', 'yellow');
+  log('\nExample: ./package-skill.mjs reactive-md', 'blue');
   
   // Show available skills
   try {
