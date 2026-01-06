@@ -14,31 +14,24 @@ function SignupJourney() {
   const [email, setEmail] = React.useState('');
   
   return (
-    <div style={{ maxWidth: '500px', margin: '0 auto', padding: '2rem' }}>
+    <div className="max-w-lg mx-auto p-8">
       {/* Progress indicator */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem' }}>
+      <div className="flex justify-between mb-8">
         {['Register', 'Verify', 'Setup', 'Done'].map((label, i) => {
           const stages = ['register', 'verify', 'onboard', 'complete'];
           const currentIndex = stages.indexOf(stage);
           const isActive = i <= currentIndex;
           
           return (
-            <div key={label} style={{ flex: 1, textAlign: 'center' }}>
-              <div style={{ 
-                width: '32px', 
-                height: '32px', 
-                borderRadius: '50%', 
-                background: isActive ? '#007bff' : '#e0e0e0',
-                color: isActive ? 'white' : '#666',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '0.5rem',
-                fontWeight: 'bold'
-              }}>
+            <div key={label} className="flex-1 text-center">
+              <div className={`w-8 h-8 rounded-full inline-flex items-center justify-center mb-2 font-bold ${
+                isActive ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
+              }`}>
                 {i + 1}
               </div>
-              <div style={{ fontSize: '0.875rem', color: isActive ? '#007bff' : '#666' }}>
+              <div className={`text-sm ${
+                isActive ? 'text-blue-600' : 'text-gray-600'
+              }`}>
                 {label}
               </div>
             </div>
@@ -47,25 +40,25 @@ function SignupJourney() {
       </div>
       
       {/* Stage content */}
-      <div style={{ background: 'white', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+      <div className="bg-white p-8 rounded-lg shadow-lg">
         {stage === 'register' && (
           <div>
-            <h2 style={{ margin: '0 0 1rem 0' }}>Create Account</h2>
+            <h2 className="text-2xl font-bold mb-4">Create Account</h2>
             <input 
               type="email" 
               placeholder="Email address" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem', border: '1px solid #ddd', borderRadius: '4px' }} 
+              className="w-full px-3 py-2 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <input 
               type="password" 
               placeholder="Password" 
-              style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem', border: '1px solid #ddd', borderRadius: '4px' }} 
+              className="w-full px-3 py-2 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <button 
               onClick={() => setStage('verify')}
-              style={{ width: '100%', padding: '0.75rem', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+              className="w-full px-3 py-2 bg-blue-600 text-white rounded font-bold hover:bg-blue-700 transition-colors"
             >
               Sign Up
             </button>
@@ -73,31 +66,24 @@ function SignupJourney() {
         )}
         
         {stage === 'verify' && (
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📧</div>
-            <h2 style={{ margin: '0 0 0.5rem 0' }}>Check Your Email</h2>
-            <p style={{ color: '#666', marginBottom: '1rem' }}>
+          <div className="text-center">
+            <div className="text-6xl mb-4">📧</div>
+            <h2 className="text-2xl font-bold mb-2">Check Your Email</h2>
+            <p className="text-gray-600 mb-4">
               We sent a verification link to<br />
               <strong>{email || 'your@email.com'}</strong>
             </p>
-            <div style={{ 
-              background: '#fef3c7', 
-              color: '#92400e', 
-              padding: '0.75rem', 
-              borderRadius: '4px', 
-              marginBottom: '1.5rem',
-              fontSize: '0.875rem'
-            }}>
+            <div className="bg-yellow-100 text-yellow-900 px-3 py-2 rounded mb-6 text-sm">
               ⏰ Link expires in 15 minutes for security
             </div>
             <button 
               onClick={() => setStage('onboard')}
-              style={{ padding: '0.75rem 2rem', background: '#22c55e', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+              className="px-8 py-3 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
             >
               I Verified My Email
             </button>
-            <div style={{ marginTop: '1rem', fontSize: '0.875rem', color: '#666' }}>
-              Didn't get it? <a href="#" style={{ color: '#007bff' }}>Resend</a>
+            <div className="mt-4 text-sm text-gray-600">
+              Didn't get it? <a href="#" className="text-blue-600">Resend</a>
             </div>
           </div>
         )}

@@ -1,6 +1,8 @@
 # Design Patterns Reference
 
-How to create reusable UI components and component libraries using reactive-md. Design patterns are for building consistent, documented component systems.
+How to create reusable UI components using reactive-md. Design patterns use **Tailwind CSS** for rapid, consistent component development.
+
+**When to use**: Reusable component libraries, quick demonstrations, documentation snippets
 
 ---
 
@@ -13,36 +15,24 @@ function TopNavbar() {
   const [active, setActive] = React.useState('home');
   
   return (
-    <nav style={{ 
-      display: 'flex', 
-      justifyContent: 'space-between', 
-      alignItems: 'center', 
-      padding: '1rem 2rem', 
-      background: 'white', 
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)' 
-    }}>
-      <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Logo</div>
-      <div style={{ display: 'flex', gap: '2rem' }}>
+    <nav className="flex justify-between items-center px-8 py-4 bg-white shadow-md">
+      <div className="text-2xl font-bold">Logo</div>
+      <div className="flex gap-8">
         {['home', 'products', 'about', 'contact'].map(item => (
           <button
             key={item}
             onClick={() => setActive(item)}
-            style={{
-              background: 'none',
-              border: 'none',
-              padding: '0.5rem 1rem',
-              color: active === item ? '#007bff' : '#666',
-              cursor: 'pointer',
-              textTransform: 'capitalize',
-              fontWeight: active === item ? 'bold' : 'normal',
-              borderBottom: active === item ? '2px solid #007bff' : 'none'
-            }}
+            className={`px-4 py-2 capitalize transition-colors ${
+              active === item 
+                ? 'text-blue-600 border-b-2 border-blue-600 font-bold' 
+                : 'text-gray-600 hover:text-blue-600'
+            }`}
           >
             {item}
           </button>
         ))}
       </div>
-      <button style={{ padding: '0.5rem 1.5rem', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+      <button className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
         Sign In
       </button>
     </nav>
@@ -65,26 +55,13 @@ function SidebarNav() {
   ];
   
   return (
-    <div style={{ display: 'flex', height: '400px' }}>
-      <div style={{ 
-        width: collapsed ? '60px' : '250px', 
-        background: '#1a1a1a', 
-        color: 'white', 
-        padding: '1rem',
-        transition: 'width 0.3s'
-      }}>
+    <div className="flex h-96">
+      <div className={`${
+        collapsed ? 'w-16' : 'w-64'
+      } bg-gray-900 text-white p-4 transition-all duration-300`}>
         <button 
           onClick={() => setCollapsed(!collapsed)}
-          style={{ 
-            width: '100%', 
-            padding: '0.5rem', 
-            background: 'rgba(255,255,255,0.1)', 
-            border: 'none', 
-            color: 'white', 
-            borderRadius: '4px', 
-            cursor: 'pointer',
-            marginBottom: '1rem'
-          }}
+          className="w-full p-2 bg-white/10 rounded hover:bg-white/20 mb-4"
         >
           {collapsed ? '→' : '←'}
         </button>
@@ -92,12 +69,22 @@ function SidebarNav() {
           <button
             key={item.id}
             onClick={() => setActive(item.id)}
-            style={{
-              width: '100%',
-              padding: '1rem',
-              background: active === item.id ? 'rgba(255,255,255,0.1)' : 'transparent',
-              border: 'none',
-              color: 'white',
+            className={`w-full p-4 flex items-center gap-3 rounded transition-colors ${
+              active === item.id ? 'bg-white/10' : 'hover:bg-white/5'
+            }`}
+          >
+            <span className="text-xl">{item.icon}</span>
+            {!collapsed && <span>{item.label}</span>}
+          </button>
+        ))}
+      </div>
+      <div className="flex-1 p-8 bg-gray-50">
+        <h1 className="text-2xl font-bold capitalize">{active}</h1>
+        <p className="text-gray-600 mt-2">Content for {active} section</p>
+      </div>
+    </div>
+  );
+}
               borderRadius: '4px',
               cursor: 'pointer',
               textAlign: 'left',
@@ -127,26 +114,23 @@ function Breadcrumbs() {
   const [path, setPath] = React.useState(['Home', 'Products', 'Electronics', 'Laptops']);
   
   return (
-    <div style={{ padding: '1rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
+    <nav className="flex items-center gap-2 py-4 text-sm">
       {path.map((crumb, i) => (
         <React.Fragment key={i}>
-          {i > 0 && <span style={{ color: '#999' }}>/</span>}
+          {i > 0 && <span className="text-gray-400">/</span>}
           <button
             onClick={() => setPath(path.slice(0, i + 1))}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: i === path.length - 1 ? '#333' : '#007bff',
-              cursor: i === path.length - 1 ? 'default' : 'pointer',
-              textDecoration: i === path.length - 1 ? 'none' : 'underline',
-              fontWeight: i === path.length - 1 ? 'bold' : 'normal'
-            }}
+            className={`transition-colors ${
+              i === path.length - 1 
+                ? 'text-gray-900 font-semibold cursor-default' 
+                : 'text-blue-600 hover:text-blue-700 underline'
+            }`}
           >
             {crumb}
           </button>
         </React.Fragment>
       ))}
-    </div>
+    </nav>
   );
 }
 ```
@@ -178,22 +162,15 @@ function SortableTable() {
   };
   
   return (
-    <div style={{ padding: '2rem' }}>
-      <table style={{ width: '100%', borderCollapse: 'collapse', background: 'white', borderRadius: '8px', overflow: 'hidden' }}>
+    <div className="p-8">
+      <table className="w-full bg-white rounded-lg overflow-hidden">
         <thead>
-          <tr style={{ background: '#f5f5f5' }}>
+          <tr className="bg-gray-50">
             {['name', 'email', 'status'].map(field => (
               <th 
                 key={field}
                 onClick={() => sort(field)}
-                style={{ 
-                  padding: '1rem', 
-                  textAlign: 'left', 
-                  borderBottom: '1px solid #ddd',
-                  cursor: 'pointer',
-                  userSelect: 'none',
-                  textTransform: 'capitalize'
-                }}
+                className="px-4 py-3 text-left border-b border-gray-200 cursor-pointer select-none capitalize hover:bg-gray-100 transition-colors"
               >
                 {field} {sortBy === field && (sortDir === 'asc' ? '↑' : '↓')}
               </th>
@@ -202,17 +179,15 @@ function SortableTable() {
         </thead>
         <tbody>
           {data.map(row => (
-            <tr key={row.id} style={{ borderBottom: '1px solid #eee' }}>
-              <td style={{ padding: '1rem' }}>{row.name}</td>
-              <td style={{ padding: '1rem' }}>{row.email}</td>
-              <td style={{ padding: '1rem' }}>
-                <span style={{ 
-                  padding: '0.25rem 0.75rem', 
-                  background: row.status === 'Active' ? '#d1fae5' : '#fee2e2',
-                  color: row.status === 'Active' ? '#065f46' : '#991b1b',
-                  borderRadius: '12px',
-                  fontSize: '0.875rem'
-                }}>
+            <tr key={row.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+              <td className="px-4 py-3">{row.name}</td>
+              <td className="px-4 py-3">{row.email}</td>
+              <td className="px-4 py-3">
+                <span className={`px-3 py-1 rounded-full text-sm ${
+                  row.status === 'Active' 
+                    ? 'bg-green-100 text-green-800' 
+                    : 'bg-red-100 text-red-800'
+                }`}>
                   {row.status}
                 </span>
               </td>
@@ -247,19 +222,19 @@ function FilterableTable() {
   });
   
   return (
-    <div style={{ padding: '2rem' }}>
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+    <div className="p-8">
+      <div className="flex gap-4 mb-4">
         <input 
           type="text"
           placeholder="Search..."
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          style={{ flex: 1, padding: '0.75rem', border: '1px solid #ddd', borderRadius: '4px' }}
+          className="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <select 
           value={deptFilter}
           onChange={(e) => setDeptFilter(e.target.value)}
-          style={{ padding: '0.75rem', border: '1px solid #ddd', borderRadius: '4px' }}
+          className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Departments</option>
           <option value="Engineering">Engineering</option>
@@ -268,26 +243,26 @@ function FilterableTable() {
         </select>
       </div>
       
-      <table style={{ width: '100%', borderCollapse: 'collapse', background: 'white' }}>
+      <table className="w-full bg-white border-collapse">
         <thead>
-          <tr style={{ background: '#f5f5f5', borderBottom: '1px solid #ddd' }}>
-            <th style={{ padding: '1rem', textAlign: 'left' }}>Name</th>
-            <th style={{ padding: '1rem', textAlign: 'left' }}>Role</th>
-            <th style={{ padding: '1rem', textAlign: 'left' }}>Department</th>
+          <tr className="bg-gray-50 border-b border-gray-200">
+            <th className="px-4 py-3 text-left">Name</th>
+            <th className="px-4 py-3 text-left">Role</th>
+            <th className="px-4 py-3 text-left">Department</th>
           </tr>
         </thead>
         <tbody>
           {filtered.map(row => (
-            <tr key={row.id} style={{ borderBottom: '1px solid #eee' }}>
-              <td style={{ padding: '1rem' }}>{row.name}</td>
-              <td style={{ padding: '1rem' }}>{row.role}</td>
-              <td style={{ padding: '1rem' }}>{row.dept}</td>
+            <tr key={row.id} className="border-b border-gray-100">
+              <td className="px-4 py-3">{row.name}</td>
+              <td className="px-4 py-3">{row.role}</td>
+              <td className="px-4 py-3">{row.dept}</td>
             </tr>
           ))}
         </tbody>
       </table>
       
-      <div style={{ marginTop: '1rem', fontSize: '0.875rem', color: '#666' }}>
+      <div className="mt-4 text-sm text-gray-600">
         Showing {filtered.length} of {allData.length} results
       </div>
     </div>
@@ -306,55 +281,37 @@ function BasicModal() {
   const [isOpen, setIsOpen] = React.useState(false);
   
   return (
-    <div style={{ padding: '2rem' }}>
+    <div className="p-8">
       <button 
         onClick={() => setIsOpen(true)}
-        style={{ padding: '0.75rem 2rem', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+        className="px-8 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
       >
         Open Modal
       </button>
       
       {isOpen && (
         <div 
-          style={{ 
-            position: 'fixed', 
-            top: 0, 
-            left: 0, 
-            right: 0, 
-            bottom: 0, 
-            background: 'rgba(0,0,0,0.5)', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center',
-            zIndex: 1000
-          }}
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
           onClick={() => setIsOpen(false)}
         >
           <div 
-            style={{ 
-              background: 'white', 
-              padding: '2rem', 
-              borderRadius: '8px', 
-              maxWidth: '500px', 
-              width: '90%',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.2)'
-            }}
+            className="bg-white p-8 rounded-lg max-w-md w-11/12 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 style={{ margin: '0 0 1rem 0' }}>Modal Title</h2>
-            <p style={{ marginBottom: '2rem', color: '#666' }}>
+            <h2 className="text-2xl font-bold mb-4">Modal Title</h2>
+            <p className="mb-8 text-gray-600">
               This is a modal dialog. Click outside or press the button to close.
             </p>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+            <div className="flex justify-end gap-4">
               <button 
                 onClick={() => setIsOpen(false)}
-                style={{ padding: '0.75rem 1.5rem', background: 'white', border: '1px solid #ddd', borderRadius: '4px', cursor: 'pointer' }}
+                className="px-6 py-2 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors"
               >
                 Cancel
               </button>
               <button 
                 onClick={() => setIsOpen(false)}
-                style={{ padding: '0.75rem 1.5rem', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
               >
                 Confirm
               </button>
@@ -381,45 +338,32 @@ function ConfirmDialog() {
   };
   
   return (
-    <div style={{ padding: '2rem' }}>
+    <div className="p-8">
       <button 
         onClick={() => setShowConfirm(true)}
-        style={{ padding: '0.75rem 2rem', background: '#ef4444', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+        className="px-8 py-3 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
       >
         Delete Item
       </button>
       
       {result && (
-        <div style={{ marginTop: '1rem', padding: '1rem', background: '#d1fae5', color: '#065f46', borderRadius: '4px' }}>
+        <div className="mt-4 p-4 bg-green-100 text-green-800 rounded">
           {result}
         </div>
       )}
       
       {showConfirm && (
-        <div 
-          style={{ 
-            position: 'fixed', 
-            top: 0, 
-            left: 0, 
-            right: 0, 
-            bottom: 0, 
-            background: 'rgba(0,0,0,0.5)', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center',
-            zIndex: 1000
-          }}
-        >
-          <div style={{ background: 'white', padding: '2rem', borderRadius: '8px', maxWidth: '400px', boxShadow: '0 4px 16px rgba(0,0,0,0.2)' }}>
-            <div style={{ fontSize: '3rem', textAlign: 'center', marginBottom: '1rem' }}>⚠️</div>
-            <h3 style={{ margin: '0 0 1rem 0', textAlign: 'center' }}>Delete Item?</h3>
-            <p style={{ marginBottom: '2rem', color: '#666', textAlign: 'center' }}>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-lg max-w-sm shadow-2xl">
+            <div className="text-6xl text-center mb-4">⚠️</div>
+            <h3 className="text-xl font-bold mb-4 text-center">Delete Item?</h3>
+            <p className="mb-8 text-gray-600 text-center">
               This action cannot be undone.
             </p>
-            <div style={{ display: 'flex', gap: '1rem' }}>
+            <div className="flex gap-4">
               <button 
                 onClick={() => setShowConfirm(false)}
-                style={{ flex: 1, padding: '0.75rem', background: 'white', border: '1px solid #ddd', borderRadius: '4px', cursor: 'pointer' }}
+                className="flex-1 px-6 py-2 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors"
               >
                 Cancel
               </button>

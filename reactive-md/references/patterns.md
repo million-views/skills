@@ -174,53 +174,47 @@ function LineChart({ data, metric = 'value' }) {
 
 ---
 
-## Theme System with CSS Custom Properties
+## Theme System with Elementary Design System
 
-Light/dark mode support using modern CSS:
+Dark mode support using Elementary's semantic tokens:
 
 ```css live
-:root {
-  color-scheme: light dark;
-  
-  /* Text colors */
-  --c-text: light-dark(#1f2937, #f8fafc);
-  --c-text-muted: light-dark(#6b7280, #94a3b8);
-  
-  /* Background colors */
-  --c-bg: light-dark(#ffffff, #0f172a);
-  --c-bg-secondary: light-dark(#f9fafb, #1e293b);
-  
-  /* Accent colors */
-  --c-accent: light-dark(#3b82f6, #60a5fa);
-  --c-accent-hover: light-dark(#2563eb, #3b82f6);
-  
-  /* Border colors */
-  --c-border: light-dark(#e5e7eb, #334155);
-}
+@import '../design-systems/elementary/tokens.css';
+```
 
-.themed-card {
-  color: var(--c-text);
-  background: var(--c-bg);
-  border: 1px solid var(--c-border);
-  padding: 1rem;
-  border-radius: 0.5rem;
-}
-
-.themed-button {
-  background: var(--c-accent);
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 0.375rem;
-  cursor: pointer;
-}
-
-.themed-button:hover {
-  background: var(--c-accent-hover);
+```jsx live
+function ThemedCard() {
+  return (
+    <div style={{
+      color: 'var(--c-text)',
+      background: 'var(--bg-surface)',
+      border: '1px solid var(--c-border)',
+      padding: 'var(--p-card)',
+      borderRadius: 'var(--r-card)',
+      boxShadow: 'var(--fx-card-shadow)'
+    }}>
+      <h3 style={{ marginBottom: 'var(--m-stack)' }}>Themed Component</h3>
+      <p style={{ color: 'var(--c-text-secondary)' }}>
+        Uses Elementary semantic tokens for automatic dark mode support.
+      </p>
+      <button style={{
+        background: 'var(--c-primary)',
+        color: 'var(--c-on-primary)',
+        padding: 'var(--p-btn)',
+        border: 'none',
+        borderRadius: 'var(--r-btn)',
+        cursor: 'pointer'
+      }}>
+        Themed Button
+      </button>
+    </div>
+  );
 }
 ```
 
-**When to use:** Design system documentation, brand guidelines, themeable prototypes
+**When to use:** High-fidelity prototypes, themeable demonstrations, brand exploration
+
+**System Reference:** See [Elementary Design System](https://github.com/million-views/reactive-md/blob/main/recipes/design-systems/elementary/tokens.md) for complete token taxonomy
 
 ---
 

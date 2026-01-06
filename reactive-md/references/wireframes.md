@@ -1,6 +1,14 @@
 # Wireframes Reference
 
-How to create quick visual concepts and page layouts using reactive-md. Wireframes focus on structure and flow, not visual polish.
+How to create quick visual concepts and page layouts using reactive-md. Wireframes use the **Wireframe Design System** for low-fidelity, structure-focused mockups.
+
+**System Import**:
+```css live
+@import '../design-systems/wireframe/tokens.css';
+@import '../wireframes/wireframe.css';
+```
+
+**When to use**: Early exploration, low-fidelity mockups, structural communication
 
 ---
 
@@ -11,20 +19,15 @@ How to create quick visual concepts and page layouts using reactive-md. Wirefram
 ```jsx live
 function HeroWireframe() {
   return (
-    <div style={{ padding: '4rem 2rem', textAlign: 'center', background: '#f5f5f5' }}>
-      <h1 style={{ fontSize: '3rem', margin: '0 0 1rem 0' }}>
-        [Product Name]
-      </h1>
-      <p style={{ fontSize: '1.25rem', color: '#666', margin: '0 0 2rem 0' }}>
-        [One-line value proposition]
-      </p>
-      <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-        <button style={{ padding: '1rem 2rem', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-          Primary CTA
-        </button>
-        <button style={{ padding: '1rem 2rem', background: 'white', border: '1px solid #ddd', borderRadius: '4px', cursor: 'pointer' }}>
-          Secondary CTA
-        </button>
+    <div className="wf-hero">
+      <div className="content">
+        <span className="wf-label">[Hero Section]</span>
+        <h1 className="title">Product Name</h1>
+        <p className="description">One-line value proposition</p>
+        <div className="wf-actions">
+          <button className="wf-btn primary">Primary CTA</button>
+          <button className="wf-btn">Secondary CTA</button>
+        </div>
       </div>
     </div>
   );
@@ -42,12 +45,12 @@ function FeatureGrid() {
   ];
   
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', padding: '4rem 2rem' }}>
+    <div className="wf-grid three-col">
       {features.map((f, i) => (
-        <div key={i} style={{ textAlign: 'center', padding: '2rem', background: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>{f.icon}</div>
-          <h3 style={{ margin: '0 0 0.5rem 0' }}>{f.title}</h3>
-          <p style={{ color: '#666', margin: 0 }}>{f.description}</p>
+        <div key={i} className="wf-card">
+          <div className="icon">{f.icon}</div>
+          <h3 className="title">{f.title}</h3>
+          <p className="description">{f.description}</p>
         </div>
       ))}
     </div>
@@ -66,38 +69,22 @@ function PricingWireframe() {
   ];
   
   return (
-    <div style={{ display: 'flex', gap: '2rem', padding: '4rem 2rem', justifyContent: 'center' }}>
+    <div className="wf-pricing">
       {plans.map((plan, i) => (
-        <div key={i} style={{ 
-          padding: '2rem', 
-          background: plan.highlighted ? '#007bff' : 'white', 
-          color: plan.highlighted ? 'white' : 'black',
-          borderRadius: '8px', 
-          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-          flex: '1',
-          maxWidth: '300px'
-        }}>
-          <h3 style={{ margin: '0 0 1rem 0' }}>{plan.name}</h3>
-          <div style={{ fontSize: '2.5rem', fontWeight: 'bold', margin: '0 0 1rem 0' }}>{plan.price}</div>
-          <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 2rem 0' }}>
+        <div key={i} className={`wf-card ${plan.highlighted ? 'highlighted' : ''}`}>
+          <h3 className="title">{plan.name}</h3>
+          <div className="price">{plan.price}</div>
+          <ul className="features">
             {plan.features.map((f, j) => (
-              <li key={j} style={{ padding: '0.5rem 0' }}>✓ {f}</li>
+              <li key={j}>✓ {f}</li>
             ))}
           </ul>
-          <button style={{ 
-            width: '100%', 
-            padding: '1rem', 
-            background: plan.highlighted ? 'white' : '#007bff', 
-            color: plan.highlighted ? '#007bff' : 'white',
-            border: 'none', 
-            borderRadius: '4px', 
-            cursor: 'pointer',
-            fontWeight: 'bold'
-          }}>
-            Choose Plan
-          </button>
+          <button className="wf-btn primary">Choose Plan</button>
         </div>
       ))}
+    </div>
+  );
+}
     </div>
   );
 }
@@ -127,27 +114,22 @@ function DashboardMetrics() {
   ];
   
   return (
-    <div style={{ padding: '2rem' }}>
+    <div className="wf-container">
       {/* Header with time info */}
-      <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold' }}>Dashboard Overview</h2>
-        <div style={{ fontSize: '0.875rem', color: '#666' }}>
+      <div className="wf-header">
+        <h2 className="title">Dashboard Overview</h2>
+        <div className="wf-meta">
           Last updated {lastUpdated.fromNow()} • Data from {dataPeriod.format('MMM D')} - {dayjs().format('MMM D')}
         </div>
       </div>
       
       {/* Metrics grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+      <div className="wf-grid four-col">
         {metrics.map((m, i) => (
-          <div key={i} style={{ 
-            padding: '1.5rem', 
-            background: 'white', 
-            borderRadius: '8px', 
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)' 
-          }}>
-            <div style={{ fontSize: '0.875rem', color: '#666', marginBottom: '0.5rem' }}>{m.label}</div>
-            <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>{m.value}</div>
-            <div style={{ fontSize: '0.875rem', color: m.positive ? '#22c55e' : '#ef4444' }}>
+          <div key={i} className="wf-card">
+            <div className="wf-label">{m.label}</div>
+            <div className="metric-value">{m.value}</div>
+            <div className={`metric-change ${m.positive ? 'positive' : 'negative'}`}>
               {m.change}
             </div>
           </div>
@@ -169,28 +151,22 @@ function DashboardTable() {
   ]);
   
   return (
-    <div style={{ padding: '2rem' }}>
-      <table style={{ width: '100%', borderCollapse: 'collapse', background: 'white', borderRadius: '8px', overflow: 'hidden' }}>
+    <div className="wf-container">
+      <table className="wf-table">
         <thead>
-          <tr style={{ background: '#f5f5f5' }}>
-            <th style={{ padding: '1rem', textAlign: 'left', borderBottom: '1px solid #ddd' }}>Name</th>
-            <th style={{ padding: '1rem', textAlign: 'left', borderBottom: '1px solid #ddd' }}>Email</th>
-            <th style={{ padding: '1rem', textAlign: 'left', borderBottom: '1px solid #ddd' }}>Status</th>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
           {data.map(row => (
             <tr key={row.id}>
-              <td style={{ padding: '1rem', borderBottom: '1px solid #eee' }}>{row.name}</td>
-              <td style={{ padding: '1rem', borderBottom: '1px solid #eee' }}>{row.email}</td>
-              <td style={{ padding: '1rem', borderBottom: '1px solid #eee' }}>
-                <span style={{ 
-                  padding: '0.25rem 0.75rem', 
-                  background: row.status === 'Active' ? '#d1fae5' : '#fef3c7',
-                  color: row.status === 'Active' ? '#065f46' : '#92400e',
-                  borderRadius: '12px',
-                  fontSize: '0.875rem'
-                }}>
+              <td>{row.name}</td>
+              <td>{row.email}</td>
+              <td>
+                <span className={`wf-badge ${row.status === 'Active' ? 'success' : 'warning'}`}>
                   {row.status}
                 </span>
               </td>
@@ -215,52 +191,61 @@ function OnboardingWizard() {
   const totalSteps = 3;
   
   return (
-    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '3rem 2rem' }}>
+    <div className="wf-wizard">
       {/* Progress bar */}
-      <div style={{ marginBottom: '2rem' }}>
-        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+      <div className="wf-progress">
+        <div className="progress-bar">
           {[...Array(totalSteps)].map((_, i) => (
-            <div key={i} style={{ 
-              flex: 1, 
-              height: '4px', 
-              background: i < step ? '#007bff' : '#e0e0e0',
-              borderRadius: '2px'
-            }} />
+            <div key={i} className={`segment ${i < step ? 'active' : ''}`} />
           ))}
         </div>
-        <div style={{ fontSize: '0.875rem', color: '#666' }}>Step {step} of {totalSteps}</div>
+        <div className="wf-meta">Step {step} of {totalSteps}</div>
       </div>
       
       {/* Step content */}
-      <div style={{ background: 'white', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', marginBottom: '2rem' }}>
+      <div className="wf-card">
         {step === 1 && (
           <div>
-            <h2 style={{ margin: '0 0 1rem 0' }}>Welcome!</h2>
+            <h2 className="title">Welcome!</h2>
             <p>Let's get you set up. This will only take a minute.</p>
           </div>
         )}
         {step === 2 && (
           <div>
-            <h2 style={{ margin: '0 0 1rem 0' }}>Your Information</h2>
-            <input type="text" placeholder="Full Name" style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem', border: '1px solid #ddd', borderRadius: '4px' }} />
-            <input type="email" placeholder="Email" style={{ width: '100%', padding: '0.75rem', border: '1px solid #ddd', borderRadius: '4px' }} />
+            <h2 className="title">Your Information</h2>
+            <input type="text" placeholder="Full Name" className="wf-input" />
+            <input type="email" placeholder="Email" className="wf-input" />
           </div>
         )}
         {step === 3 && (
           <div>
-            <h2 style={{ margin: '0 0 1rem 0' }}>All Set!</h2>
+            <h2 className="title">All Set!</h2>
             <p>You're ready to get started.</p>
           </div>
         )}
       </div>
       
       {/* Navigation */}
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div className="wf-actions">
         <button 
           onClick={() => setStep(Math.max(1, step - 1))}
           disabled={step === 1}
-          style={{ 
-            padding: '0.75rem 1.5rem', 
+          className="wf-btn"
+        >
+          Back
+        </button>
+        <button 
+          onClick={() => setStep(Math.min(totalSteps, step + 1))}
+          disabled={step === totalSteps}
+          className="wf-btn primary"
+        >
+          {step === totalSteps ? 'Finish' : 'Next'}
+        </button>
+      </div>
+    </div>
+  );
+}
+``` 
             background: step === 1 ? '#e0e0e0' : 'white', 
             border: '1px solid #ddd', 
             borderRadius: '4px', 

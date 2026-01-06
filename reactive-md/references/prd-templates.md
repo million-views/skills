@@ -84,20 +84,44 @@ function DarkModeDemo() {
   };
   
   return (
-    <div style={{
-      padding: '2rem',
-      background: theme === 'dark' ? '#1a1a1a' : '#ffffff',
-      color: theme === 'dark' ? '#ffffff' : '#1a1a1a',
-      borderRadius: '8px'
-    }}>
+    <div className={`demo-card ${theme}`}>
+      <style>{`
+        @import '../design-systems/elementary/tokens.css';
+        
+        .demo-card {
+          padding: var(--p-card);
+          border-radius: var(--r-card);
+          background: var(--bg-surface);
+          color: var(--c-text);
+        }
+        
+        .demo-card h3 {
+          color: var(--c-heading);
+          margin-bottom: var(--s-4);
+        }
+        
+        .demo-card button {
+          padding: var(--s-3) var(--s-4);
+          background: var(--bg-surface-raised);
+          color: var(--c-text);
+          border: 1px solid var(--c-border);
+          border-radius: var(--r-button);
+          cursor: pointer;
+        }
+        
+        .demo-card button:hover {
+          background: var(--bg-surface-hover);
+        }
+      `}</style>
+      
       <h3>Theme: {theme}</h3>
-      <button 
-        onClick={toggleTheme}
-        style={{
-          padding: '0.5rem 1rem',
-          background: theme === 'dark' ? '#4a4a4a' : '#e0e0e0',
-          color: theme === 'dark' ? '#ffffff' : '#1a1a1a',
-          border: 'none',
+      <button onClick={toggleTheme}>
+        Toggle Theme
+      </button>
+    </div>
+  );
+}
+```
           borderRadius: '4px',
           cursor: 'pointer'
         }}
