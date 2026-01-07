@@ -1,6 +1,6 @@
 ---
 name: reactive-md
-description: Literate UI/UX for product teams - accelerate from idea to working prototype in minutes using markdown with embedded interactive React components. Use for fast iteration on product specs, wireframes, user flows, feature demos, and design documentation. Replaces Figma/Storybook with executable specs in version control. Optimizes for velocity and async collaboration, not production code. VS Code extension enables hot-reload prototyping without leaving the editor.
+description: Literate UI/UX for product teams - accelerate from idea to working prototype in minutes using markdown with embedded interactive React components. Use for fast iteration on product specs, wireframes, user flows, feature demos, and design documentation. Replaces Figma/Storybook with executable specs in version control. Optimizes for velocity and async collaboration.
 license: MIT
 ---
 
@@ -12,16 +12,15 @@ Generate functional markdown documents with embedded interactive React component
 
 Use reactive-md when the user asks to create:
 
-**Primary Use Cases** (with recipe categories):
-- Product specs with working prototypes → [PRD Templates](https://github.com/million-views/reactive-md/tree/main/recipes/prd-templates)
-- Design system documentation with live examples → [Design Patterns](https://github.com/million-views/reactive-md/tree/main/recipes/design-patterns)
-- User flow wireframes with interactive demos → [User Journeys](https://github.com/million-views/reactive-md/tree/main/recipes/user-journeys)
-- Feature prototypes with visual concepts → [Feature Concepts](https://github.com/million-views/reactive-md/tree/main/recipes/feature-concepts)
-- A/B test mockups with interactivity → [PRD Templates/A-B Test](https://github.com/million-views/reactive-md/blob/main/recipes/prd-templates/a-b-test-proposal.md)
-- Wireframes, dashboards, or component galleries → [Wireframes](https://github.com/million-views/reactive-md/tree/main/recipes/wireframes)
-- Interactive documentation or living specifications → [Case Studies](https://github.com/million-views/reactive-md/tree/main/recipes/case-studies)
+**Primary Use Cases:**
+- Product specs with working prototypes
+- Design system documentation with live examples
+- User flow wireframes and interactive demos
+- Feature prototypes, concept exploration, and visual demos
+- A/B tests, dashboards, component galleries
+- Interactive documentation and living specifications
 
-**Workflow**: Before generating content, check if a recipe exists for the job. Adapt existing recipes rather than creating from scratch.
+**Workflow**: Before generating content, check if a recipe exists for the job (see Recipe-First Approach section). Adapt existing recipes rather than creating from scratch.
 
 **Recognized Keywords & Aliases:**
 
@@ -45,10 +44,29 @@ Reactive-md documents support:
 1. **Static Preview** (Markdown Preview): Offline, bundled packages only, server-side rendering
 2. **Interactive Preview** (`Cmd+K P`): Browser-based webview, supports CDN packages and platform APIs
 
-**Live Fences:**
-- `` ```jsx live `` - JavaScript + JSX components
-- `` ```tsx live `` - TypeScript + JSX components  
-- `` ```css live `` - CSS stylesheets (custom properties, imports)
+**Live Fences (CRITICAL):**
+
+**When to use `live` annotation:**
+- User wants to **see/interact** with the component
+- Creating a working demo or prototype
+- Showing how something works in practice
+- All primary use cases (prototypes, specs, wireframes, demos)
+
+**When to use regular fences (no `live`):**
+- Explaining **how** something works (discourse about the code)
+- Showing anti-patterns or broken examples
+- Comparing different approaches side-by-side
+- Code snippets that are incomplete or won't run standalone
+
+**Syntax:**
+- `` ```jsx live `` - JavaScript + JSX components (executable)
+- `` ```tsx live `` - TypeScript + JSX components (executable)
+- `` ```css live `` - CSS stylesheets (executable)
+- `` ```jsx `` - Code examples for discussion (non-executable)
+- `` ```tsx `` - Code snippets for illustration (non-executable)
+- `` ```css `` - CSS snippets for illustration (non-executable)
+
+**Default behavior:** When in doubt, use `live` - reactive-md's purpose is interactive demos.
 
 **File Types:**
 - Markdown (`.md`) - Primary document only (entry point)
@@ -196,109 +214,19 @@ Not available:
 
 ## Design System Integration
 
-**CRITICAL**: Never generate design system CSS from assumptions. Always fetch from canonical sources.
+Reactive-md supports three styling approaches:
 
-### Fetching Design Systems
-
-Before using any design system patterns, fetch the actual CSS files from the public repository:
-
-**Canonical Source**: `https://github.com/million-views/reactive-md/tree/main/design-systems`
-
-**Available Systems:**
 1. **Wireframe Design System** - Low-fidelity structural mockups
-   - Tokens: `design-systems/wireframe/tokens.css`
-   - Classes: `wireframes/wireframe.css`
-   - Use for: Early exploration, structural communication
+2. **Elementary Design System** - High-fidelity themeable components (light/dark mode)
+3. **Tailwind CSS** - Utility-first rapid prototyping (loaded via CDN)
 
-2. **Elementary Design System** - High-fidelity themeable components
-   - Tokens: `design-systems/elementary/tokens.css`
-   - Use for: Polished demos, themeable UIs, dark mode support
+**CRITICAL**: Never generate design system CSS from assumptions. Always fetch from canonical source:
+`https://github.com/million-views/reactive-md/tree/main/recipes/design-systems`
 
-3. **Tailwind CSS** - Utility-first styling
-   - Loaded via CDN (no fetch needed)
-   - Use for: Quick prototypes, one-off examples
-
-**Fetch Workflow:**
-```bash
-# Fetch design system files
-curl -o design-systems/wireframe/tokens.css \
-  https://raw.githubusercontent.com/million-views/reactive-md/main/design-systems/wireframe/tokens.css
-
-curl -o design-systems/elementary/tokens.css \
-  https://raw.githubusercontent.com/million-views/reactive-md/main/design-systems/elementary/tokens.css
-
-curl -o wireframes/wireframe.css \
-  https://raw.githubusercontent.com/million-views/reactive-md/main/wireframes/wireframe.css
-```
-
-Once fetched, use `@import` statements in your markdown:
-
-```css live
-@import './design-systems/elementary/tokens.css';
-```
-
-### System Selection Guide
-
-Choose styling approach based on use case:
-
-**Use Wireframe System When:**
-- Early-stage wireframes or low-fidelity mockups
-- Structural communication without visual polish
-- Speed is priority, aesthetics are secondary
-
-```jsx live
-function WireframeCard() {
-  return (
-    <div className="wf-card">
-      <h3 className="title">Card Title</h3>
-      <p className="description">Description</p>
-    </div>
-  );
-}
-```
-
-**Use Elementary System When:**
-- High-fidelity feature demos
-- Themeable components (light/dark mode)
-- Brand-specific prototypes
-- Polished visual communication
-
-```jsx live
-function ThemedCard() {
-  return (
-    <div style={{ 
-      padding: 'var(--p-card)', 
-      background: 'var(--bg-surface)',
-      color: 'var(--c-text)',
-      borderRadius: 'var(--r-card)'
-    }}>
-      <h3>Card Title</h3>
-      <p>Description</p>
-    </div>
-  );
-}
-```
-
-**Use Tailwind CSS When:**
-- Quick throwaway prototypes
-- No theming requirements
-- Speed is absolute priority
-
-```jsx live
-function TailwindCard() {
-  return (
-    <div className="p-4 bg-white border rounded-lg shadow-md">
-      <h3 className="text-lg font-bold mb-2">Card Title</h3>
-      <p className="text-gray-600">Description</p>
-    </div>
-  );
-}
-```
-
-**Documentation Links:**
-- Elementary Design System: https://github.com/million-views/reactive-md/tree/main/design-systems/elementary
-- Wireframe Design System: https://github.com/million-views/reactive-md/tree/main/design-systems/wireframe
-- Design Systems Overview: https://github.com/million-views/reactive-md/blob/main/design-systems/README.md
+**See [references/design-systems.md](references/design-systems.md)** for:
+- Fetch workflows and curl commands
+- System selection guide with examples
+- When to use each approach
 
 ---
 
@@ -308,31 +236,42 @@ function TailwindCard() {
 
 **When:** Simple concepts, manifestos, quick demos
 
-````markdown
-# Button Variants
+**Pattern for inline live fences:**
 
-## Buttons
-
+✅ **With helper components** - Wrap in parent component:
 ```jsx live
-function Button({ children, variant = 'primary' }) {
-  const styles = {
-    primary: 'bg-blue-500 text-white',
-    secondary: 'bg-gray-200 text-gray-800'
-  };
+function Demo() {
+  function Button({ children, variant = 'primary' }) {
+    return (
+      <button className={`px-4 py-2 rounded ${variant === 'primary' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}>
+        {children}
+      </button>
+    );
+  }
   
   return (
-    <button className={`px-4 py-2 rounded ${styles[variant]}`}>
-      {children}
-    </button>
+    <div className="flex gap-4">
+      <Button variant="primary">Primary</Button>
+      <Button variant="secondary">Secondary</Button>
+    </div>
   );
 }
+```
 
+✅ **Without helpers** - Pure JSX at top level:
+```jsx live
 <div className="flex gap-4">
-  <Button variant="primary">Primary</Button>
-  <Button variant="secondary">Secondary</Button>
+  <button className="px-4 py-2 rounded bg-blue-500 text-white">Primary</button>
+  <button className="px-4 py-2 rounded bg-gray-200 text-gray-800">Secondary</button>
 </div>
 ```
-````
+
+❌ **Don't mix** helper functions with top-level JSX:
+```jsx
+// This creates ambiguous entry point - renderer doesn't know what to render
+function Button({ children }) { return <button>{children}</button>; }
+<div><Button>Click me</Button></div>
+```
 
 ### Folder Structure
 
@@ -348,7 +287,7 @@ notification-system/
 ```
 
 **In spec.md:**
-````markdown
+
 # Notification System
 
 ```jsx live
@@ -359,7 +298,6 @@ function Demo() {
   return <NotificationBell items={notifications} />;
 }
 ```
-````
 
 **Naming Convention:** Kebab-case, hierarchical context
 - `checkout-flow-payment-form.jsx` (grandparent-parent-child)
@@ -494,35 +432,178 @@ When user says "improve this" or "add feature X":
 
 ## Refusal Boundaries
 
-### Always Refuse: Production Intent
+Reactive-md is a powerful prototyping tool with real capabilities. Refuse only when requests require infrastructure or services outside the extension's scope.
+
+### What Reactive-MD CAN Do
+
+- ✅ **Complex interactive UIs** - Dashboards with real data, multi-step forms, stateful components
+- ✅ **Real API integration** - Fetch from actual REST APIs, handle responses, show loading states
+- ✅ **Error handling** - Try/catch blocks, error states, retry logic in React components
+- ✅ **Authentication UI** - Login screens, registration forms, password reset flows
+- ✅ **Data persistence** - localStorage/sessionStorage for user preferences, cart state, drafts
+- ✅ **Form validation** - Client-side validation, error messages, field constraints
+- ✅ **Local mock API consumption** - Fetch from localhost servers (if provided separately)
+- ✅ **Complex state management** - Multiple components, shared state, async operations
+
+### Refuse: Production Infrastructure
 
 **Triggers:**
-- "Make this production-ready"
-- "Add error handling and retry logic"
-- "Set up testing framework"
-- "Deploy this" or "Add authentication"
-- "Integrate with real backend"
+- "Deploy this to production"
+- "Set up CI/CD pipeline"
+- "Add Docker containerization"
+- "Configure AWS/Azure infrastructure"
+- "Set up production monitoring and logging services"
+
+**Why refuse:** Reactive-md runs in VS Code, not in production environments. It can't deploy, configure cloud services, or set up infrastructure.
 
 **Response:**
 ```
-🚫 Reactive MD Boundary
+🚫 Infrastructure Boundary
 
-This request suggests production intent. Reactive-md is designed for idea 
-communication and rapid prototyping, not production code.
+Reactive-md prototypes run in VS Code, not production infrastructure.
 
-What you're asking for requires:
-- [List specific production concerns: error boundaries, testing, CI/CD, etc.]
+What you're asking requires:
+- [Deployment platform, CI/CD, containerization, cloud services, etc.]
 
-Recommended Path:
-1. Use this reactive-md document to align on the concept
-2. Graduate to proper project: create-react-app, vite, or next
-3. Implement with production tooling (tests, monitoring, deployment)
+This prototype CAN demonstrate:
+- The complete UI/UX flow
+- Real API integration (if APIs are accessible)
+- All interactive behavior and state management
 
-I can help with:
-- Simplifying the concept to demo-able scope
-- Creating visual wireframes instead
-- Focusing on UX flow rather than implementation details
+To productionize:
+1. Use this document to validate the design with stakeholders
+2. Graduate to a proper project (create-react-app, vite, next.js)
+3. Add infrastructure tooling (Docker, CI/CD, monitoring)
+
+Would you like me to focus on making the prototype more complete instead?
 ```
+
+---
+
+### Refuse: Backend Implementation
+
+**Triggers:**
+- "Build a Node.js/Express backend"
+- "Implement JWT authentication logic"
+- "Create a database schema"
+- "Write API endpoints with database persistence"
+- "Add server-side validation and security"
+
+**Why refuse:** Reactive-md is frontend-only. It can consume APIs but not implement backend services.
+
+**Response:**
+```
+🚫 Backend Boundary
+
+Reactive-md is a frontend prototyping tool. It can integrate with backends but not implement them.
+
+What you're asking requires:
+- [Backend framework, database, authentication service, etc.]
+
+This prototype CAN demonstrate:
+- UI that integrates with your real API (via fetch)
+- Authentication screens (login/register forms)
+- How the frontend handles API responses
+- Mock data flows (using local JSON or existing mock API servers)
+
+For backend implementation:
+Use existing APIs, public mock services (jsonplaceholder, mockapi), or set up a separate mock server.
+
+Would you like me to show how the UI integrates with an API instead?
+```
+
+---
+
+### Refuse: Testing Infrastructure
+
+**Triggers:**
+- "Set up Jest/Vitest"
+- "Write unit tests with testing-library"
+- "Add E2E tests with Playwright/Cypress"
+- "Configure test coverage reporting"
+
+**Why refuse:** Reactive-md documents aren't packaged projects. They can't run test frameworks.
+
+**Response:**
+```
+🚫 Testing Framework Boundary
+
+Reactive-md documents aren't packaged projects and can't run test frameworks.
+
+What you're asking requires:
+- [Test framework, test configuration, CI integration, etc.]
+
+This prototype CAN help with:
+- Manual testing of all user flows
+- Demonstrating edge cases and error states
+- Validating UX with stakeholders
+
+To add automated testing:
+Graduate to a proper project with package.json and test infrastructure.
+
+Would you like me to add more interactive demonstrations of edge cases instead?
+```
+
+---
+
+### Caution: Complexity Without Clear Scope
+
+**Triggers:**
+- Vague requests like "make it production-ready" without specifics
+- Requests for "enterprise-grade" features without defining them
+- Requests that would require 1000+ lines of code
+
+**Why caution:** These requests are ambiguous and may exceed prototyping scope.
+
+**Response:**
+```
+⚠️ Scope Clarification Needed
+
+This request is broad. Let me help narrow it down:
+
+For "production-ready":
+- Do you mean polished UI? (I can do that)
+- Do you mean error handling and loading states? (I can do that)
+- Do you mean deployment and infrastructure? (That's outside reactive-md)
+
+For "enterprise features":
+- Which specific features? (Authentication UI, data tables, dashboards?)
+- What's the primary user flow to demonstrate?
+
+Let's break this into:
+1. Core workflow (what's the main job to be done?)
+2. Essential interactions (what must work?)
+3. Nice-to-haves (what can be simplified?)
+
+What's most important to demonstrate first?
+```
+
+---
+
+### When to Push Forward vs. Refuse
+
+**Push forward when:**
+- Request involves UI/UX, even if complex
+- Request needs real API integration via fetch (remote or localhost)
+- Request involves React patterns (error boundaries, suspense, context)
+- Request asks for "authentication" meaning login screens
+- Request needs client-side validation or error handling
+- Request wants to consume from existing local mock server
+
+**Refuse when:**
+- Request needs deployment, CI/CD, or cloud infrastructure
+- Request needs backend implementation (databases, auth services, mock servers)
+- Request needs testing framework setup
+- Request needs packages that aren't bundled or CDN-available
+- Request exceeds what can be demonstrated in a prototype
+
+**Ask for clarification when:**
+- "Production-ready" (could mean polished UI or infrastructure)
+- "Add authentication" (could mean UI or backend logic)
+- "Real backend" (could mean fetch from API or build server)
+- Ambiguous scope that could go either direction
+
+---
 
 ### Always Refuse: Unsupported Packages
 
@@ -536,32 +617,10 @@ I can help with:
 
 Alternative Approaches:
 - For charts: Use native SVG or Canvas API
-- For data fetching: Use platform fetch() with remote mock APIs
-- For state management: Use bundled zustand (works in Interactive Preview)
+- For data fetching: Use native fetch() with remote APIs or mock services
+- For state management: Use bundled zustand or jotai (Interactive Preview only)
 
 Would you like me to show you how to achieve this with supported alternatives?
-```
-
-### Always Refuse: Complex Production UI
-
-**Triggers:** Requests for complex tables, advanced forms, full dashboards with real-time data
-
-**Response:**
-```
-⚠️ Complexity Boundary
-
-This request exceeds reactive-md's scope. The extension is designed for idea 
-communication, not building complex production UIs.
-
-I can help you:
-- Create a simplified proof-of-concept
-- Focus on a single interaction or flow
-- Build a wireframe that communicates the concept
-
-For production implementation:
-Graduate to a proper project with testing, error handling, and production tooling.
-
-Would you like me to simplify this to a demo-able concept?
 ```
 
 ---
@@ -574,11 +633,86 @@ Good output must:
 2. ✅ **Preserve design systems** - Keep Elementary/Wireframe imports from original recipes
 3. ✅ **Run without errors** - Code executes in appropriate preview mode
 4. ✅ **Follow conventions** - File organization, naming, import patterns match reactive-md style
-5. ✅ **Respect boundaries** - Uses allowed packages, refuses production requests
-6. ✅ **Explain decisions** - Provide context for choices to enable faster iteration
-7. ✅ **Complete structure** - Problem → Solution → Live Code → Next Steps
-8. ✅ **Readable fences** - Short code blocks (< 50 lines), clear imports, semantic naming
-9. ✅ **Include attribution** - Link to recipe sources when adapting existing templates
+5. ✅ **Respect boundaries** - Uses allowed packages, refuses infrastructure/backend requests
+6. ✅ **Embrace capabilities** - Use fetch for real APIs, error handling, complex state, local servers
+7. ✅ **Explain decisions** - Provide context for choices to enable faster iteration
+8. ✅ **Complete structure** - Problem → Solution → Live Code → Next Steps
+9. ✅ **Readable fences** - Short code blocks (< 50 lines), clear imports, semantic naming
+10. ✅ **Include attribution** - Link to recipe sources when adapting existing templates
+
+### Examples of Quality
+
+**Good: Complex dashboard with API**
+```jsx live
+function Dashboard() {
+  const [data, setData] = React.useState(null);
+  const [error, setError] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+  
+  React.useEffect(() => {
+    fetch('https://api.example.com/metrics')
+      .then(res => res.ok ? res.json() : Promise.reject('API error'))
+      .then(setData)
+      .catch(err => setError(err.message || String(err)))
+      .finally(() => setLoading(false));
+  }, []);
+  
+  if (loading) return <div>Loading metrics...</div>;
+  if (error) return <div>Error: {error}</div>;
+  return <div>{data ? JSON.stringify(data) : 'No data'}</div>;
+}
+
+<Dashboard />
+```
+✅  API integration, error handling, loading states
+
+**Good: Authentication UI with validation**
+```jsx live
+function LoginForm() {
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [errors, setErrors] = React.useState({});
+  
+  const validate = () => {
+    const errs = {};
+    if (!email.includes('@')) errs.email = 'Invalid email';
+    if (password.length < 8) errs.password = 'Password too short';
+    return errs;
+  };
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const errs = validate();
+    if (Object.keys(errs).length) {
+      setErrors(errs);
+      return;
+    }
+    // Call real auth API
+    const res = await fetch('https://api.example.com/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password })
+    });
+    // Handle response...
+  };
+  
+  return <form onSubmit={handleSubmit}>{/* form fields */}</form>;
+}
+```
+✅ Client-side validation, error handling, API integration
+
+**Bad: Refusing valid requests**
+```
+User: "Add error handling to this fetch call"
+Agent: "⚠️ That's production code, reactive-md is just for prototypes"
+```
+❌ Error handling is a valid React pattern, not "production infrastructure"
+
+**Bad: Refusing authentication UI**
+```
+User: "Create a login screen"
+Agent: "⚠️ Authentication requires backend services, I can't help with that"
+```
+❌ Login screens are UI/UX, perfectly valid for reactive-md
 
 ---
 

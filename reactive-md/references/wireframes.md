@@ -1,35 +1,84 @@
 # Wireframes Reference
 
-How to create quick visual concepts and page layouts using reactive-md. Wireframes use the **Wireframe Design System** for low-fidelity, structure-focused mockups.
+How to create low-fidelity visual concepts using reactive-md. Wireframes use the **Wireframe Design System** for structure-focused mockups that prioritize speed over polish.
 
-**System Import**:
+**Recipe source**: https://github.com/million-views/reactive-md/tree/main/recipes/wireframes
+
+**When to use**: Early exploration, structural communication, layout validation
+
+---
+
+## System Setup
+
+The Wireframe Design System uses **monospace typography**, **flat grayscale colors**, and **minimal effects** to create a deliberate "sketch on paper" aesthetic.
+
+**Required imports**:
 ```css live
 @import '../design-systems/wireframe/tokens.css';
 @import '../wireframes/wireframe.css';
 ```
 
-**When to use**: Early exploration, low-fidelity mockups, structural communication
+**Design philosophy**: Identical token names as Elementary (high-fidelity) system, but low-fidelity values. This allows system-swapping by changing one import line.
 
 ---
 
-## Landing Page Wireframes
+## Landing Page Components
 
 ### Hero Section
 
 ```jsx live
-function HeroWireframe() {
+export default function HeroSection() {
   return (
-    <div className="wf-hero">
+    <header className="wf-hero">
       <div className="content">
-        <span className="wf-label">[Hero Section]</span>
-        <h1 className="title">Product Name</h1>
-        <p className="description">One-line value proposition</p>
-        <div className="wf-actions">
-          <button className="wf-btn primary">Primary CTA</button>
-          <button className="wf-btn">Secondary CTA</button>
+        <span className="badge">
+          🎉 Now available for teams
+        </span>
+        <h1 className="title">
+          Build products faster with AI
+        </h1>
+        <p className="description">
+          The modern platform for product teams. Design, prototype, 
+          and ship — all in one place.
+        </p>
+        <div className="actions">
+          <button className="wf-btn primary">
+            Get Started Free
+          </button>
+          <button className="wf-btn secondary">
+            Watch Demo
+          </button>
         </div>
+        <p className="footnote">
+          No credit card required · Free for individuals
+        </p>
       </div>
-    </div>
+    </header>
+  );
+}
+```
+
+### Social Proof Bar
+
+```jsx live
+const Logo = ({ name }) => (
+  <span className="logo">{name}</span>
+);
+
+export default function SocialProof() {
+  const logos = ['Acme Inc', 'TechCorp', 'StartupXYZ', 'Enterprise Co', 'ScaleUp'];
+  
+  return (
+    <section className="wf-social-proof">
+      <p className="label">
+        Trusted by 10,000+ teams at companies like
+      </p>
+      <div className="logos">
+        {logos.map(logo => (
+          <Logo key={logo} name={logo} />
+        ))}
+      </div>
+    </section>
   );
 }
 ```
@@ -37,140 +86,217 @@ function HeroWireframe() {
 ### Feature Grid
 
 ```jsx live
-function FeatureGrid() {
-  const features = [
-    { icon: '🚀', title: 'Fast', description: 'Lightning quick performance' },
-    { icon: '🔒', title: 'Secure', description: 'Enterprise-grade security' },
-    { icon: '📱', title: 'Mobile', description: 'Works on any device' },
-  ];
-  
+function FeatureCard({ icon, title, description }) {
   return (
-    <div className="wf-grid three-col">
-      {features.map((f, i) => (
-        <div key={i} className="wf-card">
-          <div className="icon">{f.icon}</div>
-          <h3 className="title">{f.title}</h3>
-          <p className="description">{f.description}</p>
-        </div>
-      ))}
-    </div>
+    <article className="wf-card">
+      <div className="icon">{icon}</div>
+      <h3 className="title">{title}</h3>
+      <p className="description">{description}</p>
+    </article>
   );
 }
-```
 
-### Pricing Table
-
-```jsx live
-function PricingWireframe() {
-  const plans = [
-    { name: 'Basic', price: '$9', features: ['Feature 1', 'Feature 2'] },
-    { name: 'Pro', price: '$29', features: ['Everything in Basic', 'Feature 3', 'Feature 4'], highlighted: true },
-    { name: 'Enterprise', price: '$99', features: ['Everything in Pro', 'Feature 5', 'Feature 6'] },
+export default function FeatureGrid() {
+  const features = [
+    { icon: '⚡', title: 'Lightning Fast', desc: 'Built for speed. See changes in milliseconds.' },
+    { icon: '🔒', title: 'Secure by Default', desc: 'Enterprise-grade security out of the box.' },
+    { icon: '🎨', title: 'Beautiful Design', desc: 'Stunning templates to get started quickly.' },
+    { icon: '🔄', title: 'Real-time Sync', desc: 'Collaborate with your team in real-time.' },
+    { icon: '📊', title: 'Analytics Built-in', desc: 'Track performance without extra tools.' },
+    { icon: '🌐', title: 'Global CDN', desc: 'Deploy to 300+ edge locations worldwide.' },
   ];
   
   return (
-    <div className="wf-pricing">
-      {plans.map((plan, i) => (
-        <div key={i} className={`wf-card ${plan.highlighted ? 'highlighted' : ''}`}>
-          <h3 className="title">{plan.name}</h3>
-          <div className="price">{plan.price}</div>
-          <ul className="features">
-            {plan.features.map((f, j) => (
-              <li key={j}>✓ {f}</li>
-            ))}
-          </ul>
-          <button className="wf-btn primary">Choose Plan</button>
-        </div>
+    <section className="wf-features">
+      {features.map(f => (
+        <FeatureCard key={f.title} icon={f.icon} title={f.title} description={f.desc} />
       ))}
-    </div>
+    </section>
   );
 }
 ```
 
 ---
 
-## Dashboard Wireframes
+## Dashboard Components
 
-### Metrics Overview
+### Dashboard Layout with Sidebar
 
 ```jsx live
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
+function NavItem({ item, isActive, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`item ${isActive ? 'active' : ''}`}
+    >
+      <span>{item.icon}</span>
+      <span>{item.label}</span>
+    </button>
+  );
+}
 
-dayjs.extend(relativeTime);
+function MetricCard({ label, value }) {
+  return (
+    <article className="wf-card">
+      <div className="label">{label}</div>
+      <div className="value">{value}</div>
+    </article>
+  );
+}
 
-function DashboardMetrics() {
-  const lastUpdated = dayjs().subtract(2, 'hours');
-  const dataPeriod = dayjs().subtract(7, 'days');
+export default function DashboardLayout() {
+  const [activeNav, setActiveNav] = React.useState('overview');
+  
+  const navItems = [
+    { id: 'overview', icon: '📊', label: 'Overview' },
+    { id: 'analytics', icon: '📈', label: 'Analytics' },
+    { id: 'reports', icon: '📋', label: 'Reports' },
+    { id: 'settings', icon: '⚙️', label: 'Settings' },
+  ];
   
   const metrics = [
-    { label: 'Revenue', value: '$45,231', change: '+12%', positive: true },
-    { label: 'Users', value: '2,345', change: '+8%', positive: true },
-    { label: 'Bounce Rate', value: '42%', change: '-3%', positive: true },
-    { label: 'Avg Session', value: '4m 23s', change: '+1m', positive: true },
+    { label: 'Total Users', value: '2,345' },
+    { label: 'Active Now', value: '127' },
+    { label: 'Revenue', value: '$45.2K' },
   ];
   
   return (
-    <div className="wf-container">
-      {/* Header with time info */}
-      <div className="wf-header">
-        <h2 className="title">Dashboard Overview</h2>
-        <div className="wf-meta">
-          Last updated {lastUpdated.fromNow()} • Data from {dataPeriod.format('MMM D')} - {dayjs().format('MMM D')}
-        </div>
-      </div>
+    <div className="wf-dashboard">
+      <aside className="sidebar">
+        <h2 className="title">Dashboard</h2>
+        <nav className="nav">
+          {navItems.map((item) => (
+            <NavItem
+              key={item.id}
+              item={item}
+              isActive={activeNav === item.id}
+              onClick={() => setActiveNav(item.id)}
+            />
+          ))}
+        </nav>
+      </aside>
       
-      {/* Metrics grid */}
-      <div className="wf-grid four-col">
-        {metrics.map((m, i) => (
-          <div key={i} className="wf-card">
-            <div className="wf-label">{m.label}</div>
-            <div className="metric-value">{m.value}</div>
-            <div className={`metric-change ${m.positive ? 'positive' : 'negative'}`}>
-              {m.change}
-            </div>
-          </div>
-        ))}
-      </div>
+      <main className="main">
+        <h1 className="heading">{activeNav}</h1>
+        <div className="wf-grid metrics">
+          {metrics.map((metric, i) => (
+            <MetricCard key={i} label={metric.label} value={metric.value} />
+          ))}
+        </div>
+      </main>
     </div>
   );
 }
 ```
 
-### Data Table
+### Stat Cards with Trend Indicators
 
 ```jsx live
-function DashboardTable() {
-  const [data] = React.useState([
-    { id: 1, name: 'John Doe', email: 'john@example.com', status: 'Active' },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', status: 'Pending' },
-    { id: 3, name: 'Bob Johnson', email: 'bob@example.com', status: 'Active' },
-  ]);
+function StatCard({ stat }) {
+  return (
+    <article className="wf-card">
+      <div className="label">{stat.label}</div>
+      <div className="value">{stat.value}</div>
+      <div className={`change ${stat.up ? 'positive' : ''}`}>
+        {stat.change} vs last month
+      </div>
+    </article>
+  );
+}
+
+export default function StatCards() {
+  const stats = [
+    { label: 'Total Revenue', value: '$45,231', change: '+12.5%', up: true },
+    { label: 'Active Users', value: '2,350', change: '+4.2%', up: true },
+    { label: 'Bounce Rate', value: '32%', change: '-2.1%', up: false },
+    { label: 'Conversion', value: '3.2%', change: '+0.5%', up: true },
+  ];
   
   return (
-    <div className="wf-container">
-      <table className="wf-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map(row => (
-            <tr key={row.id}>
-              <td>{row.name}</td>
-              <td>{row.email}</td>
-              <td>
-                <span className={`wf-badge ${row.status === 'Active' ? 'success' : 'warning'}`}>
-                  {row.status}
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <section className="wf-grid stats">
+      {stats.map((stat) => (
+        <StatCard key={stat.label} stat={stat} />
+      ))}
+    </section>
+  );
+}
+```
+
+---
+
+## Empty States
+
+### Zero Data State
+
+```jsx live
+export default function EmptyState() {
+  return (
+    <section className="wf-empty-state">
+      <div className="icon">📋</div>
+      <h3 className="title">No items yet</h3>
+      <p className="description">
+        Get started by creating your first item
+      </p>
+      <button className="wf-btn primary">
+        + Create Item
+      </button>
+    </section>
+  );
+}
+```
+
+---
+
+## Settings Pages
+
+### Tabbed Settings Interface
+
+```jsx live
+export default function SettingsPage() {
+  const [tab, setTab] = React.useState('profile');
+  
+  const tabs = ['profile', 'security', 'notifications'];
+  
+  return (
+    <div className="wf-settings">
+      <nav className="tabs">
+        {tabs.map(t => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            className={`tab ${tab === t ? 'active' : ''}`}
+          >
+            {t}
+          </button>
+        ))}
+      </nav>
+      
+      <section className="wf-card">
+        {tab === 'profile' && (
+          <div>
+            <h2 className="title">Profile Settings</h2>
+            <input type="text" placeholder="Name" className="wf-input" />
+            <input type="email" placeholder="Email" className="wf-input" />
+            <button className="wf-btn primary">Save Changes</button>
+          </div>
+        )}
+        {tab === 'security' && (
+          <div>
+            <h2 className="title">Security Settings</h2>
+            <input type="password" placeholder="Current Password" className="wf-input" />
+            <input type="password" placeholder="New Password" className="wf-input" />
+            <button className="wf-btn primary">Update Password</button>
+          </div>
+        )}
+        {tab === 'notifications' && (
+          <div>
+            <h2 className="title">Notification Preferences</h2>
+            <label><input type="checkbox" /> Email notifications</label>
+            <label><input type="checkbox" /> Push notifications</label>
+            <button className="wf-btn primary">Save Preferences</button>
+          </div>
+        )}
+      </section>
     </div>
   );
 }
@@ -178,25 +304,27 @@ function DashboardTable() {
 
 ---
 
-## Onboarding Flow Wireframes
+## Onboarding Flows
 
-### Step-by-Step Wizard
+### Multi-Step Wizard
 
 ```jsx live
-function OnboardingWizard() {
+export default function OnboardingWizard() {
   const [step, setStep] = React.useState(1);
   const totalSteps = 3;
   
   return (
-    <div className="wf-wizard">
-      {/* Progress bar */}
-      <div className="wf-progress">
-        <div className="progress-bar">
-          {[...Array(totalSteps)].map((_, i) => (
-            <div key={i} className={`segment ${i < step ? 'active' : ''}`} />
-          ))}
-        </div>
-        <div className="wf-meta">Step {step} of {totalSteps}</div>
+    <div className="wf-onboarding">
+      {/* Progress indicator */}
+      <div className="progress">
+        {Array.from({ length: totalSteps }, (_, i) => (
+          <div
+            key={i}
+            className={`step ${i + 1 <= step ? 'active' : ''}`}
+          >
+            {i + 1}
+          </div>
+        ))}
       </div>
       
       {/* Step content */}
@@ -223,7 +351,7 @@ function OnboardingWizard() {
       </div>
       
       {/* Navigation */}
-      <div className="wf-actions">
+      <div className="actions">
         <button 
           onClick={() => setStep(Math.max(1, step - 1))}
           disabled={step === 1}
@@ -242,179 +370,64 @@ function OnboardingWizard() {
     </div>
   );
 }
-``` 
-            background: step === 1 ? '#e0e0e0' : 'white', 
-            border: '1px solid #ddd', 
-            borderRadius: '4px', 
-            cursor: step === 1 ? 'not-allowed' : 'pointer' 
-          }}
-        >
-          Back
-        </button>
-        <button 
-          onClick={() => setStep(Math.min(totalSteps, step + 1))}
-          disabled={step === totalSteps}
-          style={{ 
-            padding: '0.75rem 1.5rem', 
-            background: step === totalSteps ? '#22c55e' : '#007bff', 
-            color: 'white', 
-            border: 'none', 
-            borderRadius: '4px', 
-            cursor: 'pointer' 
-          }}
-        >
-          {step === totalSteps ? 'Finish' : 'Next'}
-        </button>
-      </div>
-    </div>
-  );
-}
 ```
 
 ---
 
-## Settings Page Wireframes
+## Component Classes
 
-### Tabbed Settings
+The Wireframe Design System provides these component classes:
 
-```jsx live
-function SettingsWireframe() {
-  const [tab, setTab] = React.useState('profile');
-  
-  return (
-    <div style={{ padding: '2rem' }}>
-      {/* Tabs */}
-      <div style={{ borderBottom: '1px solid #ddd', marginBottom: '2rem' }}>
-        {['profile', 'security', 'notifications'].map(t => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            style={{
-              padding: '1rem 2rem',
-              background: 'none',
-              border: 'none',
-              borderBottom: tab === t ? '2px solid #007bff' : '2px solid transparent',
-              color: tab === t ? '#007bff' : '#666',
-              cursor: 'pointer',
-              textTransform: 'capitalize'
-            }}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
-      
-      {/* Content */}
-      <div style={{ maxWidth: '600px' }}>
-        {tab === 'profile' && (
-          <div>
-            <h3>Profile Settings</h3>
-            <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Name</label>
-              <input type="text" defaultValue="John Doe" style={{ width: '100%', padding: '0.75rem', border: '1px solid #ddd', borderRadius: '4px' }} />
-            </div>
-            <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Email</label>
-              <input type="email" defaultValue="john@example.com" style={{ width: '100%', padding: '0.75rem', border: '1px solid #ddd', borderRadius: '4px' }} />
-            </div>
-            <button style={{ padding: '0.75rem 2rem', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-              Save Changes
-            </button>
-          </div>
-        )}
-        {tab === 'security' && (
-          <div>
-            <h3>Security Settings</h3>
-            <div style={{ padding: '1rem', background: '#f5f5f5', borderRadius: '4px', marginBottom: '1rem' }}>
-              <div style={{ fontWeight: 500, marginBottom: '0.5rem' }}>Two-Factor Authentication</div>
-              <div style={{ fontSize: '0.875rem', color: '#666' }}>Add an extra layer of security</div>
-            </div>
-            <button style={{ padding: '0.75rem 2rem', background: '#22c55e', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-              Enable 2FA
-            </button>
-          </div>
-        )}
-        {tab === 'notifications' && (
-          <div>
-            <h3>Notification Preferences</h3>
-            {['Email notifications', 'Push notifications', 'Weekly digest'].map((pref, i) => (
-              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 0', borderBottom: i < 2 ? '1px solid #eee' : 'none' }}>
-                <div>
-                  <div style={{ fontWeight: 500 }}>{pref}</div>
-                  <div style={{ fontSize: '0.875rem', color: '#666' }}>Receive updates about your account</div>
-                </div>
-                <input type="checkbox" defaultChecked />
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-```
+**Layout Containers:**
+- `.wf-hero` - Hero section wrapper
+- `.wf-dashboard` - Dashboard layout with sidebar
+- `.wf-settings` - Settings page layout
+- `.wf-onboarding` - Onboarding wizard layout
+- `.wf-grid` - Responsive grid container
+
+**Components:**
+- `.wf-card` - Card component
+- `.wf-btn` - Button (add `.primary` for primary variant)
+- `.wf-input` - Form input
+- `.wf-empty-state` - Empty state container
+- `.wf-social-proof` - Social proof bar
+- `.wf-features` - Feature grid
+
+**Utility Classes:**
+- `.badge` - Badge/label
+- `.title` - Section title
+- `.description` - Description text
+- `.actions` - Button group
+- `.footnote` - Small helper text
 
 ---
 
-## Empty State Wireframes
-
-### Zero Data State
-
-```jsx live
-function EmptyState() {
-  return (
-    <div style={{ 
-      padding: '4rem 2rem', 
-      textAlign: 'center', 
-      background: '#f9f9f9', 
-      borderRadius: '8px',
-      border: '2px dashed #ddd'
-    }}>
-      <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>📋</div>
-      <h3 style={{ margin: '0 0 0.5rem 0' }}>No items yet</h3>
-      <p style={{ color: '#666', margin: '0 0 1.5rem 0' }}>
-        Get started by creating your first item
-      </p>
-      <button style={{ 
-        padding: '0.75rem 2rem', 
-        background: '#007bff', 
-        color: 'white', 
-        border: 'none', 
-        borderRadius: '4px', 
-        cursor: 'pointer' 
-      }}>
-        + Create Item
-      </button>
-    </div>
-  );
-}
-```
-
----
-
-## Tips for Wireframing
+## Tips for Velocity
 
 ### Focus on Structure, Not Polish
 
-- Use simple colors (grays, blues)
-- Skip custom fonts
-- Use basic shapes and spacing
-- Emoji for icons (fast and clear)
+- Monospace typography creates "sketch" feel
+- Flat grayscale prevents color distractions
+- Simple borders and spacing
+- Emoji for icons (fast and recognizable)
 
-### Show Interactions
+### Show Real Interactions
 
 ```jsx live
-function InteractiveWireframe() {
+function InteractiveExample() {
   const [expanded, setExpanded] = React.useState(false);
   
   return (
-    <div style={{ padding: '1rem', background: 'white', borderRadius: '8px' }}>
-      <button onClick={() => setExpanded(!expanded)} style={{ padding: '0.75rem 1rem', background: '#f5f5f5', border: '1px solid #ddd', borderRadius: '4px', cursor: 'pointer' }}>
-        {expanded ? '▼' : '▶'} Click to {expanded ? 'collapse' : 'expand'}
+    <div className="wf-card">
+      <button 
+        onClick={() => setExpanded(!expanded)}
+        className="wf-btn"
+      >
+        {expanded ? '▼' : '▶'} {expanded ? 'Collapse' : 'Expand'}
       </button>
       {expanded && (
-        <div style={{ marginTop: '1rem', padding: '1rem', background: '#f9f9f9', borderRadius: '4px' }}>
-          Hidden content revealed!
+        <div style={{ marginTop: '1rem', padding: '1rem', background: '#f5f5f5' }}>
+          Hidden content revealed on click
         </div>
       )}
     </div>
@@ -422,25 +435,41 @@ function InteractiveWireframe() {
 }
 ```
 
-### Use Real-ish Data
+### Use Plausible Content
 
-Not "Lorem ipsum" - use plausible content:
-- Names: "Sarah Chen", "John Smith"
-- Emails: "sarah@company.com"
-- Metrics: "$45,231", "2,345 users"
+Not "Lorem ipsum" - use realistic data:
+- **Names**: "Sarah Chen", "Marcus Johnson"
+- **Emails**: "sarah@company.com"
+- **Metrics**: "$45.2K", "2,345 users", "+12.5%"
 
-Makes wireframes more believable for stakeholder review.
+Makes wireframes believable for stakeholder review.
+
+---
+
+## System Swapping
+
+Upgrade from wireframe to high-fidelity by changing one line:
+
+```css live
+/* Low-fidelity wireframe */
+@import '../design-systems/wireframe/tokens.css';
+
+/* High-fidelity polished */
+@import '../design-systems/elementary/tokens.css';
+```
+
+All component code using semantic tokens works with both systems.
 
 ---
 
 ## When to Use Wireframes
 
-| Scenario | Use When |
-|----------|----------|
-| **Landing Pages** | Designing marketing pages, showcasing features |
-| **Dashboards** | Organizing data visualization, metrics displays |
-| **Onboarding** | Planning step-by-step user flows |
-| **Settings** | Designing configuration interfaces |
-| **Empty States** | Handling zero-data scenarios |
+| Use Case | Why Wireframe System |
+|----------|---------------------|
+| **Landing pages** | Validate structure before visual design |
+| **Dashboards** | Test data layout and hierarchy |
+| **Onboarding flows** | Prototype step sequence |
+| **Settings pages** | Design configuration interfaces |
+| **Empty states** | Handle zero-data scenarios |
 
-Wireframes are for **structure and flow**, not pixel-perfect design. Get stakeholder alignment on layout before investing in visual design.
+**Speed over polish** - Get stakeholder alignment on structure before investing in visual design. Iterate fast on layouts, then graduate to Elementary system for high-fidelity prototypes.
