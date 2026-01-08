@@ -22,7 +22,7 @@ Before using any design system patterns, fetch the actual CSS files from the pub
    - Loaded via CDN (no fetch needed)
    - Use for: Quick prototypes, one-off examples
 
-## Fetch Workflow
+## Retrieving design system tokens for use as is
 
 ```bash
 # Fetch design system files

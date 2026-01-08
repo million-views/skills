@@ -749,6 +749,8 @@ Agent: "⚠️ Authentication requires backend services, I can't help with that"
 - Onboarding flows (wizards, progress indicators)
 - Settings pages (tabbed interfaces, form layouts)
 - Empty states (zero data, errors, loading states)
+- **Contains**: Wireframe Design System CSS classes (wf-card, wf-grid, wf-hero, etc.) and styling patterns
+- **Note**: Wireframes typically use the Wireframe Design System for low-fidelity mockups
 
 **[User Journeys](references/user-journeys.md)** - Multi-step flows
 - Signup flows (registration → verification → onboarding)
@@ -762,6 +764,14 @@ Agent: "⚠️ Authentication requires backend services, I can't help with that"
 - Modal patterns (basic modals, confirmation dialogs)
 - Card layouts (grid, list, masonry)
 - Feedback states (loading spinners, toast notifications)
+- **Contains**: Component implementation patterns and UI building blocks
+
+**[Design Systems](references/design-systems.md)** - Token definitions and usage patterns
+- **Contains**: Elementary token definitions (--c-primary, --c-text, --p-card) AND usage examples in components
+- **Contains**: Correct import paths (./design-systems/elementary/tokens.css, ./design-systems/wireframe/tokens.css)
+- **Contains**: Token usage patterns for themed buttons, cards, and other components
+- **Use when**: Building themed components, need token names, or integrating design system styling
+- System selection guide (Elementary vs Wireframe vs Tailwind)
 
 **For AI Agents:** 
 1. **Check public recipes first**: Browse [recipes repository](https://github.com/million-views/reactive-md/tree/main/recipes) for existing templates matching the job
