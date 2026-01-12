@@ -23,14 +23,16 @@ const skillName = process.argv[2];
 if (!skillName) {
   log('Usage: ./package-skill.mjs <skill-name>', 'yellow');
   log('\nExample: ./package-skill.mjs reactive-md', 'blue');
-  
+
   // Show available skills
   try {
     const marketplace = JSON.parse(fs.readFileSync('.claude-plugin/marketplace.json', 'utf8'));
     log('\nAvailable skills:', 'green');
     marketplace.plugins?.forEach(p => log(`  ${p.name}`, 'blue'));
-  } catch (e) {}
-  
+  } catch (e) {
+    console.log(`Error: ${e.message}`);
+  }
+
   process.exit(1);
 }
 
@@ -39,7 +41,7 @@ let marketplace;
 try {
   marketplace = JSON.parse(fs.readFileSync('.claude-plugin/marketplace.json', 'utf8'));
 } catch (e) {
-  log('Error: .claude-plugin/marketplace.json not found', 'red');
+  log(`Error: ${e.message}`, 'red');
   process.exit(1);
 }
 
