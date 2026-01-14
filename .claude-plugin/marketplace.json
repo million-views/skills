@@ -14,7 +14,7 @@
     {
       "name": "reactive-md",
       "source": "./reactive-md",
-      "description": "Create functional markdown documents for product collaboration - live specs, interactive prototypes, and design system documentation",
+      "description": "Literate UI/UX for product teams - accelerate from idea to working prototype in minutes using markdown with embedded interactive React components. Use for fast iteration and async collaboration on product specs, wireframes, user flows, feature demos, and design documentation. Replaces Figma/Storybook with executable specs in version control.",
       "version": "1.0.0",
       "category": "productivity",
       "keywords": [
@@ -28,6 +28,25 @@
       ],
       "strict": false,
       "agents": ["./reactive-md/SKILL.md"]
+    },
+    {
+      "name": "elementary",
+      "source": "./elementary",
+      "description": "Token-based design system with standardized CSS custom property names, multiple theme implementations (polished with light/dark mode, sketch), and optional component patterns. Use for themeable interfaces, design system compliance, or switching between visual fidelity levels without code changes.",
+      "version": "1.0.0",
+      "category": "design-systems",
+      "keywords": [
+        "elementary",
+        "design-system",
+        "design-tokens",
+        "css-variables",
+        "theming",
+        "light-dark-mode",
+        "wireframes",
+        "accessibility"
+      ],
+      "strict": false,
+      "agents": ["./elementary/SKILL.md"]
     }
   ]
 }

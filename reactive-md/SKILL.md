@@ -4,8 +4,7 @@ description: Literate UI/UX for product teams - accelerate from idea to working 
 license: MIT
 metadata:
   version: "1.0.0"
-  public-docs-commit: "7d03f60"
-  public-docs-repo: "https://github.com/million-views/reactive-md"
+  author: million-views (https://m5nv.com)
 ---
 
 # Reactive MD
@@ -18,13 +17,10 @@ Use reactive-md when the user asks to create:
 
 **Primary Use Cases:**
 - Product specs with working prototypes
-- Design system documentation with live examples
 - User flow wireframes and interactive demos
 - Feature prototypes, concept exploration, and visual demos
 - A/B tests, dashboards, component galleries
 - Interactive documentation and living specifications
-
-**Workflow**: Check if a recipe exists for the request (see Working with Recipes). Adapt existing recipes when available.
 
 **Aliases**: "live doc", "prototype", "POC", "interactive spec" all refer to reactive-md documents.
 
@@ -61,78 +57,63 @@ Reactive-md documents support:
 **Default behavior:** When in doubt, use `live` - reactive-md's purpose is interactive demos.
 
 **File Types:**
-- Markdown (`.md`) - Primary document only (entry point)
-- JSX/TSX (`.jsx`, `.tsx`) - Can be inline (`jsx live` blocks) OR external files (imported)
-- CSS (`.css`) - Can be inline (`css live` blocks) OR external files (imported)
-- JSON (`.json`) - Data files (imported or used inline)
+- **Markdown (`.md`)** - Primary document only (entry point for preview)
+- **JSX/TSX (`.jsx`, `.tsx`)** - Primary viewable OR dependent (can be imported)
+- **CSS (`.css`)** - Dependent only (imported by JSX or via `css live` blocks)
+- **JSON (`.json`)** - Dependent only (imported by JSX/TSX)
 
-**Hot Module Reload:** Edit `.jsx`, `.tsx`, `.css`, `.json` → preview updates automatically
+**Hot Module Reload:** Edit any file → preview updates automatically
+
+**Import Patterns (Where and How):**
+- **In `.jsx`/`.tsx` files or `jsx live` blocks:** Use `import './style.css'` or `import data from './data.json' with { type: 'json' }`
+- **In `.css` files or `css live` blocks:** Use `@import './other.css'`
 
 ## Package & Data Loading
 
-**Common packages available:**
-- Bundled (always): `dayjs`, `motion/react`, `lucide-react`, `clsx`, `uuid`, `es-toolkit`
-- CDN (Interactive Preview): `@heroicons/react`, `zustand`, `jotai`, `tailwind-merge`, `react-hook-form`
-- Known broken: `recharts`, `swr`, `@tanstack/react-query` → Use native SVG/Canvas
+**Bundled Packages (Both Preview Modes):**
+Always available in both Markdown Preview AND Interactive Preview:
+- `dayjs`, `motion/react`, `lucide-react`, `clsx`, `uuid`, `es-toolkit`
 
-**Data loading:**
-- ✅ Local JSON files: `import data from './data.json' with { type: 'json' };`
-- ✅ Remote APIs: `fetch('https://api.example.com/data')`
-- ❌ Fetch local files at runtime: Blocked by webview security
+**CDN Packages (Interactive Preview Only):**
+Require `Cmd+K P` to load from esm.sh:
+- `@heroicons/react`, `zustand`, `jotai`, `tailwind-merge`, `react-hook-form`
 
-**For React import rules (CRITICAL):** Read [references/GUIDE.md § React Imports](references/GUIDE.md#react-imports)
+**Data Loading & Platform APIs:**
+- ✅ Local JSON imports: `import data from './data.json' with { type: 'json' }` (both modes)
+- ✅ Remote APIs: `fetch()` in `useEffect` (Static Preview shows initial state; Interactive Preview fetches) 
+- ✅ Platform APIs: `localStorage`, `sessionStorage` (Interactive Preview only)
+- ❌ Local file fetch: Blocked by webview security (use `import` instead)
+
+**Pattern for Remote Data:** Always fetch inside `useEffect`, initialize state with default values. Component renders safely in Static Preview while showing loading UI, then fetches in Interactive Preview.
+
+```jsx live
+// This pattern works in both preview modes
+const [data, setData] = React.useState(null);
+const [loading, setLoading] = React.useState(true);
+
+React.useEffect(() => {
+  fetch('https://api.example.com/data')
+    .then(res => res.json())
+    .then(data => { setData(data); setLoading(false); });
+}, []);
+
+// Renders: "Loading..." in Static, actual data in Interactive
+return <div>{loading ? 'Loading...' : <pre>{JSON.stringify(data)}</pre>}</div>;
+```
+
+**For React import rules:** Read [references/GUIDE.md § React Imports](references/GUIDE.md#react-imports)
 **For package details:** Read [references/GUIDE.md § Package and Dependency Management](references/GUIDE.md#package-and-dependency-management)
 **For data loading patterns:** Read [references/GUIDE.md § Data Files](references/GUIDE.md#data-files)
 
-## Platform APIs
+## Styling Approach
 
-Interactive Preview (`Cmd+K P`) supports:
-- ✅ `localStorage`, `sessionStorage`, timers, remote `fetch()`, `Canvas`
-- ❌ WebSockets, Service Workers, local file `fetch()` (use `import` instead)
+Choose ANY styling approach that fits the task:
+- **Tailwind CSS** - Fast, utility-first (use for quick prototypes)
+- **Inline styles** - Simple, self-contained (use for minimal examples)
+- **Plain CSS** - `css live` blocks or external `.css` files (use for semantic, maintainable styles)
+- **Design system tokens** - When available, compose with design systems for consistent theming
 
-## Design Systems
-
-**Choose ONE styling approach per document:**
-
-### Option A: Reactive-md Design System (Recommended for most use cases)
-
-Two fidelity levels:
-- **Wireframe** - Low-fidelity structural mockups
-- **Elementary** - High-fidelity themeable components (light/dark mode support)
-
-Both use the same architecture: import tokens + component classes, then use pre-built classes in JSX.
-
-**Import pattern (CRITICAL - use BEFORE components):**
-
-```css live
-/* Wireframe variant */
-@import '../recipes/design-systems/wireframe/tokens.css';
-@import '../recipes/design-systems/reactive-md.css';
-```
-
-```css live
-/* Elementary variant */
-@import '../recipes/design-systems/elementary/tokens.css';
-@import '../recipes/design-systems/reactive-md.css';
-```
-
-**What you get:**
-- **tokens.css** - CSS custom properties (`--c-primary`, `--s-3`, `--r-btn`)
-- **reactive-md.css** - Component classes (`.wf-btn`, `.wf-card`, `.wf-hero`, `.wf-features`)
-
-**Usage:** Use component classes from reactive-md.css: `<button className="wf-btn primary">`. Do NOT invent utilities like `className="bg-[var(--c-primary)]"` - use existing `.wf-btn` with modifiers (`.primary`, `.secondary`, `.action`).
-
-### Option B: Tailwind CSS (Quick prototyping without recipes)
-
-Utility-first framework via CDN. No imports needed, no CSS custom properties, no component classes.
-
-**Usage:** Pure Tailwind utilities only: `<button className="bg-blue-500 px-4 py-2 rounded">`. Do NOT mix with reactive-md system.
-
-**NEVER mix systems.** Pick homegrown OR Tailwind, not both.
-
-**For component class lists:** Read [recipes/design-systems/elementary/tokens.md](recipes/design-systems/elementary/tokens.md) or [recipes/design-systems/wireframe/tokens.md](recipes/design-systems/wireframe/tokens.md)
-**For dashboard layouts:** Read [recipes/design-systems/use-cases/dashboards.md](recipes/design-systems/use-cases/dashboards.md)
-**For dark mode implementation:** Read [recipes/feature-concepts/dark-mode-toggle/spec.md](recipes/feature-concepts/dark-mode-toggle/spec.md)
+Focus on document structure and interactive patterns. Styling is secondary to demonstrating reactive-md capabilities.
 
 ## File Organization
 
@@ -144,48 +125,58 @@ Utility-first framework via CDN. No imports needed, no CSS custom properties, no
 ✅ **Without helpers** - Pure JSX at top level
 ❌ **Don't mix** helper functions with top-level JSX (ambiguous entry point)
 
-### Folder Structure
+### Multi-File Structure
 
-**When:** Complex features (> 50 lines)
+**When:** Complex features (> 50 lines) or reusable components
 
+**The agent will create these files for you** using the `write_file` tool. Each file is self-contained:
+
+**Example structure:**
 ```
 feature-name/
-  spec.md              (primary document)
-  Component.jsx        (extracted component)
-  styles.css           (shared styles)
-  data.json            (mock data)
+  README.md            (primary document with live fences)
+  Component.jsx        (imported component)
+  styles.css           (imported styles)
+  data.json            (imported data)
+```
+
+**Import pattern in your primary/main .md file (typically README.md or spec.md):**
+```jsx live
+import Component from './Component.jsx';
+import './styles.css';
+import data from './data.json' with { type: 'json' };
 ```
 
 **Naming:** Kebab-case, hierarchical context (e.g., `checkout-flow-payment-form.jsx`)
 
-**For complete patterns and examples:** Read [references/GUIDE.md § Component Structure Best Practices](references/GUIDE.md#component-structure-best-practices)
+**Agent workflow:**
+1. Agent analyzes the task and identifies files needed (components, styles, data)
+2. Agent creates primary document (README.md or spec.md typically) with live fence showing imports
+3. Agent uses `write_file` tool to create supporting files (Component.jsx, styles.css, data.json)
+4. You get complete, working multi-file structure ready to use
 
-## Working with Recipes
+**For reference guidance:** Read [references/GUIDE.md](references/GUIDE.md) for dos/donts, troubleshooting, and pattern snippets  
+**For working examples:** Study the recipes below - complete, production-ready implementations
 
-**Recipes are optional examples** to speed up common tasks. Use them when they fit the request.
+## Examples
 
-**Recipe categories:** PRD templates, Wireframes, User journeys, Feature concepts, UI catalog, Case studies
+**Read example files in [references/recipes/](references/recipes/) to see how to write functional live docs:**
 
-**How to use:**
-1. **If request matches known pattern** → Load relevant recipe from [references/use-cases.md](references/use-cases.md)
-2. **Adapt, don't copy** → Modify to user's specific needs
-3. **Otherwise** → Apply design system principles and create from scratch
-
-**When recipes are missing:** Acknowledge the gap, offer alternatives (Tailwind for quick prototyping), never mix styling paradigms.
-
-## Document Structure
-
-**Standard pattern:** Problem → Solution → Live Code → Next Steps
-
-Use short live fences that import from files. Include semantic headings and prose explaining intent.
+- **[references/recipes/feature-spec/](references/recipes/feature-spec/)** - Product specification with working components and edge case handling
+- **[references/recipes/a-b-test-proposal/](references/recipes/a-b-test-proposal/)** - A/B test methodology with business metrics and comparison widget
+- **[references/recipes/competitive-analysis/](references/recipes/competitive-analysis/)** - Market positioning with competitor scoring and feature matrix
+- **[references/recipes/user-flow/](references/recipes/user-flow/)** - Multi-step flows with validation, error handling, and success states
+- **[references/recipes/dark-mode-toggle/](references/recipes/dark-mode-toggle/)** - Multi-file imports, external `.jsx` and `.css` files
+- **[references/recipes/notification-system/](references/recipes/notification-system/)** - Multi-component architecture, folder organization
+- **[references/recipes/data-loading/](references/recipes/data-loading/)** - JSON imports and API fetch patterns
 
 ## Clarifying Questions
 
 When context is ambiguous, ASK instead of guessing:
 
-- **Scope**: "Make a dashboard" → Ask purpose (analytics? admin? monitoring?) and data
-- **Styling**: "Create a form" → Ask Tailwind (quick) vs CSS vars (brandable)
+- **Scope**: "Make a dashboard" → Ask purpose (analytics? admin? monitoring?) and data source
 - **File context**: User says "improve this" → Check which file is open or selected
+- **Data**: User wants working demo → Ask if they want mock data or real API
 
 ## Refusal Boundaries
 
@@ -210,24 +201,48 @@ This prototype CAN demonstrate: [UI/UX flow, API integration, interactive behavi
 To productionize: Graduate to proper project with infrastructure tooling.
 ```
 
+### Refuse: Known-Broken Packages (esm.sh Limitations)
+
+The following packages cannot be loaded via esm.sh due to dependency resolution issues. Refuse these requests in Interactive Preview:
+
+**`recharts`** - Charting library
+- **Issue:** Missing transitive dependency (`clsx` not resolved by esm.sh)
+- **Refuse:** "recharts doesn't load in Interactive Preview. For charts, use native SVG or plan a full project setup."
+
+**`swr`** - Data fetching/caching
+- **Issue:** Missing React context shim (`use-sync-external-store`)
+- **Refuse:** "swr isn't available in Interactive Preview. For data fetching, use `fetch()` directly or `zustand` for local state."
+
+**`@tanstack/react-query`** - Complex data/state management
+- **Issue:** Multiple React instance conflicts with esm.sh import isolation
+- **Refuse:** "@tanstack/react-query requires a full project setup. Use `zustand` or `jotai` for state management in prototypes."
+
+### Refuse: Real-Time & Server Infrastructure
+
+The following require server infrastructure beyond a VS Code extension:
+
+**WebSockets** - Real-time bidirectional communication
+- **Issue:** Requires persistent backend server connection
+- **Refuse:** "WebSockets need a backend server. For prototypes, use `fetch()` polling or plan a full project setup."
+
+**Service Workers** - Background processing & offline support
+- **Issue:** Requires application-level service worker infrastructure
+- **Refuse:** "Service Workers need full project setup. For prototypes, use `localStorage` for persistence."
+
 ## Quality Standards
 
 Good output must:
 
-1. ✅ **Use existing recipes** - Adapt proven templates
-2. ✅ **Preserve design systems** - Keep imports from recipes
-3. ✅ **Run without errors** - Code executes in preview
-4. ✅ **Follow conventions** - File organization, naming
-5. ✅ **Respect boundaries** - Refuse infrastructure/backend only
-6. ✅ **Embrace capabilities** - Use fetch, error handling, complex state
-7. ✅ **Complete structure** - Problem → Solution → Code → Next Steps
+1. ✅ **Run without errors** - Code executes in preview
+2. ✅ **Follow conventions** - File organization, naming, live fence syntax
+3. ✅ **Respect boundaries** - Refuse infrastructure/backend only
+4. ✅ **Complete structure** - Context → Problem → Solution → Code → Next Steps
+5. ✅ **Use imports** - External files for reusable components/styles (not massive inline fences)
 
 ## Reference Documentation
 
-**[GUIDE.md](references/GUIDE.md)** - Troubleshooting, constraints, patterns
-**[use-cases.md](references/use-cases.md)** - Recipe catalog, job-to-recipe mapping
-
-**Recipe Directories:** prd-templates, design-systems, user-journeys, feature-concepts, ui-catalog, case-studies
+**[GUIDE.md](references/GUIDE.md)** - Complete technical reference, troubleshooting, patterns
+**[use-cases.md](references/use-cases.md)** - Example implementations for each primary use case
 
 ## Success Criteria
 

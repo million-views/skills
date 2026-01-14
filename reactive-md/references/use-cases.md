@@ -1,5 +1,8 @@
-# Reactive MD: Jobs To Be Done
-> Recipe catalog organized by user intent
+# Reactive MD: IDE for Ideas
+
+Executable specs in version control beat static docs + external tools. Live code + prose eliminates ambiguity. Stakeholders don't just imagine your idea, they experience it.
+
+Use these workflows to understand where reactive-md excels.
 
 ### 1. Create Product Specifications
 
@@ -7,75 +10,75 @@
   > Define what to build and why it matters.
 
 **Workflow**:
-1. Browse `recipes/prd-templates/` or `recipes/case-studies/` for a starting point (or create a new markdown file)
+1. Start with a template from [recipes/](./recipes/) (feature-spec, a-b-test-proposal, competitive-analysis) or create a new markdown file
 2. Add interactive wireframes using Reactive MD
 3. Include live component demos in your spec
 4. Get stakeholder feedback without leaving your editor
 
-*tags: prd, spec, feature, competitive, case study*
+*tags: prd, spec, feature, competitive*
 
-### 2. Design User Interfaces
+### 2. Prototype Features
 
-**The Job**: Design interfaces with instant visual feedback, no build setup required.
-  > Create visual concepts and page layouts.
-
-**Workflow**:
-1. Browse `recipes/design-systems/use-cases/` for layout patterns (landing pages, dashboards, settings) or `recipes/ui-catalog/` for components
-2. Preview layouts instantly with `Cmd+K P`
-3. Iterate on spacing, colors, and interactions
-4. Share clickable prototypes with your team
-
-*tags: landing, dashboard, settings, nav, table, modal, card, button, form*
-
-### 3. Document User Journeys
-
-**The Job**: Create interactive journey documentation that users can actually walk through.
-  > Map out complete user experiences and flows.
+**The Job**: Build working prototypes with real components, instant feedback, and no setup overhead.
+  > Validate ideas and explore edge cases quickly.
 
 **Workflow**:
-1. Start with templates from `recipes/user-journeys/` (signup, checkout, search-to-purchase, support)
-2. Add interactive steps with working components
-3. Test the flow end-to-end in Reactive MD
-4. Validate UX assumptions before development
-
-*tags: signup, checkout, flow, journey, onboarding*
-
-### 4. Prototype Features
-
-**The Job**: Prototype features with real components, instant feedback, and no configuration overhead.
-  > Validate ideas and explore possibilities quickly.
-
-**Workflow**:
-1. Pick a feature template from `recipes/feature-concepts/` (notifications, dark mode, infinite scroll, drag-and-drop, real-time)
-2. Customize the interactive demo
+1. Browse [recipes/](./recipes/) for inspiration (dark-mode-toggle, notification-system, data-loading patterns)
+2. Customize the interactive demo with your own requirements
 3. Test user interactions and edge cases
 4. Decide whether to build or iterate further
 
-*tags: notification, dark, scroll, drag, realtime*
+*tags: prototype, feature, interactive, demo*
 
-### 5. Build Design Systems
+### 3. Document Code Patterns
 
-**The Job**: Develop components with immediate visual feedback, then document them with live examples.
-  > Create and maintain reusable component libraries.
-
-**Workflow**:
-1. Read `recipes/design-systems/README.md` for architectural inspiration (token contracts, theming patterns)
-2. Create your own design system with live token examples
-3. Prove it out by implementing use-cases or porting examples from `recipes/design-systems/use-cases/`
-4. Document your system with interactive component demos
-
-*tags: component, library, design system, pattern*
-
-### 6. Write Technical Documentation
-
-**The Job**: Write docs with code examples that actually run and render.
-  > Create documentation that developers can learn from and trust.
+**The Job**: Create documentation with working code examples that developers can learn from.
+  > Keep examples current and testable.
 
 **Workflow**:
-1. Browse recipes for documentation patterns (all categories include live examples)
-2. Add `jsx live` code fences for interactive examples
-3. Include working components that readers can modify
-4. Keep examples current and testable
+1. Write markdown prose explaining the pattern or problem
+2. Add `jsx live` code fences for runnable examples
+3. Include actual components and styles from your work
+4. Link to related patterns and references
 
-*tags: docs, documentation, tutorial, guide, example*
+*tags: docs, documentation, patterns, examples*
+
+### 4. Design Interfaces
+
+**The Job**: Design and iterate on interfaces with instant visual feedback.
+  > Create visual concepts before coding.
+
+**Workflow**:
+1. Create a markdown file with wireframe sketches or layout ideas
+2. Embed interactive components that demonstrate the design
+3. Iterate on spacing, colors, typography, and interactions
+4. Share clickable prototypes with your team for feedback
+
+*tags: design, layout, wireframe, interactive*
+
+### 5. Build and Test Reusable Components
+
+**The Job**: Develop components with immediate visual feedback, then document them.
+  > Create and maintain component libraries.
+
+**Workflow**:
+1. Create a feature folder with README.md and component files
+2. Use `jsx live` fences to demonstrate each component
+3. Show variations, edge cases, and integration patterns
+4. Document component props and usage patterns
+
+*tags: components, library, patterns, design system*
+
+### 6. Communicate Ideas Asynchronously
+
+**The Job**: Share working prototypes with your team without meetings.
+  > Iterate faster through version-controlled markdown.
+
+**Workflow**:
+1. Create a markdown file with your idea, mockups, and interactive demo
+2. Commit to version control with clear commit messages
+3. Share the file with your team for feedback
+4. Iterate based on feedback without context-switching
+
+*tags: communication, async, collaboration, prototyping*
 

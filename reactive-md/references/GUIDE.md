@@ -6,7 +6,7 @@ Practical solutions for common issues and best practices for reliable previews.
 
 Code blocks in this guide use different markers:
 
-- **`jsx live` / `css live`** - Executable examples that render in preview (try them!)
+- **`jsx live` / `css live`** - Executable examples that render in preview
 - **`jsx` / `css`** - Reference patterns (syntax examples, won't execute)
 - **Markdown fences** - Literal markdown syntax (showing fence usage itself)
 
@@ -75,9 +75,8 @@ export function Card({ title, children }) {
 ```
 
 #### For Inline Markdown Live Fences
-````markdown
-<!-- ✅ Recommended: Wrap helpers in parent component -->
 ```jsx live
+// ✅ Required: Wrap helpers in parent component
 function Demo() {
   function Button({ children, variant = 'primary' }) {
     return <button className="btn">{children}</button>;
@@ -92,6 +91,7 @@ function Demo() {
 }
 ```
 
+````markdown
 <!-- ❌ Wrong: Helper function + top-level JSX (ambiguous entry point) -->
 ```jsx live
 function Button({ children }) {
@@ -146,70 +146,62 @@ export default function MyComponent() {
 
 ## Package and Dependency Management
 
-### Bundled (Both Preview Modes)
-`lucide-react`, `motion/react`, `dayjs`, `clsx`, `uuid`, `es-toolkit`
+### Bundled Packages (Both Preview Modes)
+Always available in both Markdown Preview and Interactive Preview:
+- `lucide-react` - SVG icons
+- `motion/react` - Animations (import from `motion/react`)
+- `dayjs` - Date formatting (relativeTime plugin included)
+- `clsx` - Conditional CSS classes
+- `uuid` - Unique ID generation
+- `es-toolkit` - Modern lodash replacement
 
-### External (Interactive Preview Only)
-Require internet: `@heroicons/react`, `zustand`, `jotai`, `tailwind-merge`, `react-hook-form`
+### CDN Packages (Interactive Preview Only)
+Require `Cmd+K P` to load from esm.sh:
+- `@heroicons/react` - Icon set (Tailwind team)
+- `zustand` - State management
+- `jotai` - Atomic state
+- `tailwind-merge` - Merge Tailwind classes
+- `react-hook-form` - Form handling
 
-### Broken Packages
-`recharts`, `swr`, `@tanstack/react-query` - missing dependencies or React conflicts
+### Known Limitations
+These packages cannot be loaded via esm.sh:
+- **`recharts`** - Missing transitive dependency (`clsx` not resolved)
+- **`swr`** - Missing React context shim (`use-sync-external-store`)
+- **`@tanstack/react-query`** - React instance conflicts
 
-## Styling and Design Systems
+**Workaround**: For these use cases, use `fetch()` directly or `zustand`/`jotai` for state.
 
-**Choose ONE system per recipe**:
+### Styling Approaches
 
-- **Elementary design system** - Token-based with themes (see [design-systems/README.md](./recipes/design-systems/README.md))
-- **Tailwind CSS** - Utility-first, built into reactive-md
+**Choose ONE approach per file**:
 
-**CRITICAL: NEVER mix Elementary tokens with Tailwind utilities.**
+- **Tailwind CSS** - Utility-first, built into Reactive MD (easiest for quick prototypes)
+- **Inline styles** - Simple, self-contained (good for minimal examples)
+- **CSS classes** - Plain CSS with semantic names (good for maintainable styles)
 
-```jsx
-// ❌ FORBIDDEN: Mixing systems
-<div className="px-4 bg-[var(--c-primary)]">Bad</div>
-
-// ✅ Pick ONE system:
-<div className="wf-card">Elementary + components</div>
-<div style={{ padding: 'var(--s-3)' }}>Elementary tokens</div>
-<div className="bg-blue-500 p-4 rounded-lg">Tailwind</div>
-```
-
-See [recipes/design-systems/README.md](./recipes/design-systems/README.md) for complete architecture, examples, and implementation patterns.
-
-### CSS Cascade Issues
-
-#### VS Code Markdown Preview Conflicts
-VS Code's markdown preview applies default styles that override yours:
-
-**Problem areas**:
-- **Headings** (`h1-h6`): Default `font-weight: bold` ignores Tailwind's `font-light`
-- **Links** (`a`): Default blue color and underline
-- **Buttons**: Browser default borders
-
-**Solutions**:
-```jsx
-// Option 1: Use div with role and inline styles (bypasses heading defaults)
-<div role="heading" style={{ fontWeight: 300 }}>Light Heading</div>
-
-// Option 2: Test in Interactive Preview (no VS Code style conflicts)
-// Cmd+K P to open Interactive Preview
-```
+**Recommendation**: Use Tailwind for speed, but keep CSS files simple and readable.
 
 ## Platform APIs and Browser Features
 
-### Supported in Interactive Preview
-These browser APIs work in Interactive Preview (requires full browser environment):
+### Supported
+**Interactive Preview** (`Cmd+K P`) supports:
+- `localStorage` / `sessionStorage` - Persistent storage
+- `fetch()` - Remote API calls
+- `Canvas` API - Drawing and charts
+- Timers: `setTimeout()`, `setInterval()`
 
-- `localStorage` / `sessionStorage`
-- `IntersectionObserver`
-- `ResizeObserver`
-- `Geolocation API`
-- `Clipboard API`
+**Both Preview Modes** support:
+- `import` statements for local JSON files
+- Bundled packages (see Package and Dependency Management)
 
-### Limitations in Markdown Preview
-Markdown Preview uses static SSR rendering with limited browser APIs. Switch to Interactive Preview (`Cmd+K P`) for full platform API access.
+### Limitations
+**Markdown Preview** uses static rendering with limited browser APIs:
+- ❌ No `localStorage`/`sessionStorage` (use Interactive Preview)
+- ❌ No WebSockets (use `fetch()` polling)
+- ❌ No Service Workers (use `localStorage` for persistence)
 
----
+**Both Modes**:
+- ❌ Cannot fetch local files at runtime (use `import` instead)
 
 ## Performance
 
@@ -263,66 +255,66 @@ Very large JSX files may slow parsing - consider splitting into multiple compone
 2. **Reload VS Code**: `Cmd+Shift+P` → "Developer: Reload Window"
 3. **Verify File Type**: Ensure `.jsx` or `.tsx` extension
 4. **Simplify**: Remove complex patterns and test with basic component
-5. **Report Issues**: Include your JSX code and error messages
 
-### Common Issues
+## Creating Your Own Examples
 
-- **Blank screen**: Check Output panel, verify `.jsx`/`.tsx` extension
-- **CSS not applying**: Test in Interactive Preview (no VS Code style conflicts)
-- **Packages not loading**: Check internet connection (Interactive Preview only)
-- **Slow updates**: Increase `reactiveMd.debounceMs`
+### Folder Structure
 
-## Writing Recipes
-
-### What Makes a Good Recipe?
-
-Each recipe is ideally a **self-contained folder** that demonstrates a use case:
+Create self-contained examples that demonstrate a concept:
 
 ```
-notification-system/
-├── README.md           # Overview and context
-├── spec.md             # The interactive document
-├── Toast.jsx           # Local component
-├── NotificationBell.jsx
-└── styles.css          # Custom styles
+my-example/
+├── README.md           # Overview and problem statement
+├── spec.md             # Interactive demonstration
+├── Component.jsx       # Reusable component
+├── styles.css          # Custom styles (if needed)
+└── data.json           # Sample data (if needed)
 ```
 
-Recipes should:
-- **Tell a story** — context before code (what problem, who experiences it, what's the journey)
-- **Be interactive** — click, hover, see state changes (not static screenshots)
-- **Document the why** — explain decisions, trade-offs, and what's still uncertain
-- **Use local imports** — keep components alongside the spec
-- **Choose the right styling approach** — Wireframe for exploration, Elementary for high-fidelity, Tailwind for speed
+### What Makes a Good Example
 
-**Recipe Template**:
+- **Tell a story** — Start with the problem, then show the solution
+- **Be interactive** — Demonstrate actual behavior with `jsx live` blocks
+- **Document decisions** — Explain why you chose this approach
+- **Show edge cases** — Loading states, errors, empty states
+- **Use local imports** — Keep components and styles together
 
-```markdown
+### Example Template
+
+````markdown
 # Feature Name
 
-## Problem Statement
+## Problem
 What user problem does this solve?
 
-## Proposed Solution
-High-level description + interactive demos.
+## Solution
+How does this feature address the problem?
 
-## User Journey
-Step-by-step flow with embedded components.
+## Interactive Demo
+```jsx live
+import Component from './Component.jsx';
+import './styles.css';
+
+export default function Demo() {
+  return <Component />;
+}
+```
 
 ## Edge Cases
-Error states, empty states, loading states.
+- Loading state
+- Error state
+- Empty state
+```jsx live
+// Show these states
 ```
+````
 
 ### Quality Standards
 
-All new recipes should follow established patterns:
-- **JTBD-Aligned**: Demonstrate features within realistic use cases
-- **Self-Contained**: Work independently with clear documentation
+- **Accurate**: Code examples actually work (test them!)
+- **Self-contained**: No external dependencies beyond bundled pamentation
 - **Progressive**: Start simple, show advanced patterns
 - **Accessible**: Include ARIA labels and keyboard navigation
 - **Performant**: Efficient rendering, minimal re-renders
-
-## Getting Help
-
-Check recipes folder for examples. Report bugs with minimal reproduction cases.
 
 **Best practice**: Start simple, add complexity gradually.
