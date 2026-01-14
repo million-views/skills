@@ -45,7 +45,7 @@ Elementary is a design system comprised of three independent, orthogonal layers:
 - Pre-built component patterns for rapid prototyping
 - Design system compliance
 
-**Keywords**: Elementary, design tokens, CSS variables, light/dark mode, themeable, high-fidelity, wireframe, component classes (wf-btn, wf-card), design system
+**Keywords**: Elementary, design tokens, CSS variables, light/dark mode, themeable, high-fidelity, sketch, component classes (wf-btn, wf-card), design system
 
 **Not a Fit For**: Utility-first styling (use Tailwind), quick prototypes without design system constraints, fully custom styling without reusable patterns
 
