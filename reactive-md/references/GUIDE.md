@@ -75,8 +75,11 @@ export function Card({ title, children }) {
 ```
 
 #### For Inline Markdown Live Fences
+
+Always wrap everything in a single parent component. The reactive-md renderer needs one clear entry point.
+
 ```jsx live
-// ✅ Required: Wrap helpers in parent component
+// ✅ CORRECT: Single parent component wraps all content
 function Demo() {
   function Button({ children, variant = 'primary' }) {
     return <button className="btn">{children}</button>;
@@ -91,8 +94,12 @@ function Demo() {
 }
 ```
 
+**What NOT to do:**
+
+These patterns will fail because the renderer can't determine the entry point:
+
 ````markdown
-<!-- ❌ Wrong: Helper function + top-level JSX (ambiguous entry point) -->
+<!-- ❌ WRONG: Top-level JSX mixed with helper function -->
 ```jsx live
 function Button({ children }) {
   return <button>{children}</button>;
@@ -102,9 +109,16 @@ function Button({ children }) {
   <Button>Click me</Button>
 </div>
 ```
+
+<!-- ❌ WRONG: Top-level JSX mixed with import statement -->
+```jsx live
+import Card from './Card.jsx';
+
+<Card />
+```
 ````
 
-**Why?** The renderer needs a single entry point. Wrapping helpers in a parent component avoids ambiguity.
+**Why wrapping matters:** The renderer executes a single component function. Helpers + top-level JSX = ambiguous entry point (is it the function? the JSX? both?). A single wrapper removes all ambiguity.
 
 #### What to Avoid
 - Mixed `export default` with named exports in the same file

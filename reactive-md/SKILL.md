@@ -11,6 +11,13 @@ metadata:
 
 Generate functional markdown documents with embedded interactive React components for product design collaboration.
 
+## Reference Documentation
+
+**[GUIDE.md](references/GUIDE.md)** - Complete technical reference, troubleshooting, patterns, and dos/donts
+**[use-cases.md](references/use-cases.md)** - Example implementations for each primary use case
+
+(Consult these resources throughout for detailed guidance, pattern examples, and reference implementations.)
+
 ## When to Use This Skill
 
 Use reactive-md when the user asks to create:
@@ -54,6 +61,18 @@ Reactive-md documents support:
 - `` ```tsx `` - Code snippets for illustration (non-executable)
 - `` ```css `` - CSS snippets for illustration (non-executable)
 
+**For Anti-Patterns and Discourse:**
+When showing anti-patterns, broken examples, or code you're discussing (not executing), wrap the code fence in markdown backticks:
+````markdown
+<!-- ❌ Wrong: This pattern doesn't work in inline jsx live fences -->
+```jsx live
+import Card from './Card.jsx';
+<Card />
+```
+````
+
+This clearly signals to readers that the wrapped code fence shows **what NOT to do in inline `jsx live` fences** — mixing imports or helpers with top-level JSX is not recommended.
+
 **Default behavior:** When in doubt, use `live` - reactive-md's purpose is interactive demos.
 
 **File Types:**
@@ -80,7 +99,7 @@ Require `Cmd+K P` to load from esm.sh:
 
 **Data Loading & Platform APIs:**
 - ✅ Local JSON imports: `import data from './data.json' with { type: 'json' }` (both modes)
-- ✅ Remote APIs: `fetch()` in `useEffect` (Static Preview shows initial state; Interactive Preview fetches) 
+- ✅ Remote APIs: `fetch()` in `useEffect` (Static Preview shows initial state; Interactive Preview fetches)
 - ✅ Platform APIs: `localStorage`, `sessionStorage` (Interactive Preview only)
 - ❌ Local file fetch: Blocked by webview security (use `import` instead)
 
@@ -101,9 +120,7 @@ React.useEffect(() => {
 return <div>{loading ? 'Loading...' : <pre>{JSON.stringify(data)}</pre>}</div>;
 ```
 
-**For React import rules:** Read [references/GUIDE.md § React Imports](references/GUIDE.md#react-imports)
-**For package details:** Read [references/GUIDE.md § Package and Dependency Management](references/GUIDE.md#package-and-dependency-management)
-**For data loading patterns:** Read [references/GUIDE.md § Data Files](references/GUIDE.md#data-files)
+For React import rules, package details, and data loading patterns, consult the GUIDE in the references above.
 
 ## Styling Approach
 
@@ -155,8 +172,7 @@ import data from './data.json' with { type: 'json' };
 3. Agent uses `write_file` tool to create supporting files (Component.jsx, styles.css, data.json)
 4. You get complete, working multi-file structure ready to use
 
-**For reference guidance:** Read [references/GUIDE.md](references/GUIDE.md) for dos/donts, troubleshooting, and pattern snippets  
-**For working examples:** Study the recipes below - complete, production-ready implementations
+**For working examples:** Study the recipes below
 
 ## Examples
 
@@ -238,11 +254,6 @@ Good output must:
 3. ✅ **Respect boundaries** - Refuse infrastructure/backend only
 4. ✅ **Complete structure** - Context → Problem → Solution → Code → Next Steps
 5. ✅ **Use imports** - External files for reusable components/styles (not massive inline fences)
-
-## Reference Documentation
-
-**[GUIDE.md](references/GUIDE.md)** - Complete technical reference, troubleshooting, patterns
-**[use-cases.md](references/use-cases.md)** - Example implementations for each primary use case
 
 ## Success Criteria
 
