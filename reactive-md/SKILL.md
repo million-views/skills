@@ -62,16 +62,25 @@ Reactive-md documents support:
 - `` ```css `` - CSS snippets for illustration (non-executable)
 
 **For Anti-Patterns and Discourse:**
-When showing anti-patterns, broken examples, or code you're discussing (not executing), wrap the code fence in markdown backticks:
+When showing anti-patterns or broken examples in documentation, wrap the code fence in markdown backticks to prevent execution:
+
 ````markdown
-<!-- ❌ Wrong: This pattern doesn't work in inline jsx live fences -->
+<!-- ❌ Wrong: Top-level JSX with imports doesn't work -->
 ```jsx live
 import Card from './Card.jsx';
 <Card />
 ```
 ````
 
-This clearly signals to readers that the wrapped code fence shows **what NOT to do in inline `jsx live` fences** — mixing imports or helpers with top-level JSX is not recommended.
+This clearly signals the wrapped code fence is for **illustration only** (showing what NOT to do), not for execution.
+
+**The correct pattern** always wraps imports + JSX in a component function:
+```jsx live
+import Card from './Card.jsx';
+export default function Demo() {
+  return <Card />;
+}
+```
 
 **Default behavior:** When in doubt, use `live` - reactive-md's purpose is interactive demos.
 
@@ -162,7 +171,13 @@ feature-name/
 import Component from './Component.jsx';
 import './styles.css';
 import data from './data.json' with { type: 'json' };
+
+export default function Demo() {
+  return <Component />;
+}
 ```
+
+**Critical:** Always wrap imports + JSX in a component function. Top-level JSX mixed with imports will fail.
 
 **Naming:** Kebab-case, hierarchical context (e.g., `checkout-flow-payment-form.jsx`)
 
