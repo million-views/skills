@@ -1,8 +1,6 @@
-# Where AI learns to do more
+# Million Views Agent Skills
 
-Agent Skills for Million Views products and tools. Each skill provides domain-specific expertise that extends AI agents' capabilities for specific workflows, tools, and methodologies.
-
----
+Claude Agent Skills for Million Views products and tools. Point your AI assistant to a skill folder and it will understand the methodology, patterns, and best practices.
 
 ## Available Skills
 
@@ -11,113 +9,25 @@ Agent Skills for Million Views products and tools. Each skill provides domain-sp
 **Category**: Productivity  
 **Version**: 1.0.0
 
-Create functional markdown documents for product collaboration - live specs, interactive prototypes, and design system documentation using the Reactive MD VS Code extension.
+Literate UI/UX for product teams - accelerate from idea to working prototype in minutes using markdown with embedded interactive React components. Use for fast iteration and async collaboration on product specs, wireframes, user flows, feature demos, and design documentation.
 
 [Read skill documentation →](./reactive-md/SKILL.md)
 
----
+### [elementary](./elementary/)
 
-## Adding Skills
+**Category**: Design Systems  
+**Version**: 1.0.0
 
-As we develop more tools and establish consistent methodologies, skills can be added to this marketplace. Each skill should focus on a specific product or workflow, provide clear patterns and examples, and know when to refuse requests outside its scope.
+Token-based design system with standardized CSS custom property names, multiple theme implementations (polished with light/dark mode, sketch), and optional component patterns. Use for themeable interfaces, design system compliance, or switching between visual fidelity levels without code changes.
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for development guidelines.
-
----
-
-## Installation
-
-### For Claude Code Users
-
-```bash
-# Add this marketplace
-/plugin marketplace add million-views/skills
-
-# Install specific skills
-/plugin install reactive-md@million-views-skills
-/plugin install another-skill@million-views-skills
-```
-
-### For Other AI Agents (VS Code, etc.)
-
-While Agent Skills are natively understood by Claude Code, they can be used with other AI agents in different environments. For example, in VS Code with GitHub Copilot or other AI assistants, reference skill folders in your workspace's `AGENTS.md` file:
-
-```markdown
-# AGENTS.md
-
-## Available Skills
-
-- [Reactive MD Skill](./path/to/skills/reactive-md/) - Create functional markdown documents
-- [Another Skill](./path/to/skills/another-skill/) - Description of another skill
-```
-
-The AI agent can then read each skill's SKILL.md and references/ to understand the methodology and patterns.
-
----
-
-## Using Skills
-
-Skills are automatically activated when the AI agent recognizes your request matches a skill's domain. You don't need to explicitly invoke them.
-
-**Example requests:**
-
-```
-Create a reactive-md spec for a dark mode toggle
-```
-
-```
-Use [skill-name] to [accomplish task]
-```
-
-The agent will:
-1. Recognize the request relates to a specific skill
-2. Load the skill's instructions
-3. Apply the skill's patterns and best practices
-4. Know when to refuse requests outside the skill's scope
-
----
-
-## About Agent Skills
-
-[Agent Skills](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) are modular capabilities that extend Claude's expertise in specific domains. They use progressive disclosure:
-
-1. **Level 1 (Metadata)**: Claude loads skill name, description, and when to use it
-2. **Level 2 (Instructions)**: When relevant, Claude loads the full SKILL.md instructions
-3. **Level 3 (Reference)**: Detailed examples and patterns in `references/` folder
-
-**Benefits:**
-- ✅ Consistent methodology across conversations
-- ✅ Domain-specific expertise without repetitive prompting
-- ✅ Composable with other skills
-- ✅ Version controlled and shareable
-
----
-
-## Support
-
-### Skill-Specific Issues
-
-Each skill has its own documentation and troubleshooting:
-- [reactive-md skill](./reactive-md/)
-
-### Product/Extension Issues
-
-For issues with the underlying products:
-- [Reactive MD Extension Issues](https://github.com/million-views/reactive-md/issues)
-
----
+[Read skill documentation →](./elementary/SKILL.md)
 
 ## License
 
-All skills in this marketplace are licensed under the [MIT License](./LICENSE).
+MIT License. See [LICENSE](./LICENSE) for details.
 
-Individual skills may have additional licensing information in their respective folders.
-
----
-
-## About Million Views
+## About
 
 [Million Views](https://m5nv.com) is a research and product development firm exploring ideas worth pursuing.
 
-**Projects:**
-- [Reactive MD VS Code Extension](https://marketplace.visualstudio.com/items?itemName=million-views.reactive-md)
+These skills are provided as-is for open source use. We do not accept contributions or provide support at this time.
