@@ -148,7 +148,7 @@ Use these in code fence headers to guide the reader's view. Resolution priority 
 | **`mid`** | `iphone-15-pro`, `ipad-air-2024` | N/A | Use for high-precision, specific hardware tests. |
 | **`orientation`** | `portrait`, `landscape`, `auto` | `auto` | Use to show specific layout orientations. |
 | **`lock-view`** | (Flag) | N/A | **Critical for Narratives**. Use to hide UI controls (🚫). |
-| **`no-placeholder`**| (Flag) | N/A | Use when background blur distracts from the UI. |
+| `no-placeholder` | (Flag) | N/A | Disables display of helpful cards (EIP and BAP) in static preview |
 
 **Example Narrative Step**:
 `​``jsx live mid=iphone-15-pro orientation=portrait lock-view
