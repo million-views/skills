@@ -125,6 +125,49 @@ import Card from './Card.jsx';
 - Complex exports: `export default memo(Component)` or conditional exports
 - Helper functions + top-level JSX in inline fences
 
+## Device Emulation & Responsive Storytelling (v3.0)
+
+Reactive MD uses a **Document-Level Authority** model. As an agent, you must follow these rules when structuring responsive documents.
+
+### Baseline Dimensions (Standard Requirements)
+Always design for the lowest common denominator first.
+- **Mobile**: 375x667 (iPhone SE)
+- **Tablet**: 768x1024 (Classic iPad)
+- **Desktop**: 1440x900 (13" Notebook)
+
+### The Document Bus (🔗 vs 📌)
+- **Synced (🔗)**: Default. Use for cohesive narratives where all components shared a breakpoint.
+- **Pinned (📌)**: Set in UI. Prevents a component from changing when the document-level device changes.
+
+### Authoritative DSL Modifiers
+Use these in code fence headers to guide the reader's view. Resolution priority is **`mid` > `model` > `device`**.
+
+| Modifier | Values | Default | Agent Usage |
+| :--- | :--- | :--- | :--- |
+| **`device`** | `mobile`, `tablet`, `desktop` | `mobile` | Use for generic category previews. |
+| **`mid`** | `iphone-15-pro`, `ipad-air-2024` | N/A | Use for high-precision, specific hardware tests. |
+| **`orientation`** | `portrait`, `landscape`, `auto` | `auto` | Use to show specific layout orientations. |
+| **`lock-view`** | (Flag) | N/A | **Critical for Narratives**. Use to hide UI controls (🚫). |
+| **`no-placeholder`**| (Flag) | N/A | Use when background blur distracts from the UI. |
+
+**Example Narrative Step**:
+`​``jsx live mid=iphone-15-pro orientation=portrait lock-view
+// Force the reader to see the mobile implementation
+`​``
+
+### Responsive Design: Container Queries (Agent Requirement)
+**CRITICAL**: Since the `ViewportFrame` provides `container-type: inline-size`, you must prefer **Container Queries** over Media Queries for component responsiveness.
+
+- **Why?**: Media queries target the global VS Code window. Container queries target the emulated device viewport.
+- **Tailwind v4 builtin**:
+    1.  Mark your root element or wrapper with the `@container` class.
+    2.  Use responsive variants: `<div class="@container"><div class="grid-cols-1 @md:grid-cols-2"></div></div>`
+    3.  Arbitrary values: `<div class="flex-col @[400px]:flex-row">`
+- **CSS**: Use standard `@container (min-width: ...)` blocks.
+
+#### Pixel-Perfect Scaling
+Reactive MD uses a "Double-Wrapper" architecture. The component always "thinks" it is in a fixed logical viewport (e.g. 375px), but scales fluidly using CSS Container Query units (`cqw`) to fit any screen size.
+
 ## Data Files
 
 ### Local Files
