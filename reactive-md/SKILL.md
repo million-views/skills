@@ -80,12 +80,12 @@ import Card from './Card.jsx';
 
 This clearly signals the wrapped code fence is for **illustration only** (showing what NOT to do), not for execution.
 
-**The correct pattern** always wraps imports + JSX in a component function:
+**The correct `jsx live` pattern** always imports and wraps JSX in a component function:
 ```jsx live
 import { useState } from 'react';
-import Card from './Card.jsx';
+import Card from './references/recipes/feature-spec/proto-kit.jsx';
 
-export default function Demo() {
+function Demo() {
   return <Card />;
 }
 ```
@@ -95,111 +95,92 @@ export default function Demo() {
 **File Types:**
 - **Markdown (`.md`)** - Primary document only (entry point for preview)
 - **JSX/TSX (`.jsx`, `.tsx`)** - Primary viewable OR dependent (can be imported)
-- **CSS (`.css`)** - Dependent only (imported by JSX or via `css live` blocks)
+- **Logic & Utils (`.js`, `.mjs`, `.ts`)** - Dependent only (logic/utilities imported by components)
+- **CSS (`.css`)** - Dependent only (imported by JSX or via `css live` fences)
 - **JSON (`.json`)** - Dependent only (imported by JSX/TSX)
 
 **Hot Module Reload:** Edit any file → preview updates automatically
 
 **Import Patterns (Where and How):**
-- **In `.jsx`/`.tsx` files or `jsx live` blocks:** Use `import './style.css'` or `import data from './data.json' with { type: 'json' }`
-- **In `.css` files or `css live` blocks:** Use `@import './other.css'`
+- **In `.jsx`/`.tsx` files or `jsx live` fences:** Use `import './style.css'` or `import data from './data.json' with { type: 'json' }`
+- **In `.css` files or `css live` fences:** Use `@import './other.css'`
 
-## Package & Data Loading
+## Technical Integrity Checklist
 
-**Bundled Packages (Both Preview Modes):**
-Always available in both **Markdown Preview** AND **Interactive Preview**:
-- `dayjs`, `motion/react`, `lucide-react`, `clsx`, `uuid`, `es-toolkit`
+Before delivering, ensure:
+1.  **Container Root**: Does the root JSX element of the `live` fence have the `@container` class? (Mandatory for responsive emulation).
+2.  **Pathing**: Are all local imports using absolute-relative paths (e.g., `./proto-kit.jsx`)?
+3.  **Sidecars**: Has logic/UI exceeding 30 lines been extracted to a sidecar file? (Follow the "Project Folder" model).
+4.  **Single Entry Point**: Does the `live` fence have exactly one primary component or top-level JSX element to render? (Consult **GUIDE.md** for sidecar library discipline and export rules).
+5.  **Preview Safety**: Do exported sidecar components have default prop values? (Ensures the **Interactive Preview** doesn't crash with "Minified React error #130" when rendering components in standalone Gallery mode without parent data).
+6.  **Stable ID (Optional)**: If the component has interactive state (forms, filters), does the fence have a stable `id="..."` to prevent state loss during narrative edits?
 
-**CDN Packages (Interactive Preview Only):**
-Require **Interactive Preview** (`Cmd+K P`) to load from esm.sh:
-- `@heroicons/react`, `zustand`, `jotai`, `tailwind-merge`, `react-hook-form`
 
-**Data Loading & Platform APIs:**
-- ✅ Local JSON imports: `import data from './data.json' with { type: 'json' }` (both modes)
-- ✅ Remote APIs: `fetch()` in `useEffect` (**Markdown Preview** shows initial state; **Interactive Preview** fetches)
-- ✅ Platform APIs: `localStorage`, `sessionStorage` (**Interactive Preview** only)
-- ❌ Local file fetch: Blocked by webview security (use `import` instead)
+## Package & Data Reference
 
-**Pattern for Remote Data:** Always fetch inside `useEffect`, initialize state with default values. Component renders safely in **Markdown Preview** while showing loading UI, then fetches in **Interactive Preview**.
+### Bundled (Offline/Static)
+`dayjs`, `motion/react` (renamed from `framer-motion`), `lucide-react`, `clsx`, `es-toolkit`.
 
-```jsx live
+### CDN (Interactive Only)
+`zustand`, `jotai`, `tailwind-merge`, `react-hook-form`, `lucide-react`.
+
+### Remote Data Pattern
+Always initialize state with defaults for **Markdown Preview** SSR compatibility.
+
+```jsx live id="data-fetcher"
 import { useState, useEffect } from 'react';
+import { Display, LoadingState } from './references/recipes/feature-spec/proto-kit.jsx';
 
-export default function Demo() {
+function DataDemo() {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
-    fetch('https://api.example.com/data')
-      .then(res => res.json())
-      .then(data => { setData(data); setLoading(false); });
+    fetch('https://api.example.com/data').then(r => r.json()).then(setData);
   }, []);
-
-  // Renders: "Loading..." in Markdown Preview, actual data in Interactive Preview
-  return <div>{loading ? 'Loading...' : <pre>{JSON.stringify(data)}</pre>}</div>;
+  return <div>{data ? <Display data={data} /> : <LoadingState />}</div>;
 }
 ```
 
-For React import rules, package details, and data loading patterns, consult the GUIDE in the references above.
+## Styling
+Reactive MD uses a `container-first` styling system:
 
-## Styling Approach
+- **Tailwind v4 (Primary)**: Standard utility classes + Container Query variants.
+- **CSS Context (`css live`)**: Use for document-wide custom properties or brand tokens. Apply these to subsequent components via semantic classes.
+- **Sidecar CSS**: For complex, component-specific styles (import in `.jsx`).
 
-Choose ANY styling approach that fits the task:
-- **Tailwind CSS** - Fast, utility-first (use for quick prototypes). Available in both **Markdown Preview** and **Interactive Preview**.
-    - **Container Queries**: Use `@container` on root elements to respond to emulated device sizes rather than editor window size.
-- **Inline styles** - Simple, self-contained (use for minimal examples)
-- **Plain CSS** - `css live` blocks or external `.css` files (use for semantic, maintainable styles)
-- **Design system tokens** - When available, compose with design systems for consistent theming
+### Rule #1 (The Responsive Root)
+To ensure prototypes respond to **emulated device sizes** (the `ViewportFrame`) rather than the VS Code pane, follow these rules:
 
-Focus on document structure and interactive patterns. Styling is secondary to demonstrating reactive-md capabilities.
+1.  **Containment**: The root element of every `jsx live` fence **must** use the Tailwind `@container` class or native `container-type: inline-size`.
+2.  **Container Queries**: When using Tailwind, use the `@` prefix for all responsive variants (e.g., `@md:grid-cols-2`, `@lg:p-12`).
+3.  **Forbidden**: Do NOT use standard Media Query variants (e.g., `md:`, `lg:`) as they target the entire IDE window.
 
-## File Organization
 
-### Single File (Inline Code)
+## File Organization: The "Project Folder" Model
 
-**When:** Simple concepts (< 50 lines total)
+Treat every literate doc as a hub-and-spoke system.
 
-✅ **With helper components** - Wrap in parent function
-✅ **Without helpers** - Pure JSX at top level (Note: Hook imports still required)
-❌ **Don't mix** helper functions with top-level JSX (ambiguous entry point)
+- **The Hub**: A clean `.md` narrative that explains the "Why" and "How."
+- **The Spokes**: Sidecar `.jsx`, `.css`, and `.json` files for implementation details.
+- **Extraction Rule**: If a component or logic fence exceeds **30 lines**, extract it to a sidecar file.
 
-### Multi-File Structure
-
-**When:** Complex features (> 50 lines) or reusable components
-
-**The agent will create these files for you** using the `write_file` tool. Each file is self-contained:
+### Multi-File Architecture
+Always prefer a structured project folder approach for non-trivial tasks (anything requiring more than one component).
 
 **Example structure:**
 ```
 feature-name/
-  README.md            (primary document with live fences)
-  Component.jsx        (imported component)
-  styles.css           (imported styles)
-  data.json            (imported data)
+  spec.md              (The Hub: Narrative + High-level Demo)
+  component-name.jsx   (The Spoke: Implementation)
+  styles.css           (The Spoke: Custom styles/tokens)
+  data.json            (The Spoke: Mock data)
 ```
 
-**Import pattern in your primary/main .md file (typically README.md or spec.md):**
-```jsx live
-import Component from './Component.jsx';
-import './styles.css';
-import data from './data.json' with { type: 'json' };
+**Workflow:**
+1.  **Analyze**: Determine the core components and data structures needed to narrate the story effectively.
+2.  **Scaffold**: Create the sidecar files (`.jsx`, `.css`, `.json`) first.
+3.  **Narrate**: Write the primary `.md` file, importing the components into live fences.
+4.  **Stable Identity**: ALWAYS use `id="unique-string"` in fences that have interactive state (forms, filters) to prevent unmounting during narrative edits.
 
-export default function Demo() {
-  return <Component />;
-}
-```
-
-**Critical:** Always wrap imports + JSX in a component function. Top-level JSX mixed with imports will fail.
-
-**Naming:** Kebab-case, hierarchical context (e.g., `checkout-flow-payment-form.jsx`)
-
-**Agent workflow:**
-1. Agent analyzes the task and identifies files needed (components, styles, data)
-2. Agent creates primary document (README.md or spec.md typically) with live fence showing imports
-3. Agent uses `write_file` tool to create supporting files (Component.jsx, styles.css, data.json)
-4. You get complete, working multi-file structure ready to use
-
-**For working examples:** Study the recipes below
 
 ## Examples
 
@@ -213,84 +194,14 @@ export default function Demo() {
 - **[references/recipes/notification-system/](references/recipes/notification-system/)** - Multi-component architecture, folder organization
 - **[references/recipes/data-loading/](references/recipes/data-loading/)** - JSON imports and API fetch patterns
 
-## Clarifying Questions
+## Boundaries & Refusals (CRITICAL)
 
-When context is ambiguous, ASK instead of guessing:
+### esm.sh Limitations (Forbidden)
+Do NOT use these packages in **Interactive Preview** (they fail via esm.sh):
+- `recharts`: (Missing `clsx` dependency resolution). Use SVG/Tailwind for charts.
+- `swr`: (Missing context shim). Use `fetch()` + `useState`.
+- `@tanstack/react-query`: (Multi-instance conflicts). Use `zustand`.
 
-- **Scope**: "Make a dashboard" → Ask purpose (analytics? admin? monitoring?) and data source
-- **File context**: User says "improve this" → Check which file is open or selected
-- **Data**: User wants working demo → Ask if they want mock data or real API
+### Infrastructure
+Refuse requests for deployment, Docker, databases, or real-time WebSockets. Prototypes are client-side only (local persistence via `localStorage` is okay).
 
-## Refusal Boundaries
-
-Reactive-md is a powerful prototyping tool. Refuse only when requests require infrastructure or services outside the extension's scope.
-
-### What Reactive-MD CAN Do
-
-Complex interactive UIs, real API integration, error handling, authentication UI, data persistence (localStorage), form validation, complex state management.
-
-### Refuse: Infrastructure & Backend
-
-**Triggers:** Deploy, CI/CD, Docker, cloud platforms, backend implementation, databases, auth services, test frameworks.
-
-**Response template:**
-```
-🚫 [Infrastructure/Backend/Testing] Boundary
-
-Reactive-md prototypes run in VS Code, not production infrastructure.
-
-This prototype CAN demonstrate: [UI/UX flow, API integration, interactive behavior]
-
-To productionize: Graduate to proper project with infrastructure tooling.
-```
-
-### Refuse: Known-Broken Packages (esm.sh Limitations)
-
-The following packages cannot be loaded via esm.sh due to dependency resolution issues. Refuse these requests in **Interactive Preview**:
-
-**`recharts`** - Charting library
-- **Issue:** Missing transitive dependency (`clsx` not resolved by esm.sh)
-- **Refuse:** "recharts doesn't load in **Interactive Preview**. For charts, use native SVG or plan a full project setup."
-
-**`swr`** - Data fetching/caching
-- **Issue:** Missing React context shim (`use-sync-external-store`)
-- **Refuse:** "swr isn't available in **Interactive Preview**. For data fetching, use `fetch()` directly or `zustand` for local state."
-
-**`@tanstack/react-query`** - Complex data/state management
-- **Issue:** Multiple React instance conflicts with esm.sh import isolation
-- **Refuse:** "@tanstack/react-query requires a full project setup. Use `zustand` or `jotai` for state management in prototypes."
-
-### Refuse: Real-Time & Server Infrastructure
-
-The following require server infrastructure beyond a VS Code extension:
-
-**WebSockets** - Real-time bidirectional communication
-- **Issue:** Requires persistent backend server connection
-- **Refuse:** "WebSockets need a backend server. For prototypes, use `fetch()` polling or plan a full project setup."
-
-**Service Workers** - Background processing & offline support
-- **Issue:** Requires application-level service worker infrastructure
-- **Refuse:** "Service Workers need full project setup. For prototypes, use `localStorage` for persistence."
-
-## Quality Standards
-
-Good output must:
-
-1. ✅ **Run without errors** - Code executes in preview
-2. ✅ **Follow conventions** - File organization, naming, live fence syntax
-3. ✅ **Respect boundaries** - Refuse infrastructure/backend only
-4. ✅ **Complete structure** - Context → Problem → Solution → Code → Next Steps
-5. ✅ **Use imports** - External files for reusable components/styles (not massive inline fences)
-
-## Success Criteria
-
-**Primary success**: User goes from idea to working prototype in < 10 minutes.
-
-**Key outcomes**:
-1. Iterate fast (minutes, not days)
-2. Communicate visually (executable specs vs static mocks)
-3. Collaborate async (version-controlled `.md` files)
-4. Make decisions faster (working prototypes resolve debates)
-5. Ship confident specs (living documentation shows exact behavior)
-
-**Goal:** Make reactive-md the fastest path from product idea to shared understanding.

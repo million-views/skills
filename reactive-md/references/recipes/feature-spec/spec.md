@@ -16,16 +16,16 @@ Users miss important updates because we lack a unified notification system. Curr
 
 ## User Stories
 
-**As a** product manager,  
-**I want** to see critical feature flags and deployment alerts in one place,  
+**As a** product manager,
+**I want** to see critical feature flags and deployment alerts in one place,
 **so that** I can respond to production issues within minutes instead of hours.
 
-**As an** engineer,  
-**I want** to archive notifications I've already acted on,  
+**As an** engineer,
+**I want** to archive notifications I've already acted on,
 **so that** my notification center stays clean and only shows what needs attention.
 
-**As a** customer success rep,  
-**I want** to see account-level alerts (failed payments, usage spikes),  
+**As a** customer success rep,
+**I want** to see account-level alerts (failed payments, usage spikes),
 **so that** I can proactively reach out before the customer even notices.
 
 ## Proposed Solution
@@ -37,23 +37,23 @@ Build a unified notification center that surfaces all critical alerts in one pla
 The notification center consists of these interactive states:
 
 ```jsx live
-import ExampleComponent from './ExampleComponent.jsx';
+import FeatureSpecDemo from './proto-kit.jsx';
 
 export default function Demo() {
   return (
     <div className="space-y-6">
-      <ExampleComponent 
+      <FeatureSpecDemo
         title="Default State"
         buttonLabel="Enable"
       />
-      
-      <ExampleComponent 
+
+      <FeatureSpecDemo
         title="Pre-enabled Variant"
         buttonLabel="Disable"
         isActive={true}
       />
-      
-      <ExampleComponent 
+
+      <FeatureSpecDemo
         title="With Callback"
         buttonLabel="Toggle Feature"
         onStateChange={(state) => console.log('Feature is now:', state ? 'ON' : 'OFF')}
@@ -139,13 +139,13 @@ export default function DisabledState() {
       <p className="text-gray-600 text-sm mb-6">
         Upgrade your plan to unlock this feature.
       </p>
-      <input 
+      <input
         type="text"
         disabled
         placeholder="This field is disabled"
         className="w-full px-4 py-2 border rounded bg-gray-100 text-gray-500 cursor-not-allowed mb-4"
       />
-      <button 
+      <button
         disabled
         className="w-full px-4 py-2 bg-gray-300 text-gray-500 rounded cursor-not-allowed"
       >
