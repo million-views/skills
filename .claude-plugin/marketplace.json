@@ -7,7 +7,7 @@
   },
   "metadata": {
     "description": "Claude Agent Skills for Million Views products and tools",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "pluginRoot": "."
   },
   "plugins": [
@@ -15,7 +15,7 @@
       "name": "reactive-md",
       "source": "./reactive-md",
       "description": "Literate UI/UX for product teams - accelerate from idea to working prototype in minutes using markdown with embedded interactive React components. Use for fast iteration and async collaboration on product specs, wireframes, user flows, feature demos, and design documentation. Replaces Figma/Storybook with executable specs in version control.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "category": "productivity",
       "keywords": [
         "reactive-md",
@@ -27,7 +27,9 @@
         "interactive-docs"
       ],
       "strict": false,
-      "agents": ["./reactive-md/SKILL.md"]
+      "agents": [
+        "./reactive-md/SKILL.md"
+      ]
     },
     {
       "name": "elementary",
@@ -46,7 +48,9 @@
         "accessibility"
       ],
       "strict": false,
-      "agents": ["./elementary/SKILL.md"]
+      "agents": [
+        "./elementary/SKILL.md"
+      ]
     }
   ]
 }

@@ -3,7 +3,7 @@ name: reactive-md
 description: Literate UI/UX for product teams - accelerate from idea to working prototype in minutes using markdown with embedded interactive React components. Use for fast iteration and async collaboration on product specs, wireframes, user flows, feature demos, and design documentation. Replaces Figma/Storybook with executable specs in version control.
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   author: million-views (https://m5nv.com)
 ---
 
@@ -29,19 +29,19 @@ Use reactive-md when the user asks to create:
 - A/B tests, dashboards, component galleries
 - Interactive documentation and living specifications
 
-**Aliases**: "live doc", "prototype", "POC", "interactive spec" all refer to reactive-md documents.
+**Aliases**: "live doc", "prototype", "POC", "interactive spec", "reactive spec", "reactive doc" all refer to reactive-md documents.
 
 ## Core Capabilities
 
 Reactive-md documents support:
 
 **Two Preview Modes:**
-1. **Static Preview** (Markdown Preview): Offline, bundled packages only, server-side rendering
+1. **Markdown Preview**: Offline, bundled packages only, server-side rendering
 2. **Interactive Preview** (`Cmd+K P`): Browser-based webview, supports CDN packages and platform APIs
 
-**Live Fences (CRITICAL):**
+**Interactive Fences (CRITICAL):**
 
-**When to use `live` annotation:**
+**When to use `live` modifier:**
 - User wants to **see/interact** with the component
 - Creating a working demo or prototype
 - Showing how something works in practice
@@ -61,6 +61,12 @@ Reactive-md documents support:
 - `` ```tsx `` - Code snippets for illustration (non-executable)
 - `` ```css `` - CSS snippets for illustration (non-executable)
 
+**Modifiers & Anchors:**
+- **`id="stable-name"`** - Prevents a **Component Refresh** (reload) when editing the surrounding narrative. Essential for maintaining state while writing.
+- **`device="mobile"`** - Sets the initial emulation viewport (also `tablet`, `desktop`).
+- **`orientation="portrait"`** - Sets the initial rotation: `portrait` or `landscape`.
+- **`lock-view`** - Standalone flag to strictly enforce DSL viewport settings.
+
 **For Anti-Patterns and Discourse:**
 When showing anti-patterns or broken examples in documentation, wrap the code fence in markdown backticks to prevent execution:
 
@@ -76,7 +82,9 @@ This clearly signals the wrapped code fence is for **illustration only** (showin
 
 **The correct pattern** always wraps imports + JSX in a component function:
 ```jsx live
+import { useState } from 'react';
 import Card from './Card.jsx';
+
 export default function Demo() {
   return <Card />;
 }
@@ -99,34 +107,37 @@ export default function Demo() {
 ## Package & Data Loading
 
 **Bundled Packages (Both Preview Modes):**
-Always available in both Markdown Preview AND Interactive Preview:
+Always available in both **Markdown Preview** AND **Interactive Preview**:
 - `dayjs`, `motion/react`, `lucide-react`, `clsx`, `uuid`, `es-toolkit`
 
 **CDN Packages (Interactive Preview Only):**
-Require `Cmd+K P` to load from esm.sh:
+Require **Interactive Preview** (`Cmd+K P`) to load from esm.sh:
 - `@heroicons/react`, `zustand`, `jotai`, `tailwind-merge`, `react-hook-form`
 
 **Data Loading & Platform APIs:**
 - ✅ Local JSON imports: `import data from './data.json' with { type: 'json' }` (both modes)
-- ✅ Remote APIs: `fetch()` in `useEffect` (Static Preview shows initial state; Interactive Preview fetches)
-- ✅ Platform APIs: `localStorage`, `sessionStorage` (Interactive Preview only)
+- ✅ Remote APIs: `fetch()` in `useEffect` (**Markdown Preview** shows initial state; **Interactive Preview** fetches)
+- ✅ Platform APIs: `localStorage`, `sessionStorage` (**Interactive Preview** only)
 - ❌ Local file fetch: Blocked by webview security (use `import` instead)
 
-**Pattern for Remote Data:** Always fetch inside `useEffect`, initialize state with default values. Component renders safely in Static Preview while showing loading UI, then fetches in Interactive Preview.
+**Pattern for Remote Data:** Always fetch inside `useEffect`, initialize state with default values. Component renders safely in **Markdown Preview** while showing loading UI, then fetches in **Interactive Preview**.
 
 ```jsx live
-// This pattern works in both preview modes
-const [data, setData] = React.useState(null);
-const [loading, setLoading] = React.useState(true);
+import { useState, useEffect } from 'react';
 
-React.useEffect(() => {
-  fetch('https://api.example.com/data')
-    .then(res => res.json())
-    .then(data => { setData(data); setLoading(false); });
-}, []);
+export default function Demo() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-// Renders: "Loading..." in Static, actual data in Interactive
-return <div>{loading ? 'Loading...' : <pre>{JSON.stringify(data)}</pre>}</div>;
+  useEffect(() => {
+    fetch('https://api.example.com/data')
+      .then(res => res.json())
+      .then(data => { setData(data); setLoading(false); });
+  }, []);
+
+  // Renders: "Loading..." in Markdown Preview, actual data in Interactive Preview
+  return <div>{loading ? 'Loading...' : <pre>{JSON.stringify(data)}</pre>}</div>;
+}
 ```
 
 For React import rules, package details, and data loading patterns, consult the GUIDE in the references above.
@@ -134,7 +145,8 @@ For React import rules, package details, and data loading patterns, consult the 
 ## Styling Approach
 
 Choose ANY styling approach that fits the task:
-- **Tailwind CSS** - Fast, utility-first (use for quick prototypes)
+- **Tailwind CSS** - Fast, utility-first (use for quick prototypes). Available in both **Markdown Preview** and **Interactive Preview**.
+    - **Container Queries**: Use `@container` on root elements to respond to emulated device sizes rather than editor window size.
 - **Inline styles** - Simple, self-contained (use for minimal examples)
 - **Plain CSS** - `css live` blocks or external `.css` files (use for semantic, maintainable styles)
 - **Design system tokens** - When available, compose with design systems for consistent theming
@@ -148,7 +160,7 @@ Focus on document structure and interactive patterns. Styling is secondary to de
 **When:** Simple concepts (< 50 lines total)
 
 ✅ **With helper components** - Wrap in parent function
-✅ **Without helpers** - Pure JSX at top level
+✅ **Without helpers** - Pure JSX at top level (Note: Hook imports still required)
 ❌ **Don't mix** helper functions with top-level JSX (ambiguous entry point)
 
 ### Multi-File Structure
@@ -234,15 +246,15 @@ To productionize: Graduate to proper project with infrastructure tooling.
 
 ### Refuse: Known-Broken Packages (esm.sh Limitations)
 
-The following packages cannot be loaded via esm.sh due to dependency resolution issues. Refuse these requests in Interactive Preview:
+The following packages cannot be loaded via esm.sh due to dependency resolution issues. Refuse these requests in **Interactive Preview**:
 
 **`recharts`** - Charting library
 - **Issue:** Missing transitive dependency (`clsx` not resolved by esm.sh)
-- **Refuse:** "recharts doesn't load in Interactive Preview. For charts, use native SVG or plan a full project setup."
+- **Refuse:** "recharts doesn't load in **Interactive Preview**. For charts, use native SVG or plan a full project setup."
 
 **`swr`** - Data fetching/caching
 - **Issue:** Missing React context shim (`use-sync-external-store`)
-- **Refuse:** "swr isn't available in Interactive Preview. For data fetching, use `fetch()` directly or `zustand` for local state."
+- **Refuse:** "swr isn't available in **Interactive Preview**. For data fetching, use `fetch()` directly or `zustand` for local state."
 
 **`@tanstack/react-query`** - Complex data/state management
 - **Issue:** Multiple React instance conflicts with esm.sh import isolation

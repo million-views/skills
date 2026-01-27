@@ -1,356 +1,121 @@
-# Reactive MD User Guide
+# Reactive MD Guide
 
-Practical solutions for common issues and best practices for reliable previews.
+Reactive MD is an authoring system for **Literate UI/UX**. It treats a document as a cohesive project environment—unifying the narrative (the specification) and the implementation (the prototype) into a single, portable folder.
 
-## About Code Examples
+## The Conceptual Model
 
-Code blocks in this guide use different markers:
+To use Reactive MD effectively, a document architect must distinguish between the two primary ways a document is viewed:
 
-- **`jsx live` / `css live`** - Executable examples that render in preview
-- **`jsx` / `css`** - Reference patterns (syntax examples, won't execute)
-- **Markdown fences** - Literal markdown syntax (showing fence usage itself)
+- **Markdown Preview**: Provides the **Static Preview**. It renders the initial HTML and CSS for reading and review only when the integrated VS Code markdown preview is opened. It **cannot execute code** because of the markdown extension's security model.
+- **Interactive Preview**: Provides the **High-Fidelity Prototype**. It executes the full React 19 lifecycle, enabling stateful testing, animations, and responsive device emulation.
 
-## Component Development
+### Code Block Modes
+The system distinguishes between **interactive prototypes** and **static examples** based on the fence info string:
+- **`jsx live` / `css live`**: Code that is utilized to render a React component in both preview modes.
+- **`jsx` / `css` / `json`**: Static syntax highlighting only. Use these for snippets that shouldn't be executed.
 
-### React Imports
+## The Literate Prototype
 
-React is global - don't import it. Hooks must be imported:
+A great document is a **story**, not a code dump. Use Reactive MD to maintain "Conceptual Integrity" by following these principles:
 
-```jsx live
-// ✅ Correct pattern
-import { useState, useEffect } from 'react';
+### 1. Narrative over Syntax
+Start with the *intent*, the *user journey*, or a problem statement. Code is the proof, not the lead. Use Markdown to explain *why* a specific UX decision was made, and use comments in code only for technical nuance.
 
-export default function MyComponent() {
-  const [count, setCount] = useState(0);
-  return <div>Count: {count}</div>;
-}
+### 2. Multi-Fence Narratives
+Don't build one giant monolithic component. Break your story down into multiple fences to show the evolution of a design or different edge cases (loading, empty, success state).
+
+### 3. Portability
+A prototype should be self-contained and portable. Minimize deep external dependencies so another team member can open and view the document instantly without complex environment setup.
+
+**Stay simple, then add complexity.**
+
+
+## Authoring Rules
+
+To ensure your prototypes render reliably in both previews, follow these rules for organizing your code.
+
+### 1. The Project Folder
+A "Reactive Document" is more than a single file; it is ideally a self-contained project folder. Move implementation details into sidecar files to keep your main narrative clean and portable.
+
+```text
+my-prototype/
+├── README.md           # Overview and problem statement
+├── spec.md             # The Literate Narrative (Main entry)
+├── Component.jsx       # Implementation details (Sidecar)
+├── theme.css           # Custom styles (Sidecar)
+└── data.json           # Sample data (Sidecar)
 ```
 
-### Quick Diagnosis
+### 2. Markdown Code Fences
+Each `jsx live` fence is treated as a standalone component.
+- **One Component per Fence**: Define exactly one primary component to be the entry point for the fence.
+- **Scope Helpers**: If you need small helper components, define them **inside** your main component function to keep your fence focused on a single, clear entry point.
+- **The 30-Line Rule**: If a `live` fence exceeds 30 lines of code, extract the implementation to a sidecar file and `import` it.
 
-When components show error cards instead of rendering:
-
-**File Extension**: Only `.jsx` and `.tsx` files work (VS Code needs this to recognize JSX syntax)
-
-**Syntax Errors**: Check the Problems panel (`View → Problems`), or use Interactive Preview (`Cmd+K P`) for detailed messages
-
-**Export Patterns**: Use simple `export default function` or `export function`. Avoid `memo()`, conditional exports, or dynamic exports
-
-### Component Structure Best Practices
-
-#### For Single Components with Helpers
-```jsx live
-// ✅ Recommended: Helpers before or after main export
-import { useState } from 'react';
-
-function HelperComponent() {
-  return <div>Helper content</div>;
-}
-
-export default function MainComponent() {
-  return (
-    <div>
-      <HelperComponent />
-      Main content
-    </div>
-  );
-}
-```
-
-#### For Multiple Components
-```jsx
-// ✅ Recommended: Named exports for libraries
-export function Button({ children }) {
-  return <button className="btn">{children}</button>;
-}
-
-export function Card({ title, children }) {
-  return (
-    <div className="card">
-      <h3>{title}</h3>
-      {children}
-    </div>
-  );
-}
-```
-
-#### For Inline Markdown Live Fences
-
-Always wrap everything in a single parent component. The reactive-md renderer needs one clear entry point.
+#### Example: The Ideal Fence (Reference)
+Keep your narrative focused on the "Why." Move complex UI logic and large blocks of CSS/Tailwind into external files.
 
 ```jsx live
-// ✅ CORRECT: Single parent component wraps all content
+import { TicketList } from './lib/ui/TicketList.jsx';
+
+// The fence just provides the context/usage
 function Demo() {
-  function Button({ children, variant = 'primary' }) {
-    return <button className="btn">{children}</button>;
+  return (
+    <div className="p-8 bg-slate-50">
+      <TicketList limit={5} />
+    </div>
+  );
+}
+```
+
+#### Example: The Iterative Fence (Drafting)
+When rapidly prototyping a concept *within* the document, keep helpers scoped inside your main entry point. Once the design stabilizes, move them to a sidecar file.
+
+```jsx live
+function PricingStory() {
+  // Helpers are scoped inside to keep the entry point clean
+  function Badge({ children }) {
+    return <span className="bg-blue-100 px-2 py-1 rounded">{children}</span>;
   }
 
   return (
-    <div className="flex gap-4">
-      <Button variant="primary">Primary</Button>
-      <Button variant="secondary">Secondary</Button>
+    <div className="flex flex-col gap-4">
+      <h3>Professional Plan <Badge>Recommended</Badge></h3>
+      <p>The perfect choice for growing teams.</p>
     </div>
   );
 }
 ```
 
-**What NOT to do:**
+### 3. External Files (`.jsx` | `.tsx`)
+External files are for shared libraries. They require explicit exports to work with the editor's "Preview" features.
+- **Inline Exports**: Use `export function Component()`. This ensures the **▶ Preview** button appears exactly where you defined the code.
+- **Avoid Tail-End Exports**: Do not place `export default` at the very bottom of a file. This separates the preview controls from the source code.
+- **Library Discipline**: Use named exports for utilities; reserve `export default` for your primary "App" component.
 
-These patterns will fail because the renderer can't determine the entry point:
+### 4. Local Imports
+Organize data and logic into sidecar files.
 
-````markdown
-<!-- ❌ WRONG: Top-level JSX mixed with helper function -->
-```jsx live
-function Button({ children }) {
-  return <button>{children}</button>;
-}
+| File Type | Purpose | Syntax |
+| :--- | :--- | :--- |
+| **`.json`** | Data stores. | `import data from './users.json'` |
+| **`.jsx`**  | UI modules. | `import { Card } from './Card.jsx'` |
+| **`.css`**  | Shared styles. | `import './theme.css'` (JSX) or `@import './theme.css'` (CSS) |
+| **`.ts`**   | Type-safe logic. | `import { util } from './util.ts'` |
 
-<div>
-  <Button>Click me</Button>
-</div>
-```
-
-<!-- ❌ WRONG: Top-level JSX mixed with import statement -->
-```jsx live
-import Card from './Card.jsx';
-
-<Card />
-```
-````
-
-**Why wrapping matters:** The renderer executes a single component function. Helpers + top-level JSX = ambiguous entry point (is it the function? the JSX? both?). A single wrapper removes all ambiguity.
-
-#### What to Avoid
-- Mixed `export default` with named exports in the same file
-- Complex exports: `export default memo(Component)` or conditional exports
-- Helper functions + top-level JSX in inline fences
-
-## Device Emulation & Responsive Storytelling (v3.0)
-
-Reactive MD uses a **Document-Level Authority** model. As an agent, you must follow these rules when structuring responsive documents.
-
-### Baseline Dimensions (Standard Requirements)
-Always design for the lowest common denominator first.
-- **Mobile**: 375x667 (iPhone SE)
-- **Tablet**: 768x1024 (Classic iPad)
-- **Desktop**: 1440x900 (13" Notebook)
-
-### The Document Bus (🔗 vs 📌)
-- **Synced (🔗)**: Default. Use for cohesive narratives where all components shared a breakpoint.
-- **Pinned (📌)**: Set in UI. Prevents a component from changing when the document-level device changes.
-
-### Authoritative DSL Modifiers
-Use these in code fence headers to guide the reader's view. Resolution priority is **`mid` > `model` > `device`**.
-
-| Modifier | Values | Default | Agent Usage |
-| :--- | :--- | :--- | :--- |
-| **`device`** | `mobile`, `tablet`, `desktop` | `mobile` | Use for generic category previews. |
-| **`mid`** | `iphone-15-pro`, `ipad-air-2024` | N/A | Use for high-precision, specific hardware tests. |
-| **`orientation`** | `portrait`, `landscape`, `auto` | `auto` | Use to show specific layout orientations. |
-| **`lock-view`** | (Flag) | N/A | **Critical for Narratives**. Use to hide UI controls (🚫). |
-| `no-placeholder` | (Flag) | N/A | Disables display of helpful cards (EIP and BAP) in static preview |
-
-**Example Narrative Step**:
-`​``jsx live mid=iphone-15-pro orientation=portrait lock-view
-// Force the reader to see the mobile implementation
-`​``
-
-### Responsive Design: Container Queries (Agent Requirement)
-**CRITICAL**: Since the `ViewportFrame` provides `container-type: inline-size`, you must prefer **Container Queries** over Media Queries for component responsiveness.
-
-- **Why?**: Media queries target the global VS Code window. Container queries target the emulated device viewport.
-- **Tailwind v4 builtin**:
-    1.  Mark your root element or wrapper with the `@container` class.
-    2.  Use responsive variants: `<div class="@container"><div class="grid-cols-1 @md:grid-cols-2"></div></div>`
-    3.  Arbitrary values: `<div class="flex-col @[400px]:flex-row">`
-- **CSS**: Use standard `@container (min-width: ...)` blocks.
-
-#### Pixel-Perfect Scaling
-Reactive MD uses a "Double-Wrapper" architecture. The component always "thinks" it is in a fixed logical viewport (e.g. 375px), but scales fluidly using CSS Container Query units (`cqw`) to fit any screen size.
-
-## Data Files
-
-### Local Files
-
-**Don't use `fetch()` for local files** (security restrictions block it). Use import statements instead:
-
-```jsx
-// ✅ Correct: Import local JSON
-import data from './data.json';
-
-export default function MyComponent() {
-  return <div>{data.items.map(item => <span>{item.name}</span>)}</div>;
-}
-```
-
-```jsx
-// ❌ Wrong: fetch() doesn't work
-export default function MyComponent() {
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    fetch('./data.json').then(r => r.json()).then(setData);
-  }, []);
-
-  return <div>{data?.items.map(item => <span>{item.name}</span>)}</div>;
-}
-```
-
-### Remote Data
-
-- **Markdown Preview**: No network access - use static data or imports
-- **Interactive Preview**: Full network access - `fetch()` works normally
-
-## Package and Dependency Management
-
-### Bundled Packages (Both Preview Modes)
-Always available in both Markdown Preview and Interactive Preview:
-- `lucide-react` - SVG icons
-- `motion/react` - Animations (import from `motion/react`)
-- `dayjs` - Date formatting (relativeTime plugin included)
-- `clsx` - Conditional CSS classes
-- `uuid` - Unique ID generation
-- `es-toolkit` - Modern lodash replacement
-
-### CDN Packages (Interactive Preview Only)
-Require `Cmd+K P` to load from esm.sh:
-- `@heroicons/react` - Icon set (Tailwind team)
-- `zustand` - State management
-- `jotai` - Atomic state
-- `tailwind-merge` - Merge Tailwind classes
-- `react-hook-form` - Form handling
-
-### Known Limitations
-These packages cannot be loaded via esm.sh:
-- **`recharts`** - Missing transitive dependency (`clsx` not resolved)
-- **`swr`** - Missing React context shim (`use-sync-external-store`)
-- **`@tanstack/react-query`** - React instance conflicts
-
-**Workaround**: For these use cases, use `fetch()` directly or `zustand`/`jotai` for state.
-
-### Styling Approaches
-
-**Choose ONE approach per file**:
-
-- **Tailwind CSS** - Utility-first, built into Reactive MD (easiest for quick prototypes)
-- **Inline styles** - Simple, self-contained (good for minimal examples)
-- **CSS classes** - Plain CSS with semantic names (good for maintainable styles)
-
-**Recommendation**: Use Tailwind for speed, but keep CSS files simple and readable.
-
-## Platform APIs and Browser Features
-
-### Supported
-**Interactive Preview** (`Cmd+K P`) supports:
-- `localStorage` / `sessionStorage` - Persistent storage
-- `fetch()` - Remote API calls
-- `Canvas` API - Drawing and charts
-- Timers: `setTimeout()`, `setInterval()`
-
-**Both Preview Modes** support:
-- `import` statements for local JSON files
-- Bundled packages (see Package and Dependency Management)
-
-### Limitations
-**Markdown Preview** uses static rendering with limited browser APIs:
-- ❌ No `localStorage`/`sessionStorage` (use Interactive Preview)
-- ❌ No WebSockets (use `fetch()` polling)
-- ❌ No Service Workers (use `localStorage` for persistence)
-
-**Both Modes**:
-- ❌ Cannot fetch local files at runtime (use `import` instead)
-
-## Performance
-
-### Live Reload
-Default debounce: 300ms. Increase via `reactiveMd.debounceMs` if updates feel too frequent.
-
-### Module-Level Side Effects
-Avoid side effects at module level (they run multiple times on hot reload):
-
-```jsx
-// ❌ Wrong: Runs on every hot reload
-console.log('Module loaded');
-const timestamp = Date.now();
-
-export default function Demo() { ... }
-```
-
-```jsx live
-// ✅ Correct: Side effects in useEffect
-import { useEffect } from 'react';
-
-export default function Demo() {
-  useEffect(() => {
-    console.log('Component mounted');
-  }, []);
-
-  return <div>Demo Component</div>;
-}
-```
-
-### Large Files
-Very large JSX files may slow parsing - consider splitting into multiple components.
-
-## Troubleshooting
-
-### Quick Checklist
-
-1. ✅ File extension is `.jsx` or `.tsx`?
-2. ✅ Not importing React (`import React from 'react'`)?
-3. ✅ Using `import` not `fetch()` for local files?
-4. ✅ Simple export pattern (`export default function`)?
-5. ✅ Single entry point in inline fences?
-6. ✅ Check Output panel (`View → Output → "Reactive MD"`)?
-7. ✅ Try Interactive Preview (`Cmd+K P`) for detailed errors?
-
-**When in doubt**: Simplify to a basic component, then add complexity gradually.
-
-### When Things Still Don't Work
-
-1. **Check the Output Panel**: `View → Output → "Reactive MD"` for extension logs
-2. **Reload VS Code**: `Cmd+Shift+P` → "Developer: Reload Window"
-3. **Verify File Type**: Ensure `.jsx` or `.tsx` extension
-4. **Simplify**: Remove complex patterns and test with basic component
-
-## Creating Your Own Examples
-
-### Folder Structure
-
-Create self-contained examples that demonstrate a concept:
-
-```
-my-example/
-├── README.md           # Overview and problem statement
-├── spec.md             # Interactive demonstration
-├── Component.jsx       # Reusable component
-├── styles.css          # Custom styles (if needed)
-└── data.json           # Sample data (if needed)
-```
-
-### What Makes a Good Example
-
-- **Tell a story** — Start with the problem, then show the solution
-- **Be interactive** — Demonstrate actual behavior with `jsx live` blocks
-- **Document decisions** — Explain why you chose this approach
-- **Show edge cases** — Loading states, errors, empty states
-- **Use local imports** — Keep components and styles together
-
-### Example Template
+### 5. Recommended Template
+Maintain conceptual integrity across your team by following a standard structure:
 
 ````markdown
 # Feature Name
 
-## Problem
+## The Problem
 What user problem does this solve?
-
-## Solution
-How does this feature address the problem?
 
 ## Interactive Demo
 ```jsx live
+import './theme.css';
 import Component from './Component.jsx';
-import './styles.css';
 
 export default function Demo() {
   return <Component />;
@@ -358,20 +123,128 @@ export default function Demo() {
 ```
 
 ## Edge Cases
-- Loading state
-- Error state
-- Empty state
-```jsx live
-// Show these states
-```
+Showcase loading, empty, or error states in separate fences.
 ````
 
-### Quality Standards
 
-- **Accurate**: Code examples actually work (test them!)
-- **Self-contained**: No external dependencies beyond bundled pamentation
-- **Progressive**: Start simple, show advanced patterns
-- **Accessible**: Include ARIA labels and keyboard navigation
-- **Performant**: Efficient rendering, minimal re-renders
+## Fence Specification Reference
 
-**Best practice**: Start simple, add complexity gradually.
+### Key Modifiers
+Use these modifiers in the opening fence header (e.g., ` ```jsx live device="mobile" ... ``` `) to control identity and emulation.
+
+| Key | Category | Description |
+| :--- | :--- | :--- |
+| **`id`** | Identity | A stable name (e.g., `id="login-form"`) that prevents a **Component Refresh** when you edit the surrounding narrative. |
+| **`mid`** | Device | Specific Model ID (e.g., `mid="iphone-15-pro"`). Best for exact viewport and safe-area specs. |
+| **`model`** | Device | Human-readable name (e.g., `model="iPhone 14"`). The system will search for the closest match. |
+| **`device`** | Device | General category preset: `mobile`, `tablet`, or `desktop`. |
+| **`orientation`**| Viewport | Sets the initial rotation: `portrait` or `landscape`. |
+
+> **Precedence**: For device emulation, keywords are resolved in this order: **`mid`** > **`model`** > **`device`**.
+
+### Standard Device Viewports
+Reactive MD uses these logical device dimensions:
+- **Mobile (`mobile`)**: 375 × 667 (Logical SE)
+- **Tablet (`tablet`)**: 768 × 1024 (Logical iPad)
+- **Desktop (`desktop`)**: 1440 × 900 (Logical Notebook)
+
+### Specification Flags
+Flags are standalone keywords added to the fence header (no `=` required).
+
+- **`lock-view`**: Hides emulation controls in Interactive Preview, strictly enforcing your DSL settings.
+- **`no-placeholder`**: Suppresses the helpful guidance cards that normally explain why a component isn't rendering (such as missing libraries or security restrictions).
+- **`debug`**: Enables additional runtime logging in the console.
+
+
+## Styling & Visual System
+
+Reactive MD uses a modern, container-first styling system that ensures your prototypes look and behave correctly across all devices.
+
+### 1. Tailwind CSS (v4)
+Tailwind is the primary styling engine. It is available in both **Markdown** and **Interactive** previews.
+- **Usage**: Use standard utility classes (e.g., `className="p-8 bg-slate-50"`) directly in your JSX.
+- **Container Queries (Recommended)**: Use `@container` on your root element. This allows your UI to respond to the *emulated device* dimensions (using `@md:`, `@lg:`, etc.) rather than the global VS Code window size.
+- **Media Queries (Avoid)**: Standard CSS media queries target the entire VS Code editor window, which can cause layout issues during emulation.
+
+### 2. The CSS Context (`css live`)
+Use `css live` fences to define document-specific styles, such as custom properties or unique brand tokens. These styles apply to every subsequent component in the document.
+
+```css live
+:root {
+  --document-accent: #ff3366;
+}
+
+.custom-card {
+  border: 1px solid var(--document-accent);
+}
+```
+
+### 3. External Stylesheets
+For larger design systems, move your CSS to external `.css` files. These can then be imported in either `jsx` or `css` live fences as below:
+- **In JSX**: `import './theme.css';`
+- **In CSS Fences**: `@import './theme.css';`
+
+## The Package Ecosystem
+
+To ensure performance and reliability, Reactive MD categorizes packages into two tiers:
+
+### 1. Built-in (Available Everywhere)
+These packages are bundled with the extension and work in both **Markdown** and **Interactive** previews.
+- **Foundational**: `lucide-react`, `motion/react`, `clsx`, `uuid`.
+- **Utilities**: `dayjs`, `es-toolkit`.
+
+### 2. External (Interactive Only)
+Any ESM-compatible package on NPM can be used in **Interactive Preview** (`Cmd+K P`). These are resolved via the `esm.sh` CDN.
+- **Known to work**: `@heroicons/react`, `zustand`, `jotai`, `react-hook-form`, `tailwind-merge`.
+- **Known Limitations**: The following packages are currently unsupported due to environment constraints:
+    - `recharts` (transitive dependency resolution issues)
+    - `swr` (missing React context shim)
+    - `@tanstack/react-query` (multiple React instance conflicts)
+
+
+## Emulation & Synchronization
+
+In **Interactive Preview**, you can control device emulation (phone, tablet, desktop) directly from the header of each rendered component.
+
+- **Sync Mode (🔗)**: By default, components are synchronized. Changing the device on any synced component updates every other synced component in the document simultaneously.
+- **Pin Mode (📌)**: Click the Pin icon to take a specific component out of sync. This lets you lock one component to "Mobile" while the rest of the document stays on "Desktop."
+
+
+## The Lifecycle of a Prototype
+
+Reactive MD keeps your prototypes alive even as you work on them, but it distinguishes between **minor tweaks** and **full refreshes** of the component lifecycle.
+
+### 1. The Component Refresh
+Whenever you change the **Source Code** or **CSS**, the component must be refreshed. This unmounts the current React instance and remounts a fresh one.
+
+- **What is lost**: Ephemeral React state (like `useState` values or form focus).
+- **What is preserved**: Data saved to `localStorage` or `sessionStorage`. If your prototype requires persistent state across refreshes, use standard Web Storage APIs.
+- **Maintenance**: You can manually wipe all document data using the **Clear Storage** (🗑️) button located in the Interactive Preview header.
+
+### 2. The UI Tweak
+Changing the viewport (rotating the device or switching between presets) is a **UI Tweak**. The component stays mounted, the instance is preserved, and your state is safe.
+
+> **Persistence Tip**: Modifying the fence header in your Markdown file (e.g., changing `device="mobile"`) is a source change that triggers a **Component Refresh**. To change the device without losing form data, use the emulation buttons in the component header instead.
+
+### 3. Stable Identity (The `id` modifier)
+If you want to edit your narrative text or move a fence to a different section without triggering a refresh, give it a stable `id`. This acts as an **Identity Anchor**:
+
+````markdown
+```jsx live id="signup-form"
+// edits to the markdown text *outside* this fence won't refresh this component
+```
+````
+Without an `id`, Reactive MD identifies components by their position or a hash of their content. Changing the text *above* a fence can sometimes change its internal index, causing a brief refresh as the system re-aligns its state. Explicit IDs eliminate this.
+
+## Troubleshooting
+
+### The Quick Checklist
+If a component fails to render, go through this checklist to help isolate the issue:
+1. **File Extension**: Ensure you are using `.jsx` or `.tsx` (required for parser detection).
+2. **React Imports**: You **must** still import any hooks you use (e.g., `import { useState } from 'react'`). You only skip the generic `import React from 'react'` for JSX usage, as the modern React 19 runtime is handled automatically.
+3. **The Import Pattern**: Always use ESM `import` statements (e.g., `import data from './data.json'`). Reactive MD handles the security handshake and URI translation for you. **Never use standard `fetch()` for local files.**
+4. **Interactive vs Markdown**: If it works in the Interactive Preview but not in the static Markdown Preview, check if you are relying on `useEffect` or browser events that are not available during the static render.
+5. **Output Log**: Check `View → Output → "Reactive MD"` for specific transformation or bundling errors.
+
+### External APIs
+You can fetch data from the public internet. Ensure these calls are wrapped in `useEffect` or a similar hook so they do not block the **Markdown Preview's** static render.
