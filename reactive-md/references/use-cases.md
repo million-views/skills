@@ -10,7 +10,7 @@ Use these workflows to understand where reactive-md excels.
   > Define what to build and why it matters.
 
 **Workflow**:
-1. Start with a template from [recipes/](./recipes/) (feature-spec, a-b-test-proposal, competitive-analysis) or create a new markdown file
+1. Start with a template from [recipes/](./recipes/) (feature-spec, a-b-test-proposal, visual-essays) or create a new markdown file
 2. Add interactive wireframes using Reactive MD
 3. Include live component demos in your spec
 4. Get stakeholder feedback without leaving your editor
@@ -81,4 +81,17 @@ Use these workflows to understand where reactive-md excels.
 4. Iterate based on feedback without context-switching
 
 *tags: communication, async, collaboration, prototyping*
+
+### 7. Narrative & Data Storytelling
+
+**The Job**: Create "Visual Essays" or "Data Journalism" pieces where the prose and visualizations are deeply integrated.
+  > Turn static data into a narrative experience.
+
+**Workflow**:
+1. Gather datasets in `.json` or `.csv` sidecars
+2. Write the narrative hub in `spec.md` using standard Markdown
+3. Create custom SVG visualizations in sidecar `.jsx` files (Preview-safe with default props)
+4. Embed interactive components that allow users to explore the data (filters, sliders, hovers)
+
+*tags: journalism, data-viz, essay, narrative, storytelling*
 

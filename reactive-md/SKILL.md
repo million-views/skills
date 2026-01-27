@@ -28,8 +28,9 @@ Use reactive-md when the user asks to create:
 - Feature prototypes, concept exploration, and visual demos
 - A/B tests, dashboards, component galleries
 - Interactive documentation and living specifications
+- Data journalism and visual essays (narrative storytelling with animated visualizations)
 
-**Aliases**: "live doc", "prototype", "POC", "interactive spec", "reactive spec", "reactive doc" all refer to reactive-md documents.
+**Aliases**: "visual essay", "data story", "live doc", "prototype", "POC", "interactive spec" all refer to reactive-md documents.
 
 ## Core Capabilities
 
@@ -152,7 +153,7 @@ To ensure prototypes respond to **emulated device sizes** (the `ViewportFrame`) 
 
 1.  **Containment**: The root element of every `jsx live` fence **must** use the Tailwind `@container` class or native `container-type: inline-size`.
 2.  **Container Queries**: When using Tailwind, use the `@` prefix for all responsive variants (e.g., `@md:grid-cols-2`, `@lg:p-12`).
-3.  **Forbidden**: Do NOT use standard Media Query variants (e.g., `md:`, `lg:`) as they target the entire IDE window.
+3.  **Forbidden**: Do NOT use standard Media Query variants (e.g., `md:`, `lg:` in Tailwind) as they target the entire IDE window.
 
 
 ## File Organization: The "Project Folder" Model
@@ -188,7 +189,7 @@ feature-name/
 
 - **[references/recipes/feature-spec/](references/recipes/feature-spec/)** - Product specification with working components and edge case handling
 - **[references/recipes/a-b-test-proposal/](references/recipes/a-b-test-proposal/)** - A/B test methodology with business metrics and comparison widget
-- **[references/recipes/competitive-analysis/](references/recipes/competitive-analysis/)** - Market positioning with competitor scoring and feature matrix
+- **[references/recipes/visual-essays/](references/recipes/visual-essays/)** - Data journalism, market research, and visual storytelling using SVG charts and matrices
 - **[references/recipes/user-flow/](references/recipes/user-flow/)** - Multi-step flows with validation, error handling, and success states
 - **[references/recipes/dark-mode-toggle/](references/recipes/dark-mode-toggle/)** - Multi-file imports, external `.jsx` and `.css` files
 - **[references/recipes/notification-system/](references/recipes/notification-system/)** - Multi-component architecture, folder organization
