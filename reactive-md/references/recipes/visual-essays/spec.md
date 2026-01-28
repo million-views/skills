@@ -10,11 +10,13 @@ tags: ["data-journalism", "strategy", "visual-essay"]
 
 In 2024, the boundary between "the document" and "the product" began to dissolve. Design teams are moving away from static specs towards **Executable Narratives**. This essay explores the growth of Literate Prototyping and how it compares to traditional workflows.
 
+> Like most stuff you find on the Internet, this is fiction. We pose no threat to Figma or Storybook. Having said that we do believe that **Literate UI/UX** pow-wowing the `Reactive MD` way will grow on you and with you!
+
 ## The Adoption Curve
 
 We are seeing a rapid shift in how high-performance teams document their logic. Unlike previous tooling cycles, adoption is driven by developer-designer parity.
 
-```jsx live id="adoption-trend"
+```jsx live id="adoption-trend" device=tablet orientation=landscape zoom=auto
 import { SVGTrendChart } from './proto-kit.jsx';
 
 export default function Trend() {
@@ -24,14 +26,14 @@ export default function Trend() {
     { label: 'Q3', value: 48 },
     { label: 'Q4', value: 92 }
   ];
-  
+
   return (
-    <div className="@container">
-      <SVGTrendChart 
-        data={data} 
-        title="Active Teams (Adoption %)" 
-        color="#8b5cf6" 
-      />
+    <div className="@container w-full flex justify-center p-4">
+        <SVGTrendChart
+          data={data}
+          title="Active Teams (Adoption %)"
+          color="#8b5cf6"
+        />
     </div>
   );
 }
@@ -51,17 +53,17 @@ import { Zap } from 'lucide-react';
 
 export default function WorkflowComparison() {
   const scores = [
-    { name: 'Literate Prototyping', score: 96, color: 'bg-indigo-600' },
-    { name: 'Traditional PRD', score: 45, color: 'bg-slate-300' },
-    { name: 'Design Components', score: 72, color: 'bg-indigo-400' }
+    { name: 'Reactive MD', score: 96, color: 'bg-indigo-600' },
+    { name: 'Figma Handover', score: 45, color: 'bg-slate-300' },
+    { name: 'Storybook Docs', score: 72, color: 'bg-indigo-400' }
   ];
 
   return (
     <div className="space-y-6">
       <ComparisonMatrix data={scores} />
-      
+
       <InsightCard title="The Speed Advantage" icon={Zap}>
-        Literate Prototyping eliminates the "Logic Gap" between Figma Handover and Production. Changes in the spec are immediately reflected in the working component.
+        Reactive MD eliminates the "Logic Gap" between Figma Handover and Production. Changes in the spec are immediately reflected in the working component.
       </InsightCard>
     </div>
   );
@@ -77,9 +79,9 @@ import { FeatureMatrix } from './proto-kit.jsx';
 
 export default function Features() {
   const capabilities = [
-    { name: 'Hot Module Reload', ours: true, compA: true, compB: false },
+    { name: 'Hot Module Reload', ours: true, compA: false, compB: true },
     { name: 'Sidecar Extraction', ours: true, compA: false, compB: false },
-    { name: 'CDN Import Support', ours: true, compA: true, compB: true },
+    { name: 'CDN Import Support', ours: true, compA: false, compB: true },
     { name: 'SVG Chart Primitives', ours: true, compA: false, compB: true },
     { name: 'Stable Viewports', ours: true, compA: false, compB: false }
   ];
@@ -92,6 +94,12 @@ export default function Features() {
 }
 ```
 
+## Escaping the "Design System" Trap
+
+Most teams treat Storybook as a cemetery: it's where components go to die after they've been coded. They exist in isolation, disconnected from the product narrative. Similarly, Figma files are "The Map" that never quite matches "The Territory."
+
+Literate Prototyping flips the script. The documentation **is** the implementation.
+
 ## Conclusion
 
-As evidenced by the lack of **Sidecar Extraction** and **Stable Viewports** in incumbent tools, Literate Prototyping remains the only path forward for teams that value technical truth in their specifications.
+As evidenced by the lack of **Sidecar Extraction** and **Stable Viewports** in incumbent tools like Figma and Storybook, Literate Prototyping (and Reactive MD specifically) remains the only path forward for teams that value technical truth in their specifications. Static mockups are the "paper maps" of the digital age—pretty, but ultimately useless for navigation. It's time to stop drawing pictures of software and start writing it into existence.

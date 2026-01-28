@@ -1,6 +1,6 @@
 ---
 name: reactive-md
-description: Literate UI/UX for product teams - accelerate from idea to working prototype in minutes using markdown with embedded interactive React components. Use for fast iteration and async collaboration on product specs, wireframes, user flows, feature demos, and design documentation. Replaces Figma/Storybook with executable specs in version control.
+description: Literate UI/UX for product teams - accelerate from idea to working prototype in minutes using markdown with embedded interactive React components. Use for fast iteration and async collaboration on product specs, wireframes, user flows, feature demos, and design documentation. Replaces static documentation and handoff tools (like Figma or Storybook) with executable specs in version control.
 license: MIT
 metadata:
   version: "1.1.0"

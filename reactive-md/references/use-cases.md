@@ -10,7 +10,7 @@ Use these workflows to understand where reactive-md excels.
   > Define what to build and why it matters.
 
 **Workflow**:
-1. Start with a template from [recipes/](./recipes/) (feature-spec, a-b-test-proposal, visual-essays) or create a new markdown file
+1. Start with a template from [recipes/](./recipes/) (feature-spec, a-b-test-proposal) or create a new markdown file
 2. Add interactive wireframes using Reactive MD
 3. Include live component demos in your spec
 4. Get stakeholder feedback without leaving your editor
@@ -88,10 +88,11 @@ Use these workflows to understand where reactive-md excels.
   > Turn static data into a narrative experience.
 
 **Workflow**:
-1. Gather datasets in `.json` or `.csv` sidecars
-2. Write the narrative hub in `spec.md` using standard Markdown
-3. Create custom SVG visualizations in sidecar `.jsx` files (Preview-safe with default props)
-4. Embed interactive components that allow users to explore the data (filters, sliders, hovers)
+1. Take inspiration from [recipes/visual-essays](./recipes/visual-essays)
+2. Gather datasets in `.json` or `.js` sidecars
+3. Write the narrative hub in `spec.md` using standard Markdown
+4. Create custom SVG visualizations in sidecar `.jsx` files (Preview-safe with default props)
+5. Embed interactive components that allow users to explore the data (filters, sliders, hovers)
 
 *tags: journalism, data-viz, essay, narrative, storytelling*
 
