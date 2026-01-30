@@ -82,19 +82,6 @@ Use these workflows to understand where reactive-md excels.
 
 *tags: fidelity, audit, mobile, responsive, testing*
 
-### 7. Communicate Ideas Asynchronously
-
-**The Job**: Share working prototypes with your team without meetings.
-  > Iterate faster through version-controlled markdown.
-
-**Workflow**:
-1. Create a markdown file with your idea, mockups, and interactive demo
-2. Commit to version control with clear commit messages
-3. Share the file with your team for feedback
-4. Iterate based on feedback without context-switching
-
-*tags: communication, async, collaboration, prototyping*
-
 ### 7. Narrative & Data Storytelling
 
 **The Job**: Create "Visual Essays" or "Data Journalism" pieces where the prose and visualizations are deeply integrated.
@@ -108,4 +95,17 @@ Use these workflows to understand where reactive-md excels.
 5. Embed interactive components that allow users to explore the data (filters, sliders, hovers)
 
 *tags: journalism, data-viz, essay, narrative, storytelling*
+
+### 8. Communicate Ideas Asynchronously
+
+**The Job**: Share working prototypes with your team without meetings.
+  > Iterate faster through version-controlled markdown.
+
+**Workflow**:
+1. Create a markdown file with your idea, mockups, and interactive demo
+2. Commit to version control with clear commit messages
+3. Share the file with your team for feedback
+4. Iterate based on feedback without context-switching
+
+*tags: communication, async, collaboration, prototyping*
 
