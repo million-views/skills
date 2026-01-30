@@ -30,7 +30,7 @@ export default function Trend() {
   ];
 
   return (
-    <div className="w-full p-8 bg-slate-50/50 rounded-[3rem]">
+    <div className="w-full p-4">
         <SVGTrendChart
           data={data}
           title="Velocity Multiplier"
@@ -61,11 +61,11 @@ export default function StrategyAnalysis() {
   ];
 
   return (
-    <div className="space-y-12 p-8 bg-slate-50/50 rounded-[3rem]">
+    <div className="grid @landscape:grid-cols-[1fr_240px] gap-4 p-4 items-start">
       <ComparisonMatrix data={scores} />
 
       <InsightCard title="The Fidelity Factor" icon={Target}>
-        By maintaining Technical Truth at the point of origin, we eliminate the 'Logic Gap' entirely.
+        Technical Truth at the point of origin eliminates the 'Logic Gap'.
       </InsightCard>
     </div>
   );
@@ -89,7 +89,7 @@ export default function Audit() {
   ];
 
   return (
-    <div className="p-8 bg-slate-50/50 rounded-[3rem]">
+    <div className="w-full p-4">
       <FeatureMatrix features={capabilities} />
     </div>
   );
