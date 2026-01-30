@@ -16,13 +16,13 @@ export function ComparisonMatrix({ data = [] }) {
   const isSSR = useIsSSR();
 
   return (
-    <div className="py-6 bg-white border-y border-slate-100 @container">
+    <div className="p-8 bg-white border border-slate-100 rounded-3xl @container shadow-[0_32px_64px_-12px_rgba(59,175,73,0.06)]">
       {/*
           Editorial Typography:
           Tight tracking, clean hairline separators
       */}
-      <div className="flex items-baseline justify-between mb-8 border-b border-slate-900/10 pb-2">
-        <h3 className="m-0 font-black text-slate-900 text-[10px] uppercase tracking-[0.2em] leading-none">
+      <div className="flex items-baseline justify-between mb-8 border-b border-[#3baf49]/20 pb-2">
+        <h3 className="m-0 font-black text-[#3baf49] text-[10px] uppercase tracking-[0.2em] leading-none">
           Comparative Analysis
         </h3>
         <span className="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Index 100 Baseline</span>
@@ -38,12 +38,12 @@ export function ComparisonMatrix({ data = [] }) {
               </span>
             </div>
             
-            <div className="w-full bg-slate-50 h-1 overflow-hidden">
+            <div className="w-full bg-[#ceead2]/30 h-1 overflow-hidden">
               <motion.div
                 initial={isSSR ? { width: `${item.score}%` } : { width: 0 }}
                 whileInView={{ width: `${item.score}%` }}
                 viewport={{ once: true }}
-                className={`h-full ${item.color || 'bg-slate-900'}`}
+                className={`h-full ${item.color || 'bg-[#3baf49]'}`}
                 transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }} 
               />
             </div>
@@ -60,27 +60,27 @@ export function ComparisonMatrix({ data = [] }) {
  * Uses Progressive Disclosure: Tables on desktop, definition cards on mobile.
  */
 export function FeatureMatrix({ features = [] }) {
-  const Check = () => <span className="text-slate-900 text-xs font-black">YES</span>;
-  const Cross = () => <span className="text-slate-300 text-xs font-light">--</span>;
+  const Check = () => <span className="text-[#3baf49] text-xs font-black px-1.5 py-0.5 bg-[#ceead2]/50 rounded">YES</span>;
+  const Cross = () => <span className="text-slate-300 text-xs font-light tracking-[0.2em] uppercase">None</span>;
 
   return (
-    <div className="@container border-t border-slate-900 bg-white">
+    <div className="@container p-8 bg-white border border-slate-100 rounded-3xl shadow-[0_32px_64px_-12px_rgba(59,175,73,0.06)]">
       {/* Table View: Only visible on wider containers */}
       <div className="hidden @md:block">
         <table className="w-full text-left border-collapse">
-          <thead className="border-b border-slate-100">
+          <thead className="border-b border-[#3baf49]/20">
             <tr>
-              <th className="py-4 pr-4 font-black text-[10px] uppercase tracking-widest text-slate-400">Core Capability</th>
-              <th className="py-4 px-4 text-center font-black text-[10px] uppercase tracking-widest text-slate-900 bg-slate-50">R-MD</th>
+              <th className="py-4 pr-4 font-black text-[10px] uppercase tracking-widest text-[#3baf49]">Strategic Capability</th>
+              <th className="py-4 px-4 text-center font-black text-[10px] uppercase tracking-widest text-slate-900 bg-[#ceead2]/20">R-MD</th>
               <th className="py-4 px-4 text-center font-black text-[10px] uppercase tracking-widest text-slate-400">Figma</th>
               <th className="py-4 px-4 text-center font-black text-[10px] uppercase tracking-widest text-slate-400">Storybook</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-50">
             {features.map((f) => (
-              <tr key={f.name} className="group">
+              <tr key={f.name} className="group hover:bg-[#ceead2]/5 transition-colors">
                 <td className="py-4 pr-4 text-[12px] font-bold text-slate-900 tracking-tight">{f.name}</td>
-                <td className="py-4 px-4 text-center bg-slate-50/50">{f.ours ? <Check /> : <Cross />}</td>
+                <td className="py-4 px-4 text-center bg-[#ceead2]/10">{f.ours ? <Check /> : <Cross />}</td>
                 <td className="py-4 px-4 text-center">{f.compA ? <Check /> : <Cross />}</td>
                 <td className="py-4 px-4 text-center">{f.compB ? <Check /> : <Cross />}</td>
               </tr>
@@ -92,19 +92,19 @@ export function FeatureMatrix({ features = [] }) {
       {/* Card View: Mobile-first alternative */}
       <div className="block @md:hidden divide-y divide-slate-100">
         {features.map((f) => (
-          <div key={f.name} className="py-4">
-            <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-400 mb-3">{f.name}</h4>
+          <div key={f.name} className="py-5">
+            <h4 className="font-black text-[10px] uppercase tracking-widest text-[#3baf49] mb-4">{f.name}</h4>
             <div className="flex justify-between items-center text-center">
-              <div className="flex flex-col gap-1">
-                <span className="text-[8px] uppercase font-bold text-slate-400">R-MD</span>
+              <div className="flex flex-col gap-2">
+                <span className="text-[8px] uppercase font-bold text-slate-400 tracking-tighter">R-MD</span>
                 <div className="h-6 flex items-center justify-center">{f.ours ? <Check /> : <Cross />}</div>
               </div>
-              <div className="flex flex-col gap-1">
-                <span className="text-[8px] uppercase font-bold text-slate-400">Figma</span>
+              <div className="flex flex-col gap-2">
+                <span className="text-[8px] uppercase font-bold text-slate-400 tracking-tighter">Figma</span>
                 <div className="h-6 flex items-center justify-center">{f.compA ? <Check /> : <Cross />}</div>
               </div>
-              <div className="flex flex-col gap-1">
-                <span className="text-[8px] uppercase font-bold text-slate-400">Storybook</span>
+              <div className="flex flex-col gap-2">
+                <span className="text-[8px] uppercase font-bold text-slate-400 tracking-tighter">Storybook</span>
                 <div className="h-6 flex items-center justify-center">{f.compB ? <Check /> : <Cross />}</div>
               </div>
             </div>
@@ -122,10 +122,10 @@ export function FeatureMatrix({ features = [] }) {
 export function SVGTrendChart({
   data = [],
   title = "Growth Trends",
-  color = "#111827" 
+  color = "#3baf49" 
 }) {
   const isSSR = useIsSSR();
-  if (data.length === 0) return <div className="py-12 border-t border-slate-100 text-slate-400 text-center text-[11px] uppercase tracking-widest">Awaiting Dataset...</div>;
+  if (data.length === 0) return <div className="py-12 border border-slate-100 rounded-3xl text-slate-400 text-center text-[11px] uppercase tracking-widest bg-white">Awaiting Dataset...</div>;
 
   // Unitless coordinate system for SVG geometry (scales with SVG)
   const baseWidth = 400;
@@ -146,14 +146,14 @@ export function SVGTrendChart({
   const pathData = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p[0]} ${p[1]}`).join(' ');
 
   return (
-    <div className="bg-white border-y border-slate-100 flex flex-col @landscape:flex-row w-full aspect-[4/3] @md:aspect-video relative @container/chart overflow-hidden">
+    <div className="bg-white border border-slate-100 rounded-[2.5rem] flex flex-col @landscape:flex-row w-full aspect-[4/3] @md:aspect-video relative @container/chart overflow-hidden shadow-[0_32px_64px_-12px_rgba(59,175,73,0.06)]">
       {/*
           Side-Rail:
           Strategic sidebar for context and metadata.
       */}
-      <div className="p-6 flex flex-col justify-between @landscape:w-72 @landscape:border-r @landscape:border-slate-50 bg-white">
+      <div className="p-8 flex flex-col justify-between @landscape:w-72 @landscape:border-r @landscape:border-slate-50 bg-[#ceead2]/5">
         <div>
-          <h4 className="m-0 text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] leading-none mb-3">
+          <h4 className="m-0 text-[10px] font-black text-[#6cc277] uppercase tracking-[0.2em] leading-none mb-3">
             Trend Intelligence
           </h4>
           <h3 className="m-0 text-[clamp(18px,5cqw,28px)] font-black text-slate-900 tracking-tighter leading-[0.9] mb-6">
@@ -164,14 +164,14 @@ export function SVGTrendChart({
             <p className="text-[11px] text-slate-500 leading-relaxed mb-4">
               Analysis reveals an exponential shift in design-to-logic workflows following the Q3 architecture pivot.
             </p>
-            <div className="h-px w-8 bg-slate-900 mb-4" />
+            <div className="h-px w-8 bg-[#3baf49] mb-4" />
             <span className="text-[9px] font-bold text-slate-900 uppercase tracking-widest">Source: Internal Metrics</span>
           </div>
         </div>
 
         {/* Status Indicator: Minimalist */}
         <div className="flex items-center gap-2 mt-4 @landscape:mt-0">
-          <div className="w-1.5 h-1.5 bg-slate-900" />
+          <div className="w-1.5 h-1.5 bg-[#3baf49]" />
           <span className="text-[9px] font-black text-slate-900 uppercase tracking-widest">Verified Real-Time</span>
         </div>
       </div>
@@ -180,7 +180,7 @@ export function SVGTrendChart({
           Chart Canvas:
           Flat, minimalist SVG without grid noise.
       */}
-      <div className="flex-1 relative p-4 @md:p-10">
+      <div className="flex-1 relative p-10">
         <svg
           viewBox={`0 0 ${baseWidth} ${baseHeight}`}
           className="w-full h-full overflow-visible"
@@ -192,9 +192,19 @@ export function SVGTrendChart({
             y1={baseHeight - paddingY + 10}
             x2={baseWidth - paddingX}
             y2={baseHeight - paddingY + 10}
-            stroke="#111827"
+            stroke="#3baf49"
             strokeWidth="0.5"
             strokeOpacity="0.1"
+          />
+
+          {/* Area under curve: Subtle brand gradient effect */}
+          <motion.path
+            d={`${pathData} L ${points[points.length-1][0]} ${baseHeight - paddingY + 10} L ${points[0][0]} ${baseHeight - paddingY + 10} Z`}
+            fill="#ceead2"
+            fillOpacity="0.1"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 1.5 }}
           />
 
           {/* Data Path: Ultra-thin precise line */}
@@ -259,15 +269,15 @@ export function SVGTrendChart({
  */
 export function InsightCard({ title, icon: Icon, children }) {
   return (
-    <div className="flex gap-6 py-6 border-l-2 border-slate-900 pl-6 bg-slate-50/50 @container">
-      <div className="shrink-0 text-slate-900 @[width<200px]:hidden">
-        <Icon size={18} strokeWidth={2.5} />
+    <div className="flex gap-6 p-8 border border-slate-100 rounded-3xl bg-[#ceead2]/10 @container shadow-[0_32px_64px_-12px_rgba(59,175,73,0.06)]">
+      <div className="shrink-0 text-[#3baf49] @[width<200px]:hidden">
+        <Icon size={20} strokeWidth={2.5} />
       </div>
       <div>
-        <h4 className="m-0 font-black text-slate-900 text-[11px] uppercase tracking-widest mb-2 leading-tight">
+        <h4 className="m-0 font-black text-[#3baf49] text-[11px] uppercase tracking-widest mb-3 leading-tight">
           {title}
         </h4>
-        <div className="text-[13px] text-slate-600 leading-relaxed font-medium italic">
+        <div className="text-[13px] text-slate-700 leading-relaxed font-medium italic">
           "{children}"
         </div>
       </div>

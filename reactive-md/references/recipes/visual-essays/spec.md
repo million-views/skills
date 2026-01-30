@@ -18,7 +18,7 @@ We propose a shift toward **Literate Infrastructure**—where the document is no
 
 Analysis of design-system maturity reveals a critical hockey-stick transition. Teams that adopt "Sidecar Extraction" and "Stable Viewports" experience a 4x reduction in logic-related regressions during handovers.
 
-```jsx live id="adoption-trend" device=tablet orientation=landscape zoom=auto
+```jsx live id="adoption-trend" device=mobile orientation=landscape zoom=none
 import { SVGTrendChart } from './proto-kit.jsx';
 
 export default function Trend() {
@@ -30,11 +30,11 @@ export default function Trend() {
   ];
 
   return (
-    <div className="w-full">
+    <div className="w-full p-8 bg-slate-50/50 rounded-[3rem]">
         <SVGTrendChart
           data={data}
           title="Velocity Multiplier"
-          color="#0f172a"
+          color="#3baf49"
         />
     </div>
   );
@@ -49,19 +49,19 @@ export default function Trend() {
 
 Traditional workflows optimize for *speed-of-sketching*, whereas Literate workflows optimize for *speed-of-deployment*. 
 
-```jsx live id="comparison-analysis" device=mobile orientation=portrait
+```jsx live id="comparison-analysis"  device=mobile orientation=landscape zoom=none
 import { ComparisonMatrix, InsightCard } from './proto-kit.jsx';
 import { Target } from 'lucide-react';
 
 export default function StrategyAnalysis() {
   const scores = [
-    { name: 'Literate (R-MD)', score: 98, color: 'bg-slate-900' },
+    { name: 'Literate (R-MD)', score: 98, color: 'bg-[#3baf49]' },
     { name: 'Design-Sync', score: 64, color: 'bg-slate-400' },
     { name: 'Stateless Docs', score: 32, color: 'bg-slate-200' }
   ];
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 p-8 bg-slate-50/50 rounded-[3rem]">
       <ComparisonMatrix data={scores} />
 
       <InsightCard title="The Fidelity Factor" icon={Target}>
@@ -76,7 +76,7 @@ export default function StrategyAnalysis() {
 
 A side-by-side audit of core infrastructure capabilities required for professional design-to-logic workflows.
 
-```jsx live id="capability-matrix" device=desktop
+```jsx live id="capability-matrix" device=mobile orientation=landscape zoom=none
 import { FeatureMatrix } from './proto-kit.jsx';
 
 export default function Audit() {
@@ -89,7 +89,7 @@ export default function Audit() {
   ];
 
   return (
-    <div className="bg-white">
+    <div className="p-8 bg-slate-50/50 rounded-[3rem]">
       <FeatureMatrix features={capabilities} />
     </div>
   );
