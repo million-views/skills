@@ -69,7 +69,20 @@ Use these workflows to understand where reactive-md excels.
 
 *tags: components, library, patterns, design system*
 
-### 6. Communicate Ideas Asynchronously
+### 6. Audit Design Fidelity
+
+**The Job**: Verify that components are responsive and look exactly as intended across different device viewports.
+  > Prove your implementation works on the target device, not just your monitor.
+
+**Workflow**:
+1. Wrap your component in a `@container`.
+2. Use the `device` and `orientation` modifiers to test specific hardware viewports.
+3. Validate that `@container` queries trigger correctly at the logical boundaries.
+4. Use the `FidelityToolkit` to inspect precise dimensions and safe areas.
+
+*tags: fidelity, audit, mobile, responsive, testing*
+
+### 7. Communicate Ideas Asynchronously
 
 **The Job**: Share working prototypes with your team without meetings.
   > Iterate faster through version-controlled markdown.

@@ -9,6 +9,12 @@ To use Reactive MD effectively, a document architect must distinguish between th
 - **Markdown Preview**: Provides the **Static Preview**. It renders the initial HTML and CSS for reading and review only when the integrated VS Code markdown preview is opened. It **cannot execute code** because of the markdown extension's security model.
 - **Interactive Preview**: Provides the **High-Fidelity Prototype**. It executes the full React 19 lifecycle, enabling stateful testing, animations, and responsive device emulation.
 
+### The Two Truths
+Working in Reactive MD requires understanding the distinction between physical reality and emulated reality:
+
+- **Logical Truth (The Primary)**: This is the reality of your component's target viewport (e.g., 375px for iPhone SE). Elements like `@container` queries, CSS math, and layout logic respond to this truth.
+- **Literal Truth (The Physical)**: This is the actual pixel width of the VS Code pane on your monitor. We explicitly ignore this for design fidelity, as physical window size should not dictate component behavior in a high-fidelity prototype.
+
 ### Code Fence Modes
 The system distinguishes between **interactive prototypes** and **static examples** based on the fence info string:
 - **`jsx live` / `css live`**: Code that is utilized to render a React component in both preview modes.
@@ -149,15 +155,16 @@ Showcase loading, empty, or error states in separate fences.
 ## Fence Specification Reference
 
 ### Key Modifiers
-Use these modifiers in the opening fence header (e.g., ` ```jsx live device="mobile" ... ``` `) to control identity and emulation.
+Use these modifiers in the opening fence header (e.g., ` ```jsx live device=mobile ... ``` `) to control identity and emulation.
 
 | Key | Category | Description |
 | :--- | :--- | :--- |
-| **`id`** | Identity | A stable name (e.g., `id="login-form"`) that prevents a **Component Refresh** when you edit the surrounding narrative. |
-| **`mid`** | Device | Specific Model ID (e.g., `mid="iphone-15-pro"`). Best for exact viewport and safe-area specs. |
+| **`id`** | Identity | A stable name (e.g., `id=login-form`) that prevents a **Component Refresh** when you edit the surrounding narrative. |
+| **`mid`** | Device | Specific Model ID (e.g., `mid=iphone-15-pro`). Best for exact viewport and safe-area specs. |
 | **`model`** | Device | Human-readable name (e.g., `model="iPhone 14"`). The system will search for the closest match. |
 | **`device`** | Device | General category preset: `mobile`, `tablet`, or `desktop`. |
 | **`orientation`**| Viewport | Sets the initial rotation: `portrait` or `landscape`. |
+| **`zoom`** | Viewport | Controls visual scaling: `auto` (adaptive), `fill` (stretch), or `none` (1:1). |
 
 > **Precedence**: For device emulation, keywords are resolved in this order: **`mid`** > **`model`** > **`device`**.
 
@@ -165,7 +172,7 @@ Use these modifiers in the opening fence header (e.g., ` ```jsx live device="mob
 Reactive MD uses these logical device dimensions:
 - **Mobile (`mobile`)**: 375 × 667 (Logical SE)
 - **Tablet (`tablet`)**: 768 × 1024 (Logical iPad)
-- **Desktop (`desktop`)**: 1440 × 900 (Logical Notebook)
+- **Desktop (`desktop`)**: 1920 × 1080 (High Definition)
 
 ### Specification Flags
 Flags are standalone keywords added to the fence header (no `=` required).
@@ -177,15 +184,15 @@ Flags are standalone keywords added to the fence header (no `=` required).
 
 ## Styling & Visual System
 
-Reactive MD uses a modern, container-first styling system. This ensures that your interactive prototypes behave correctly regardless of the physical size of the VS Code editor window.
+Reactive MD uses a modern, **Container-First** styling system. This ensures that your interactive prototypes behave correctly regardless of the physical size of the VS Code editor window.
 
-### The Responsive Root (Rule #1)
-To ensure your UI responds to the **emulated device size** (e.g., iPhone SE) rather than the global VS Code window, you must mark the root of your component as a "Container."
+### The Golden Rule: Responsive Root
+To ensure your UI responds to the **emulated device size** rather than the global VS Code window, you must mark the root of your component as a "Container."
 
 - **Tailwind (Preferred)**: Add the `@container` class to your root element.
-- **Native CSS**: Apply `container-type: inline-size;` to your root element.
+- **Native CSS**: Apply `container-type: size;` to your root element.
 
-Without this "containment context," responsive utilities or media queries will look at the entire editor window, causing your "Mobile" prototype to incorrectly show "Desktop" layouts on large monitors.
+Without this "containment context," standard media queries will look at the entire editor window, causing your "Mobile" prototype to incorrectly show "Desktop" layouts on large monitors.
 
 
 ### 1. Tailwind CSS (v4)
@@ -252,13 +259,13 @@ Whenever you change the **Source Code** or **CSS**, the component must be refres
 ### 2. The UI Tweak
 Changing the viewport (rotating the device or switching between presets) is a **UI Tweak**. The component stays mounted, the instance is preserved, and your state is safe.
 
-> **Persistence Tip**: Modifying the fence header in your Markdown file (e.g., changing `device="mobile"`) is a source change that triggers a **Component Refresh**. To change the device without losing form data, use the emulation buttons in the component header instead.
+> **Persistence Tip**: Modifying the fence header in your Markdown file (e.g., changing `device=mobile`) is a source change that triggers a **Component Refresh**. To change the device without losing form data, use the emulation buttons in the component header instead.
 
 ### 3. Stable Identity (The `id` modifier)
 If you want to edit your narrative text or move a fence to a different section without triggering a refresh, give it a stable `id`. This acts as an **Identity Anchor**:
 
 ````markdown
-```jsx live id="signup-form"
+```jsx live id=signup-form
 // edits to the markdown text *outside* this fence won't refresh this component
 ```
 ````

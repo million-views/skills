@@ -84,7 +84,7 @@ export default function Demo() {
 ```jsx live
 export default function EmptyState() {
   return (
-    <div className="text-center py-12 text-gray-500">
+    <div className="@container text-center py-12 text-gray-500 bg-white rounded-xl">
       <div className="text-4xl mb-4">📭</div>
       <h3 className="font-medium mb-2">No items yet</h3>
       <p className="text-sm mb-6">When you have items, they'll show up here.</p>
