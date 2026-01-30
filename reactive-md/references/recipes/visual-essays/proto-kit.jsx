@@ -16,31 +16,40 @@ export function ComparisonMatrix({ data = [] }) {
   const isSSR = useIsSSR();
 
   return (
-    <div className="p-6 bg-white rounded-xl border border-slate-200 shadow-sm @container">
+    <div className="py-6 bg-white border-y border-slate-100 @container">
       {/*
-          Orientation Awareness:
-          Switch between stacked and horizontally distributed layouts
+          Editorial Typography:
+          Tight tracking, clean hairline separators
       */}
-      <h3 className="m-0 font-bold text-slate-800 mb-6 text-[clamp(14px,4cqw,20px)] leading-none @landscape:mb-4">
-        Model Efficiency Score
-      </h3>
-      <div className="space-y-4 @landscape:grid @landscape:grid-cols-2 @landscape:gap-x-8 @landscape:space-y-0 @landscape:gap-y-4">
+      <div className="flex items-baseline justify-between mb-8 border-b border-slate-900/10 pb-2">
+        <h3 className="m-0 font-black text-slate-900 text-[10px] uppercase tracking-[0.2em] leading-none">
+          Comparative Analysis
+        </h3>
+        <span className="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Index 100 Baseline</span>
+      </div>
+
+      <div className="space-y-6 @landscape:grid @landscape:grid-cols-2 @landscape:gap-x-12 @landscape:space-y-0 @landscape:gap-y-6">
         {data.map((item) => (
-          <div key={item.name} className="flex flex-col @sm:flex-row @sm:items-center gap-2 @sm:gap-4">
-            <span className="w-full @sm:w-32 text-sm font-semibold text-slate-600 truncate">{item.name}</span>
-            <div className="flex-1 bg-slate-100 rounded-full h-3 @sm:h-4 overflow-hidden">
+          <div key={item.name} className="flex flex-col gap-1">
+            <div className="flex justify-between items-end">
+              <span className="text-[11px] font-bold text-slate-900 tracking-tight uppercase">{item.name}</span>
+              <span className="text-[11px] font-black text-slate-900 tracking-tighter italic whitespace-nowrap">
+                {item.score}.0<span className="text-[8px] ml-0.5 not-italic text-slate-400">PTS</span>
+              </span>
+            </div>
+            
+            <div className="w-full bg-slate-50 h-1 overflow-hidden">
               <motion.div
                 initial={isSSR ? { width: `${item.score}%` } : { width: 0 }}
                 whileInView={{ width: `${item.score}%` }}
                 viewport={{ once: true }}
-                className={`h-full ${item.color || 'bg-blue-500'} rounded-full`}
-                transition={{ duration: 0.8, ease: "easeOut" }}
+                className={`h-full ${item.color || 'bg-slate-900'}`}
+                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }} 
               />
             </div>
-            <span className="text-right text-xs @sm:text-sm font-bold text-slate-900 shrink-0">{item.score}%</span>
           </div>
         ))}
-        {data.length === 0 && <p className="text-slate-400 text-sm italic">No data provided.</p>}
+        {data.length === 0 && <p className="text-slate-400 text-[11px] italic">No comparative data available.</p>}
       </div>
     </div>
   );
@@ -51,29 +60,29 @@ export function ComparisonMatrix({ data = [] }) {
  * Uses Progressive Disclosure: Tables on desktop, definition cards on mobile.
  */
 export function FeatureMatrix({ features = [] }) {
-  const Check = () => <span className="text-emerald-500 text-lg font-bold">✓</span>;
-  const Cross = () => <span className="text-rose-300 text-lg font-light">×</span>;
+  const Check = () => <span className="text-slate-900 text-xs font-black">YES</span>;
+  const Cross = () => <span className="text-slate-300 text-xs font-light">--</span>;
 
   return (
-    <div className="@container overflow-hidden rounded-xl border border-slate-200 bg-white">
+    <div className="@container border-t border-slate-900 bg-white">
       {/* Table View: Only visible on wider containers */}
-      <div className="hidden @md:block overflow-x-auto">
-        <table className="w-full text-sm text-left border-collapse">
-          <thead className="bg-slate-50 border-b border-slate-200">
+      <div className="hidden @md:block">
+        <table className="w-full text-left border-collapse">
+          <thead className="border-b border-slate-100">
             <tr>
-              <th className="p-4 font-bold text-slate-700">Capability</th>
-              <th className="p-4 text-center font-bold text-indigo-600 bg-indigo-50/50">Reactive MD</th>
-              <th className="p-4 text-center font-bold text-slate-700">Figma</th>
-              <th className="p-4 text-center font-bold text-slate-700">Storybook</th>
+              <th className="py-4 pr-4 font-black text-[10px] uppercase tracking-widest text-slate-400">Core Capability</th>
+              <th className="py-4 px-4 text-center font-black text-[10px] uppercase tracking-widest text-slate-900 bg-slate-50">R-MD</th>
+              <th className="py-4 px-4 text-center font-black text-[10px] uppercase tracking-widest text-slate-400">Figma</th>
+              <th className="py-4 px-4 text-center font-black text-[10px] uppercase tracking-widest text-slate-400">Storybook</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-slate-50">
             {features.map((f) => (
-              <tr key={f.name} className="hover:bg-slate-50/50 transition-colors">
-                <td className="p-4 font-medium text-slate-900 whitespace-nowrap">{f.name}</td>
-                <td className="p-4 text-center bg-indigo-50/30">{f.ours ? <Check /> : <Cross />}</td>
-                <td className="p-4 text-center">{f.compA ? <Check /> : <Cross />}</td>
-                <td className="p-4 text-center">{f.compB ? <Check /> : <Cross />}</td>
+              <tr key={f.name} className="group">
+                <td className="py-4 pr-4 text-[12px] font-bold text-slate-900 tracking-tight">{f.name}</td>
+                <td className="py-4 px-4 text-center bg-slate-50/50">{f.ours ? <Check /> : <Cross />}</td>
+                <td className="py-4 px-4 text-center">{f.compA ? <Check /> : <Cross />}</td>
+                <td className="py-4 px-4 text-center">{f.compB ? <Check /> : <Cross />}</td>
               </tr>
             ))}
           </tbody>
@@ -83,20 +92,20 @@ export function FeatureMatrix({ features = [] }) {
       {/* Card View: Mobile-first alternative */}
       <div className="block @md:hidden divide-y divide-slate-100">
         {features.map((f) => (
-          <div key={f.name} className="p-4">
-            <h4 className="font-bold text-slate-900 mb-3">{f.name}</h4>
-            <div className="grid grid-cols-3 gap-2">
-              <div className="flex flex-col items-center p-2 bg-indigo-50 rounded-lg">
-                <span className="text-[9px] uppercase font-black text-indigo-400 mb-1">R-MD</span>
-                {f.ours ? <Check /> : <Cross />}
+          <div key={f.name} className="py-4">
+            <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-400 mb-3">{f.name}</h4>
+            <div className="flex justify-between items-center text-center">
+              <div className="flex flex-col gap-1">
+                <span className="text-[8px] uppercase font-bold text-slate-400">R-MD</span>
+                <div className="h-6 flex items-center justify-center">{f.ours ? <Check /> : <Cross />}</div>
               </div>
-              <div className="flex flex-col items-center p-2 bg-slate-50 rounded-lg">
-                <span className="text-[9px] uppercase font-bold text-slate-400 mb-1">Figma</span>
-                {f.compA ? <Check /> : <Cross />}
+              <div className="flex flex-col gap-1">
+                <span className="text-[8px] uppercase font-bold text-slate-400">Figma</span>
+                <div className="h-6 flex items-center justify-center">{f.compA ? <Check /> : <Cross />}</div>
               </div>
-              <div className="flex flex-col items-center p-2 bg-slate-50 rounded-lg">
-                <span className="text-[9px] uppercase font-bold text-slate-400 mb-1">S-Book</span>
-                {f.compB ? <Check /> : <Cross />}
+              <div className="flex flex-col gap-1">
+                <span className="text-[8px] uppercase font-bold text-slate-400">Storybook</span>
+                <div className="h-6 flex items-center justify-center">{f.compB ? <Check /> : <Cross />}</div>
               </div>
             </div>
           </div>
@@ -113,10 +122,10 @@ export function FeatureMatrix({ features = [] }) {
 export function SVGTrendChart({
   data = [],
   title = "Growth Trends",
-  color = "#3b82f6"
+  color = "#111827" 
 }) {
   const isSSR = useIsSSR();
-  if (data.length === 0) return <div className="p-8 border border-dashed rounded-xl text-slate-400 text-center text-sm">Waiting for trend data...</div>;
+  if (data.length === 0) return <div className="py-12 border-t border-slate-100 text-slate-400 text-center text-[11px] uppercase tracking-widest">Awaiting Dataset...</div>;
 
   // Unitless coordinate system for SVG geometry (scales with SVG)
   const baseWidth = 400;
@@ -137,98 +146,100 @@ export function SVGTrendChart({
   const pathData = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p[0]} ${p[1]}`).join(' ');
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col @landscape:flex-row w-full aspect-[4/3] @md:aspect-video relative @container/chart">
+    <div className="bg-white border-y border-slate-100 flex flex-col @landscape:flex-row w-full aspect-[4/3] @md:aspect-video relative @container/chart overflow-hidden">
       {/*
-          Stable Header:
-          Container-aware spacing and sizing.
-          In landscape, this acts as a side-rail for metadata.
+          Side-Rail:
+          Strategic sidebar for context and metadata.
       */}
-      <div className="p-4 @md:p-8 flex flex-col justify-between @landscape:w-64 @landscape:border-r @landscape:border-slate-100 @landscape:bg-slate-50/30">
+      <div className="p-6 flex flex-col justify-between @landscape:w-72 @landscape:border-r @landscape:border-slate-50 bg-white">
         <div>
-          <h4 className="m-0 text-[10px] @md:text-xs font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">
-            Performance Metric
+          <h4 className="m-0 text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] leading-none mb-3">
+            Trend Intelligence
           </h4>
-          <h3 className="m-0 text-[clamp(16px,5cqw,24px)] font-black text-slate-900 tracking-tighter leading-none">
+          <h3 className="m-0 text-[clamp(18px,5cqw,28px)] font-black text-slate-900 tracking-tighter leading-[0.9] mb-6">
             {title}
           </h3>
           
-          <p className="hidden @landscape:block mt-4 text-xs text-slate-500 leading-relaxed">
-            Data points represent organic team growth following the introduction of Sidecar Extraction in Q3.
-          </p>
+          <div className="hidden @landscape:block">
+            <p className="text-[11px] text-slate-500 leading-relaxed mb-4">
+              Analysis reveals an exponential shift in design-to-logic workflows following the Q3 architecture pivot.
+            </p>
+            <div className="h-px w-8 bg-slate-900 mb-4" />
+            <span className="text-[9px] font-bold text-slate-900 uppercase tracking-widest">Source: Internal Metrics</span>
+          </div>
         </div>
 
-        {/* Dynamic Insight Badge: only visible on wider containers or landscape */}
-        <div className="flex @landscape:mt-8 items-center gap-2 px-3 py-1 bg-green-50 rounded-full border border-green-100 shrink-0 w-fit">
-          <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-          <span className="text-[10px] font-bold text-green-700 uppercase tracking-tight">Active Pulse</span>
+        {/* Status Indicator: Minimalist */}
+        <div className="flex items-center gap-2 mt-4 @landscape:mt-0">
+          <div className="w-1.5 h-1.5 bg-slate-900" />
+          <span className="text-[9px] font-black text-slate-900 uppercase tracking-widest">Verified Real-Time</span>
         </div>
       </div>
 
       {/*
           Chart Canvas:
-          The flex-1 container allows the SVG to fill the remaining aspect-ratio space.
+          Flat, minimalist SVG without grid noise.
       */}
-      <div className="flex-1 relative p-2 @md:p-8 pt-0 @md:pt-2">
+      <div className="flex-1 relative p-4 @md:p-10">
         <svg
           viewBox={`0 0 ${baseWidth} ${baseHeight}`}
           className="w-full h-full overflow-visible"
           preserveAspectRatio="xMidYMid meet"
         >
-          {/* Subtle horizontal grid guide */}
+          {/* Baseline only */}
           <line
             x1={paddingX}
-            y1={baseHeight - paddingY + 15}
+            y1={baseHeight - paddingY + 10}
             x2={baseWidth - paddingX}
-            y2={baseHeight - paddingY + 15}
-            stroke="#f1f5f9"
-            strokeWidth="1"
+            y2={baseHeight - paddingY + 10}
+            stroke="#111827"
+            strokeWidth="0.5"
+            strokeOpacity="0.1"
           />
 
-          {/* Data Path: reduced strokeWidth for better visual balance on small screens */}
+          {/* Data Path: Ultra-thin precise line */}
           <motion.path
             d={pathData}
             fill="none"
             stroke={color}
-            strokeWidth="6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            strokeWidth="1.5"
             initial={isSSR ? { pathLength: 1, opacity: 1 } : { pathLength: 0, opacity: 0 }}
             whileInView={{ pathLength: 1, opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
+            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
           />
 
-          {/* Interactive Data Points */}
+          {/* Data High-points: Small square markers instead of circles */}
           {points.map((p, i) => (
-            <motion.circle
+            <motion.rect
               key={i}
-              cx={p[0]}
-              cy={p[1]}
-              r="8"
+              x={p[0] - 2}
+              y={p[1] - 2}
+              width="4"
+              height="4"
               fill="white"
               stroke={color}
-              strokeWidth="4"
+              strokeWidth="1"
               initial={isSSR ? { scale: 1 } : { scale: 0 }}
               whileInView={{ scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: (isSSR ? 0 : 1 + i * 0.1) }}
-              whileHover={{ scale: 1.4, fill: color }}
             />
           ))}
 
-          {/* SVG Labels: Container-aware show/hide of intermediate labels */}
+          {/* Typography: Small, tracked-out caps */}
           {data.map((d, i) => {
             const isFirst = i === 0;
             const isLast = i === data.length - 1;
             const labelClass = (!isFirst && !isLast)
-              ? "hidden @md:block text-[12px] font-bold fill-slate-400 select-none uppercase tracking-tight"
-              : "text-[12px] font-black fill-slate-900 select-none uppercase tracking-tight";
+              ? "hidden @md:block text-[9px] font-medium fill-slate-300 select-none uppercase tracking-widest"
+              : "text-[9px] font-black fill-slate-900 select-none uppercase tracking-widest";
 
             return (
               <text
                 key={i}
                 x={points[i][0]}
-                y={baseHeight - 5}
+                y={baseHeight - 10}
                 textAnchor="middle"
                 className={labelClass}
               >
@@ -244,17 +255,20 @@ export function SVGTrendChart({
 
 /**
  * Editorial Insight Card
+ * Side-accent style, magazine feel.
  */
 export function InsightCard({ title, icon: Icon, children }) {
   return (
-    <div className="flex flex-col @sm:flex-row gap-4 p-5 bg-amber-50 rounded-xl border border-amber-100 @container">
-      <div className="mt-1 text-amber-600 @[width<200px]:hidden">
-        <Icon size={20} />
+    <div className="flex gap-6 py-6 border-l-2 border-slate-900 pl-6 bg-slate-50/50 @container">
+      <div className="shrink-0 text-slate-900 @[width<200px]:hidden">
+        <Icon size={18} strokeWidth={2.5} />
       </div>
       <div>
-        <h4 className="m-0 font-bold text-amber-900 mb-1 leading-tight">{title}</h4>
-        <div className="text-sm text-amber-800 leading-relaxed">
-          {children}
+        <h4 className="m-0 font-black text-slate-900 text-[11px] uppercase tracking-widest mb-2 leading-tight">
+          {title}
+        </h4>
+        <div className="text-[13px] text-slate-600 leading-relaxed font-medium italic">
+          "{children}"
         </div>
       </div>
     </div>
