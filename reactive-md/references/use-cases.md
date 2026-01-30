@@ -78,7 +78,7 @@ Use these workflows to understand where reactive-md excels.
 1. Wrap your component in a `@container`.
 2. Use the `device` and `orientation` modifiers to test specific hardware viewports.
 3. Validate that `@container` queries trigger correctly at the logical boundaries.
-4. Use the `FidelityToolkit` to inspect precise dimensions and safe areas.
+4. Use the [Fidelity Audit recipe](./recipes/fidelity-audit/spec.md) to inspect precise dimensions and safe areas.
 
 *tags: fidelity, audit, mobile, responsive, testing*
 

@@ -31,7 +31,7 @@ export default function Trend() {
     <div className="@container w-full flex justify-center p-4">
         <SVGTrendChart
           data={data}
-          title="Active Teams (Adoption %)"
+          title="Active Teams"
           color="#8b5cf6"
         />
     </div>
@@ -39,7 +39,7 @@ export default function Trend() {
 }
 ```
 
-> **The Insight**: Notice the hockey-stick inflection point in Q3. This corresponds with the release of the VMS (Virtual Module System) which allowed sidecar extraction.
+> **The Insight**: Notice the hockey-stick inflection point in Q3. This corresponds with the release of the VMS (Virtual Module System). **Try rotating the preview to "Portrait"** to see how the chart adapts its internal layout and metadata.
 
 ---
 
@@ -47,7 +47,7 @@ export default function Trend() {
 
 How does Literate Prototyping stack up against the status quo? We've graded the primary workflows based on three criteria: Speed, Maintenance, and Fidelity.
 
-```jsx live id="score-matrix"
+```jsx live id="score-matrix" device=mobile orientation=portrait
 import { ComparisonMatrix, InsightCard } from './proto-kit.jsx';
 import { Zap } from 'lucide-react';
 
@@ -63,7 +63,7 @@ export default function WorkflowComparison() {
       <ComparisonMatrix data={scores} />
 
       <InsightCard title="The Speed Advantage" icon={Zap}>
-        Reactive MD eliminates the "Logic Gap" between Figma Handover and Production. Changes in the spec are immediately reflected in the working component.
+        Reactive MD eliminates the "Logic Gap" between Figma Handover and Production.
       </InsightCard>
     </div>
   );
@@ -74,7 +74,7 @@ export default function WorkflowComparison() {
 
 The following table breaks down the feature parity required for a team to ship Literate Docs effectively.
 
-```jsx live id="feature-grid"
+```jsx live id="feature-grid" device=desktop
 import { FeatureMatrix } from './proto-kit.jsx';
 
 export default function Features() {

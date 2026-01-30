@@ -18,13 +18,13 @@ export function ComparisonMatrix({ data = [] }) {
   return (
     <div className="p-6 bg-white rounded-xl border border-slate-200 shadow-sm @container">
       {/*
-          Aspect Ratio Intelligence:
-          Hide the title or condense layout if the container is very flat (landscape)
+          Orientation Awareness:
+          Switch between stacked and horizontally distributed layouts
       */}
-      <h3 className="m-0 font-bold text-slate-800 mb-6 text-[clamp(14px,4cqw,20px)] leading-none @[aspect-ratio<1.5]:mb-2">
+      <h3 className="m-0 font-bold text-slate-800 mb-6 text-[clamp(14px,4cqw,20px)] leading-none @landscape:mb-4">
         Model Efficiency Score
       </h3>
-      <div className="space-y-4">
+      <div className="space-y-4 @landscape:grid @landscape:grid-cols-2 @landscape:gap-x-8 @landscape:space-y-0 @landscape:gap-y-4">
         {data.map((item) => (
           <div key={item.name} className="flex flex-col @sm:flex-row @sm:items-center gap-2 @sm:gap-4">
             <span className="w-full @sm:w-32 text-sm font-semibold text-slate-600 truncate">{item.name}</span>
@@ -48,33 +48,60 @@ export function ComparisonMatrix({ data = [] }) {
 
 /**
  * Responsive Feature Comparison Matrix
+ * Uses Progressive Disclosure: Tables on desktop, definition cards on mobile.
  */
 export function FeatureMatrix({ features = [] }) {
   const Check = () => <span className="text-emerald-500 text-lg font-bold">✓</span>;
   const Cross = () => <span className="text-rose-300 text-lg font-light">×</span>;
 
   return (
-    <div className="@container overflow-x-auto rounded-xl border border-slate-200">
-      <table className="w-full text-sm text-left border-collapse">
-        <thead className="bg-slate-50 border-b border-slate-200">
-          <tr>
-            <th className="p-4 font-bold text-slate-700">Capability</th>
-            <th className="p-4 text-center font-bold text-blue-600 bg-blue-50/50">Reactive MD</th>
-            <th className="p-4 text-center font-bold text-slate-700">Figma</th>
-            <th className="p-4 text-center font-bold text-slate-700">Storybook</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-slate-100">
-          {features.map((f) => (
-            <tr key={f.name} className="hover:bg-slate-50/50 transition-colors">
-              <td className="p-4 font-medium text-slate-900">{f.name}</td>
-              <td className="p-4 text-center bg-blue-50/30">{f.ours ? <Check /> : <Cross />}</td>
-              <td className="p-4 text-center">{f.compA ? <Check /> : <Cross />}</td>
-              <td className="p-4 text-center">{f.compB ? <Check /> : <Cross />}</td>
+    <div className="@container overflow-hidden rounded-xl border border-slate-200 bg-white">
+      {/* Table View: Only visible on wider containers */}
+      <div className="hidden @md:block overflow-x-auto">
+        <table className="w-full text-sm text-left border-collapse">
+          <thead className="bg-slate-50 border-b border-slate-200">
+            <tr>
+              <th className="p-4 font-bold text-slate-700">Capability</th>
+              <th className="p-4 text-center font-bold text-indigo-600 bg-indigo-50/50">Reactive MD</th>
+              <th className="p-4 text-center font-bold text-slate-700">Figma</th>
+              <th className="p-4 text-center font-bold text-slate-700">Storybook</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-slate-100">
+            {features.map((f) => (
+              <tr key={f.name} className="hover:bg-slate-50/50 transition-colors">
+                <td className="p-4 font-medium text-slate-900 whitespace-nowrap">{f.name}</td>
+                <td className="p-4 text-center bg-indigo-50/30">{f.ours ? <Check /> : <Cross />}</td>
+                <td className="p-4 text-center">{f.compA ? <Check /> : <Cross />}</td>
+                <td className="p-4 text-center">{f.compB ? <Check /> : <Cross />}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Card View: Mobile-first alternative */}
+      <div className="block @md:hidden divide-y divide-slate-100">
+        {features.map((f) => (
+          <div key={f.name} className="p-4">
+            <h4 className="font-bold text-slate-900 mb-3">{f.name}</h4>
+            <div className="grid grid-cols-3 gap-2">
+              <div className="flex flex-col items-center p-2 bg-indigo-50 rounded-lg">
+                <span className="text-[9px] uppercase font-black text-indigo-400 mb-1">R-MD</span>
+                {f.ours ? <Check /> : <Cross />}
+              </div>
+              <div className="flex flex-col items-center p-2 bg-slate-50 rounded-lg">
+                <span className="text-[9px] uppercase font-bold text-slate-400 mb-1">Figma</span>
+                {f.compA ? <Check /> : <Cross />}
+              </div>
+              <div className="flex flex-col items-center p-2 bg-slate-50 rounded-lg">
+                <span className="text-[9px] uppercase font-bold text-slate-400 mb-1">S-Book</span>
+                {f.compB ? <Check /> : <Cross />}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -110,12 +137,13 @@ export function SVGTrendChart({
   const pathData = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p[0]} ${p[1]}`).join(' ');
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col w-full aspect-[4/3] @md:aspect-video relative @container/chart">
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col @landscape:flex-row w-full aspect-[4/3] @md:aspect-video relative @container/chart">
       {/*
           Stable Header:
-          Container-aware spacing and sizing
+          Container-aware spacing and sizing.
+          In landscape, this acts as a side-rail for metadata.
       */}
-      <div className="p-4 @md:p-8 pb-0 flex items-start justify-between">
+      <div className="p-4 @md:p-8 flex flex-col justify-between @landscape:w-64 @landscape:border-r @landscape:border-slate-100 @landscape:bg-slate-50/30">
         <div>
           <h4 className="m-0 text-[10px] @md:text-xs font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">
             Performance Metric
@@ -123,10 +151,14 @@ export function SVGTrendChart({
           <h3 className="m-0 text-[clamp(16px,5cqw,24px)] font-black text-slate-900 tracking-tighter leading-none">
             {title}
           </h3>
+          
+          <p className="hidden @landscape:block mt-4 text-xs text-slate-500 leading-relaxed">
+            Data points represent organic team growth following the introduction of Sidecar Extraction in Q3.
+          </p>
         </div>
 
-        {/* Dynamic Insight Badge: only visible on wider containers */}
-        <div className="hidden @lg:flex items-center gap-2 px-3 py-1 bg-green-50 rounded-full border border-green-100 shrink-0">
+        {/* Dynamic Insight Badge: only visible on wider containers or landscape */}
+        <div className="flex @landscape:mt-8 items-center gap-2 px-3 py-1 bg-green-50 rounded-full border border-green-100 shrink-0 w-fit">
           <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
           <span className="text-[10px] font-bold text-green-700 uppercase tracking-tight">Active Pulse</span>
         </div>
