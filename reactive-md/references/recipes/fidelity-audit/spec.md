@@ -51,7 +51,7 @@ export default function BezelAudit() {
 
 We use **Container Queries** (`@container`) to ensure that rotating the device triggers layout changes, while resizing the VS Code sidebar does not—maintaining isolated fidelity.
 
-```jsx live device=mobile orientation=landscape
+```jsx live device=mobile orientation=landscape zoom=auto
 import { ZoomDiagnostic, OrientationIndicator } from './FidelityToolkit.tsx';
 
 export default function RotationAudit() {

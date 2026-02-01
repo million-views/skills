@@ -109,21 +109,19 @@ function Demo() {
 ## Technical Integrity Checklist
 
 Before delivering, ensure:
-1.  **Container Root**: Does the root JSX element of the `live` fence have the `@container` class? (Mandatory for responsive emulation).
-2.  **Pathing**: Are all local imports using absolute-relative paths (e.g., `./proto-kit.jsx`)?
-3.  **Sidecars**: Has logic/UI exceeding 30 lines been extracted to a sidecar file? (Follow the "Project Folder" model).
-4.  **Single Entry Point**: Does the `live` fence have exactly one primary component or top-level JSX element to render? (Consult **GUIDE.md** for sidecar library discipline and export rules).
-5.  **Preview Safety**: Do exported sidecar components have default prop values? (Ensures the **Interactive Preview** doesn't crash with "Minified React error #130" when rendering components in standalone Gallery mode without parent data).
-6.  **Stable ID (Optional)**: If the component has interactive state (forms, filters), does the fence have a stable `id="..."` to prevent state loss during narrative edits?
+1.  **Pathing**: Are all local imports using absolute-relative paths (e.g., `./proto-kit.jsx`)?
+2.  **Sidecars**: Has logic/UI exceeding 30 lines been extracted to a sidecar file? (Follow the "Project Folder" model).
+3.  **Single Entry Point**: Does the `live` fence have exactly one primary component or top-level JSX element to render? (Consult **GUIDE.md** for sidecar library discipline and export rules).
+4.  **Preview Safety**: Do exported sidecar components have default prop values? (Ensures the **Interactive Preview** doesn't crash with "Minified React error #130" when rendering components in standalone Gallery mode without parent data).
+5.  **Stable ID (Optional)**: If the component has interactive state (forms, filters), does the fence have a stable `id="..."` to prevent state loss during narrative edits?
 
 
-## Package & Data Reference
+## Package & Data Reference (Offline Registry)
 
-### Bundled (Offline/Static)
-`dayjs`, `motion/react` (renamed from `framer-motion`), `lucide-react`, `clsx`, `es-toolkit`.
-
-### CDN (Interactive Only)
-`zustand`, `jotai`, `tailwind-merge`, `react-hook-form`, `lucide-react`.
+The following libraries are available **offline** in both preview modes:
+- **Icons & Motion**: `lucide-react`, `@heroicons/react`, `motion/react`.
+- **State & Logic**: `zustand`, `jotai`, `react-hook-form`, `uuid`.
+- **Utilities**: `dayjs`, `es-toolkit`, `clsx`, `tailwind-merge`, `class-variance-authority`.
 
 ### Remote Data Pattern
 Always initialize state with defaults for **Markdown Preview** SSR compatibility.
@@ -149,11 +147,11 @@ Reactive MD uses a `container-first` styling system:
 - **Sidecar CSS**: For complex, component-specific styles (import in `.jsx`).
 
 ### Rule #1 (The Responsive Root)
-To ensure prototypes respond to **emulated device sizes** (the `ViewportFrame`) rather than the VS Code pane, follow these rules:
+Reactive MD uses a **Logical Truth** model where components respond to their *emulated device size* rather than the global IDE window.
 
-1.  **Containment**: The root element of every `jsx live` fence **must** use the Tailwind `@container` class or native `container-type: inline-size`.
-2.  **Container Queries**: When using Tailwind, use the `@` prefix for all responsive variants (e.g., `@md:grid-cols-2`, `@lg:p-12`).
-3.  **Forbidden**: Do NOT use standard Media Query variants (e.g., `md:`, `lg:` in Tailwind) as they target the entire IDE window.
+1.  **Automated Containment**: You do **not** need to manually add `@container` or `container-type: size`. The `ViewportFrame` provides this automatically for every component.
+2.  **Container Queries**: Use the Tailwind `@` prefix for all responsive variants (e.g., `@md:grid-cols-2`, `@lg:p-12`). These respond to the emulated frame size.
+3.  **Forbidden**: Do NOT use standard Media Query variants (e.g., `md:`, `lg:` in Tailwind) as they target the entire IDE window and ignore emulation settings.
 
 
 ## File Organization: The "Project Folder" Model
@@ -197,11 +195,12 @@ feature-name/
 
 ## Boundaries & Refusals (CRITICAL)
 
-### esm.sh Limitations (Forbidden)
-Do NOT use these packages in **Interactive Preview** (they fail via esm.sh):
-- `recharts`: (Missing `clsx` dependency resolution). Use SVG/Tailwind for charts.
-- `swr`: (Missing context shim). Use `fetch()` + `useState`.
-- `@tanstack/react-query`: (Multi-instance conflicts). Use `zustand`.
+### Unsupported Libraries (Pre-Bundled Only)
+Reactive MD uses a pre-bundled library model (no external CDNs). Do NOT attempt to import or use these packages as they are not available in the offline registry:
+- `recharts`: Not bundled. Use SVG/Tailwind for custom charts (see `chart-components.jsx`).
+- `swr`: Not bundled. Use standard `fetch()` + `useState`.
+- `@tanstack/react-query`: Not bundled. Use `zustand` for state management.
+- `axios`: Not bundled. Use native `fetch()`.
 
 ### Infrastructure
 Refuse requests for deployment, Docker, databases, or real-time WebSockets. Prototypes are client-side only (local persistence via `localStorage` is okay).

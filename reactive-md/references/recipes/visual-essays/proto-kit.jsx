@@ -1,133 +1,289 @@
+import * as React from 'react';
 import { motion } from 'motion/react';
 
 /**
  * Environment detection for SSR vs Interactive Preview.
- * Reactive MD provides the __REACTIVE_MD_SSR__ global.
  */
 function useIsSSR() {
   return typeof window === 'undefined' || window.__REACTIVE_MD_SSR__ === true;
 }
 
 /**
- * Score comparison bar chart.
- * Preview Safety: Default data to empty array.
+ * Strategic Data Module
+ * A high-density container that provides consistent header/footer and enforces
+ * viewport-perfect sizing using container query units.
+ */
+export function DataModule({ 
+  title, 
+  subtitle, 
+  source = "SYSTEM-V1", 
+  children,
+  sidebar
+}) {
+  return (
+    <section className="flex flex-col h-[100cqh] w-[100cqw] bg-white border border-slate-200 overflow-hidden @container/module select-none relative font-sans">
+      <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px]" />
+
+      {/* Header */}
+      <header className="px-[4cqw] py-[2cqh] border-b border-slate-100 flex justify-between items-center bg-white/80 backdrop-blur-sm z-10 shrink-0">
+        <div className="flex flex-col">
+          <div className="flex items-center gap-[1.5cqw] mb-[0.2cqh]">
+            <div className="w-[1cqw] h-[0.5cqh] bg-emerald-500" />
+            <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase tracking-widest leading-none">
+              {source}
+            </span>
+          </div>
+          
+          <h3 className="m-0 text-[min(18px,4cqh)] font-black text-slate-950 tracking-tighter leading-none">
+            {title}
+          </h3>
+
+          {subtitle && (
+            <p className="m-0 mt-[0.5cqh] text-[min(10px,2cqh)] font-medium text-slate-500 leading-tight">
+              {subtitle}
+            </p>
+          )}
+        </div>
+
+        <div className="flex items-center gap-[4cqw]">
+          <div className="hidden @[width>500px]:flex flex-col items-end">
+            <span className="text-[min(7px,1.4cqh)] font-black text-slate-300 uppercase tracking-widest leading-none">STATUS</span>
+            <span className="text-[min(9px,1.8cqh)] font-bold text-emerald-600">ACTIVE</span>
+          </div>
+          <div className="flex flex-col items-end">
+            <span className="text-[min(7px,1.4cqh)] font-black text-slate-300 uppercase tracking-widest leading-none">DATE</span>
+            <span className="text-[min(9px,1.8cqh)] font-bold text-slate-950 tabular-nums uppercase">
+              {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+            </span>
+          </div>
+        </div>
+      </header>
+
+      {/* Content Area */}
+      <div className="flex-1 flex overflow-hidden">
+        <main className="flex-1 overflow-hidden relative">
+          {children}
+        </main>
+        
+        {sidebar && (
+          <aside className="hidden @[width>700px]:flex w-[25cqw] border-l border-slate-100 bg-slate-50/20 flex-col overflow-y-auto p-[3cqw] gap-[3cqh]">
+            {sidebar}
+          </aside>
+        )}
+      </div>
+
+      {/* Footer */}
+      <footer className="px-[4cqw] py-[1.5cqh] bg-white border-t border-slate-100 flex justify-between items-center shrink-0 z-10 @[height<150px]:hidden">
+        <div className="flex items-center gap-[2cqw]">
+          <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase tracking-widest">
+            STABILITY_INDEX
+          </span>
+          <div className="flex gap-[0.5cqw]">
+            {[1,2,3,4].map(i => <div key={i} className="w-[0.5cqw] h-[0.5cqh] bg-emerald-500 rounded-full" />)}
+          </div>
+        </div>
+        <div className="flex items-center gap-[1.5cqw]">
+          <span className="text-[min(8px,1.6cqh)] font-black text-emerald-600 uppercase tracking-widest bg-emerald-50 px-[1.5cqw] py-[0.5cqh] rounded-sm">
+            VERIFIED_ASSET
+          </span>
+        </div>
+      </footer>
+    </section>
+  );
+}
+
+/**
+ * Performance Comparison Matrix
  */
 export function ComparisonMatrix({ data = [] }) {
   const isSSR = useIsSSR();
 
   return (
-    <div className="p-5 bg-white border border-slate-100 rounded-2xl @container shadow-[0_16px_32px_-12px_rgba(59,175,73,0.06)]">
-      {/*
-          Editorial Typography:
-          Tight tracking, clean hairline separators
-      */}
-      <div className="flex items-baseline justify-between mb-4 border-b border-[#3baf49]/20 pb-2">
-        <h3 className="m-0 font-black text-[#3baf49] text-[9px] uppercase tracking-[0.2em] leading-none">
-          Comparative Analysis
-        </h3>
-        <span className="text-[9px] font-medium text-slate-400 uppercase tracking-widest leading-none">Index 100 Baseline</span>
+    <div className="h-full w-full bg-white flex flex-col @container/matrix overflow-hidden font-sans group">
+      <div className="p-[4cqw] border-b border-slate-100 flex justify-between items-end bg-slate-50/50">
+        <div className="flex flex-col gap-[0.5cqh]">
+          <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase tracking-widest leading-none">Market_Sector / Performance</span>
+          <h3 className="m-0 text-[min(18px,4cqh)] font-black tracking-tight text-slate-950 uppercase italic">
+            Comparative Analysis
+          </h3>
+        </div>
+        <div className="hidden @[width>500px]:flex flex-col items-end">
+          <span className="text-[min(8px,1.6cqh)] font-black text-slate-300 uppercase">AVG_SCORE</span>
+          <span className="text-[min(18px,4cqh)] font-black text-emerald-600 tabular-nums">84.2</span>
+        </div>
       </div>
 
-      <div className="space-y-4 @landscape:grid @landscape:grid-cols-2 @landscape:gap-x-10 @landscape:space-y-0 @landscape:gap-y-4">
-        {data.map((item) => (
-          <div key={item.name} className="flex flex-col gap-1">
-            <div className="flex justify-between items-end">
-              <span className="text-[10px] font-bold text-slate-900 tracking-tight uppercase">{item.name}</span>
-              <span className="text-[10px] font-black text-slate-900 tracking-tighter italic whitespace-nowrap">
-                {item.score}.0<span className="text-[8px] ml-0.5 not-italic text-slate-400">PTS</span>
-              </span>
-            </div>
-            
-            <div className="w-full bg-[#ceead2]/30 h-1 overflow-hidden">
-              <motion.div
-                initial={isSSR ? { width: `${item.score}%` } : { width: 0 }}
-                whileInView={{ width: `${item.score}%` }}
-                viewport={{ once: true }}
-                className={`h-full ${item.color || 'bg-[#3baf49]'}`}
-                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }} 
-              />
-            </div>
-          </div>
-        ))}
-        {data.length === 0 && <p className="text-slate-400 text-[10px] italic">No comparative data available.</p>}
+      <div className="flex-1 overflow-y-auto custom-scrollbar flex @[width>750px]:flex-row flex-col">
+        <div className="flex-1 divide-y divide-slate-100">
+          {data.map((item, i) => (
+            <motion.div
+              key={item.name}
+              initial={{ x: -10, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: i * 0.05 }}
+              className="p-[4cqw] @[width>600px]:p-[3cqw] flex justify-between items-center hover:bg-slate-50 transition-colors"
+            >
+              <div className="flex flex-col">
+                <span className="text-slate-300 text-[min(8px,1.6cqh)] font-black uppercase tracking-wider mb-[0.2cqh]">0{i+1}</span>
+                <span className="text-slate-900 text-[min(14px,3.2cqh)] font-bold tracking-tight uppercase italic">{item.name}</span>
+              </div>
+              <div className="flex flex-col items-end gap-[1cqh]">
+                <div className="h-[0.8cqh] w-[20cqw] bg-slate-100 rounded-full overflow-hidden">
+                  <motion.div 
+                    initial={isSSR ? { width: `${item.score}%` } : { width: 0 }}
+                    animate={{ width: `${item.score}%` }}
+                    transition={{ duration: 1, delay: 0.2 + i * 0.05 }}
+                    className="h-full bg-emerald-500" 
+                  />
+                </div>
+                <span className="text-emerald-600 text-[min(12px,2.4cqh)] font-black tabular-nums">{item.score}%</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="hidden @[width>750px]:flex w-[35%] bg-slate-50 border-l border-slate-100 p-[4cqw] flex-col gap-[3cqh]">
+           <div className="flex flex-col gap-[1cqh]">
+              <span className="text-[min(9px,1.8cqh)] font-black text-slate-400 uppercase tracking-widest">Statistical_Overview</span>
+              <div className="h-px bg-slate-200 w-full" />
+           </div>
+
+           <div className="space-y-[4cqh] mt-[2cqh]">
+             <div className="flex flex-col">
+                <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase mb-[0.5cqh]">Variance_Delta</span>
+                <span className="text-[min(24px,5cqh)] font-black text-slate-950 tabular-nums tracking-tighter leading-none">12.4%</span>
+                <p className="mt-[1cqh] text-[min(10px,2cqh)] text-slate-500 italic font-medium leading-relaxed">
+                  Calculated against the sector baseline for {new Date().getFullYear()}.
+                </p>
+             </div>
+
+             <div className="space-y-[1cqh]">
+                <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase">Trend_Projection</span>
+                <div className="h-[8cqh] w-full flex items-end gap-[2px]">
+                   {[30, 45, 35, 60, 50, 80, 75, 95].map((h, i) => (
+                     <div key={i} style={{ height: `${h}%` }} className="flex-1 bg-emerald-500/10 border-t border-emerald-500/30" />
+                   ))}
+                </div>
+             </div>
+           </div>
+        </div>
+      </div>
+      
+      <div className="px-[4cqw] py-[1cqh] border-t border-slate-100 bg-white flex justify-between items-center group-hover:bg-slate-50 transition-colors">
+        <div className="flex items-center gap-[1.5cqw]">
+          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+          <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase tracking-widest">System_Rendering / Stable</span>
+        </div>
+        <span className="text-[min(8px,1.6cqh)] font-bold text-slate-300 tabular-nums uppercase">
+           Fidelity: High
+        </span>
       </div>
     </div>
   );
 }
 
 /**
- * Responsive Feature Comparison Matrix
- * Uses Progressive Disclosure: Tables on desktop, definition cards on mobile.
+ * Feature Comparison Matrix
  */
 export function FeatureMatrix({ features = [] }) {
-  const Check = () => <span className="text-[#3baf49] text-[10px] font-black px-1 py-0.5 bg-[#ceead2]/50 rounded leading-none">YES</span>;
-  const Cross = () => <span className="text-slate-300 text-[10px] font-light tracking-[0.1em] uppercase leading-none">None</span>;
+  const [activeRow, setActiveRow] = React.useState(null);
+
+  const Check = () => (
+    <div className="flex items-center justify-center">
+      <div className="bg-emerald-500 text-white text-[min(8px,1.6cqh)] font-black px-[1.5cqw] py-[0.5cqh] rounded-sm leading-none uppercase tracking-tighter">
+        YES
+      </div>
+    </div>
+  );
+  
+  const Cross = () => (
+    <div className="flex items-center justify-center opacity-10">
+      <div className="w-[1cqw] h-[1cqw] rounded-full bg-slate-400" />
+    </div>
+  );
 
   return (
-    <div className="@container p-5 bg-white border border-slate-100 rounded-2xl shadow-[0_16px_32px_-12px_rgba(59,175,73,0.06)]">
-      {/* Table View: Only visible on wider containers */}
-      <div className="hidden @md:block scrollbar-hide">
-        <table className="w-full text-left border-collapse">
-          <thead className="border-b border-[#3baf49]/10">
-            <tr>
-              <th className="py-3 pr-2 font-black text-[9px] uppercase tracking-widest text-[#3baf49]">Strategic Capability</th>
-              <th className="py-3 px-3 text-center font-black text-[9px] uppercase tracking-widest text-slate-900 bg-[#ceead2]/10">R-MD</th>
-              <th className="py-3 px-3 text-center font-black text-[9px] uppercase tracking-widest text-slate-400">Figma</th>
-              <th className="py-3 px-3 text-center font-black text-[9px] uppercase tracking-widest text-slate-400">Storybook</th>
+    <div className="h-full w-full @container/matrix bg-white relative group">
+      <div className="hidden @[width>500px]:block h-full p-[4cqw] overflow-hidden">
+        <table className="w-full text-left border-collapse table-fixed">
+          <thead>
+            <tr className="border-b border-slate-900">
+              <th className="py-[1.5cqh] pr-[2cqw] font-black text-[min(10px,2cqh)] uppercase tracking-widest text-slate-950 w-[45%]">Capability</th>
+              <th className="py-[1.5cqh] px-[1cqw] text-center font-black text-[min(10px,2cqh)] uppercase tracking-widest text-emerald-600 bg-emerald-50/30">CURRENT</th>
+              <th className="py-[1.5cqh] px-[1cqw] text-center font-black text-[min(10px,2cqh)] uppercase tracking-widest text-slate-300">CORE_A</th>
+              <th className="py-[1.5cqh] px-[1cqw] text-center font-black text-[min(10px,2cqh)] uppercase tracking-widest text-slate-300">CORE_B</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-50">
-            {features.map((f) => (
-              <tr key={f.name} className="group hover:bg-[#ceead2]/5 transition-colors">
-                <td className="py-2.5 pr-2 text-[11px] font-bold text-slate-900 tracking-tight">{f.name}</td>
-                <td className="py-2.5 px-3 text-center bg-[#ceead2]/5">{f.ours ? <Check /> : <Cross />}</td>
-                <td className="py-2.5 px-3 text-center">{f.compA ? <Check /> : <Cross />}</td>
-                <td className="py-2.5 px-3 text-center">{f.compB ? <Check /> : <Cross />}</td>
-              </tr>
+          <tbody className="divide-y divide-slate-100">
+            {features.map((f, i) => (
+              <motion.tr 
+                key={f.name}
+                onMouseEnter={() => setActiveRow(i)}
+                onMouseLeave={() => setActiveRow(null)}
+                className="group hover:bg-slate-50 transition-colors"
+              >
+                <td className="py-[1.5cqh] pr-[2cqw] font-black text-slate-900 tracking-tight italic">
+                  <div className="flex items-center gap-[1.5cqw]">
+                    <span className="text-[min(11px,2.4cqh)] uppercase">{f.name}</span>
+                    {activeRow === i && (
+                      <motion.div layoutId="ptr" className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    )}
+                  </div>
+                </td>
+                <td className="py-[1.5cqh] px-[1cqw] bg-emerald-50/10">{f.ours ? <Check /> : <Cross />}</td>
+                <td className="py-[1.5cqh] px-[1cqw]">{f.compA ? <Check /> : <Cross />}</td>
+                <td className="py-[1.5cqh] px-[1cqw]">{f.compB ? <Check /> : <Cross />}</td>
+              </motion.tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      {/* Card View: Mobile-first alternative */}
-      <div className="block @md:hidden divide-y divide-slate-100">
-        {features.map((f) => (
-          <div key={f.name} className="py-3">
-            <h4 className="font-black text-[9px] uppercase tracking-widest text-[#3baf49] mb-3">{f.name}</h4>
-            <div className="flex justify-between items-center text-center">
-              <div className="flex flex-col gap-1.5">
-                <span className="text-[7px] uppercase font-bold text-slate-400 tracking-tighter">R-MD</span>
-                <div className="h-5 flex items-center justify-center">{f.ours ? <Check /> : <Cross />}</div>
+      <div className="block @[width>500px]:hidden h-full p-[5cqw] overflow-hidden">
+        <div className="flex flex-col gap-[1cqh]">
+          {features.slice(0, 5).map((f, i) => (
+            <motion.div 
+              key={f.name}
+              initial={{ opacity: 0, x: -5 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.05 }}
+              className="p-[3cqw] border-l-2 border-slate-950 bg-slate-50 flex flex-col gap-[1cqh]"
+            >
+              <h4 className="m-0 font-black text-[min(11px,2.4cqh)] text-slate-950 uppercase tracking-tight italic">
+                {f.name}
+              </h4>
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-[2cqw]">
+                  <span className="text-[min(8px,1.6cqh)] font-black text-emerald-600">STATE:</span>
+                  {f.ours ? <Check /> : <Cross />}
+                </div>
+                <div className="flex items-center gap-[1.5cqw] opacity-40">
+                   <div className="flex gap-[0.5cqw]">
+                      <div className={`w-1 h-1 rounded-full ${f.compA ? 'bg-emerald-500' : 'bg-slate-300'}`} />
+                      <div className={`w-1 h-1 rounded-full ${f.compB ? 'bg-emerald-500' : 'bg-slate-300'}`} />
+                   </div>
+                </div>
               </div>
-              <div className="flex flex-col gap-1.5">
-                <span className="text-[7px] uppercase font-bold text-slate-400 tracking-tighter">Figma</span>
-                <div className="h-5 flex items-center justify-center">{f.compA ? <Check /> : <Cross />}</div>
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <span className="text-[7px] uppercase font-bold text-slate-400 tracking-tighter">Storybook</span>
-                <div className="h-5 flex items-center justify-center">{f.compB ? <Check /> : <Cross />}</div>
-              </div>
-            </div>
-          </div>
-        ))}
+            </motion.div>
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
 /**
- * Animated SVG Trend Chart (Data Journalism Style)
- * Optimized for layout neutrality and proportional scaling.
+ * Animated SVG Trend Chart
  */
 export function SVGTrendChart({
   data = [],
-  title = "Growth Trends",
-  color = "#3baf49" 
+  color = "#10b981"
 }) {
   const isSSR = useIsSSR();
-  if (data.length === 0) return <div className="py-12 border border-slate-100 rounded-2xl text-slate-400 text-center text-[10px] uppercase tracking-widest bg-white">Awaiting Dataset...</div>;
+  const [povIndex, setPovIndex] = React.useState(null);
 
-  // Unitless coordinate system for SVG geometry (scales with SVG)
+  if (data.length === 0) return <div className="h-full w-full flex items-center justify-center text-slate-300 text-[min(10px,2cqh)] uppercase font-black tracking-widest bg-slate-50">NO_DATA</div>;
+
   const baseWidth = 400;
   const baseHeight = 220;
   const paddingX = 40;
@@ -135,151 +291,99 @@ export function SVGTrendChart({
 
   const maxValue = Math.max(...data.map(d => d.value));
   const minValue = Math.min(...data.map(d => d.value));
+  const avgValue = data.reduce((acc, curr) => acc + curr.value, 0) / data.length;
   const range = maxValue - minValue || 1;
 
   const points = data.map((d, i) => {
     const x = paddingX + (i / (data.length - 1)) * (baseWidth - paddingX * 2);
-    const y = (baseHeight - paddingY) - ((d.value - minValue) / range) * (baseHeight - paddingY * 1.5);
+    const y = (baseHeight - paddingY) - ((d.value - minValue) / range) * (baseHeight - paddingY * 2.0);
     return [x, y];
   });
 
   const pathData = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p[0]} ${p[1]}`).join(' ');
 
   return (
-    <div className="bg-white border border-slate-100 rounded-2xl flex flex-col @landscape:flex-row w-full aspect-[4/3] @landscape:h-[320px] relative @container/chart overflow-hidden shadow-[0_16px_32px_-12px_rgba(59,175,73,0.06)]">
-      {/*
-          Side-Rail:
-          Strategic sidebar for context and metadata.
-      */}
-      <div className="p-5 flex flex-col justify-between @landscape:w-60 @landscape:border-r @landscape:border-slate-50 bg-[#ceead2]/5 shrink-0">
-        <div>
-          <h4 className="m-0 text-[10px] font-black text-[#6cc277] uppercase tracking-[0.2em] leading-none mb-1.5">
-            Trend Intelligence
-          </h4>
-          <h3 className="m-0 text-[clamp(16px,4cqw,22px)] font-black text-slate-900 tracking-tighter leading-[0.9] mb-3">
-            {title}
-          </h3>
-          
-          <div className="hidden @landscape:block">
-            <p className="text-[10px] text-slate-500 leading-snug mb-2">
-              Experimental growth observed following Q3 architecture pivot.
-            </p>
-            <div className="h-px w-6 bg-[#3baf49] mb-2" />
-            <span className="text-[8px] font-bold text-slate-900 uppercase tracking-widest">Source: Internal Metrics</span>
+    <div 
+      className="h-full w-full relative @container/chart bg-white overflow-hidden flex flex-col font-sans"
+      onMouseLeave={() => setPovIndex(null)}
+    >
+      <div className="flex-1 flex overflow-hidden">
+        <div className="flex-1 relative flex flex-col min-w-0">
+          <div className="absolute top-[4cqw] left-[4cqw] flex items-center gap-[2cqw] z-20">
+            <div className="w-1.5 h-[1.5cqh] bg-emerald-500" />
+            <span className="text-[min(10px,2.4cqh)] font-black text-slate-950 uppercase tracking-widest">Macro_Velocity</span>
+          </div>
+
+          <div className="flex-1 w-full relative p-[2cqw] flex items-center justify-center bg-transparent min-h-0 cursor-crosshair">
+            <svg
+              viewBox={`0 0 ${baseWidth} ${baseHeight}`}
+              className="w-full h-full max-h-full overflow-visible transition-transform duration-700 ease-out"
+              preserveAspectRatio="xMidYMid meet"
+              onMouseMove={(e) => {
+                if (isSSR) return;
+                const bounds = e.currentTarget.getBoundingClientRect();
+                const xProp = (e.clientX - bounds.left) / bounds.width;
+                const index = Math.round(xProp * (data.length - 1));
+                if (index >= 0 && index < data.length) setPovIndex(index);
+              }}
+            >
+              <g className="opacity-30">
+                <line x1={paddingX} y1={baseHeight-paddingY+10} x2={baseWidth-paddingX} y2={baseHeight-paddingY+10} stroke="#e2e8f0" strokeWidth="1" />
+              </g>
+
+              <motion.path
+                d={pathData} fill="none" stroke={color} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
+                initial={isSSR ? { pathLength: 1 } : { pathLength: 0 }} animate={{ pathLength: 1 }}
+                transition={{ duration: 1.5, ease: "easeOut" }} 
+              />
+              
+              {!isSSR && povIndex !== null && (
+                <circle cx={points[povIndex][0]} cy={points[povIndex][1]} r="6" fill={color} stroke="white" strokeWidth="2" />
+              )}
+            </svg>
           </div>
         </div>
 
-        {/* Status Indicator: Minimalist */}
-        <div className="flex items-center gap-1.5 mt-2 @landscape:mt-0">
-          <div className="w-1 h-1 bg-[#3baf49]" />
-          <span className="text-[8px] font-black text-slate-900 uppercase tracking-widest">Verified Real-Time</span>
+        <div className="hidden @[width>700px]:flex w-[30%] border-l border-slate-100 bg-slate-50/50 flex-col p-[4cqw] relative">
+          <div className="flex flex-col gap-[1cqh]">
+            <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase tracking-widest">Analytics_Feed</span>
+            <div className="h-px bg-slate-200 w-full" />
+          </div>
+          
+          <div className="mt-[4cqh] flex-1 flex flex-col gap-[4cqh]">
+            <div className="flex flex-col">
+               <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase mb-[0.2cqh]">High_Signal</span>
+               <span className="text-[min(24px,6cqh)] font-black text-slate-950 tabular-nums leading-none tracking-tighter">{maxValue.toFixed(1)}</span>
+            </div>
+
+            <div className="flex flex-col">
+               <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase mb-[0.2cqh]">Avg_Velocity</span>
+               <span className="text-[min(24px,6cqh)] font-black text-slate-950 tabular-nums leading-none tracking-tighter">{avgValue.toFixed(1)}</span>
+            </div>
+
+            <div className="mt-auto space-y-[2cqh]">
+               <p className="text-[min(10px,2.2cqh)] text-slate-500 leading-relaxed italic font-medium">
+                  Baseline confirms consistent stability across the Documented infrastructure.
+               </p>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/*
-          Chart Canvas:
-          Flat, minimalist SVG without grid noise.
-      */}
-      <div className="flex-1 relative p-6">
-        <svg
-          viewBox={`0 0 ${baseWidth} ${baseHeight}`}
-          className="w-full h-full overflow-visible"
-          preserveAspectRatio="xMidYMid meet"
-        >
-          {/* Baseline only */}
-          <line
-            x1={paddingX}
-            y1={baseHeight - paddingY + 10}
-            x2={baseWidth - paddingX}
-            y2={baseHeight - paddingY + 10}
-            stroke="#3baf49"
-            strokeWidth="0.5"
-            strokeOpacity="0.1"
-          />
-
-          {/* Area under curve: Subtle brand gradient effect */}
-          <motion.path
-            d={`${pathData} L ${points[points.length-1][0]} ${baseHeight - paddingY + 10} L ${points[0][0]} ${baseHeight - paddingY + 10} Z`}
-            fill="#ceead2"
-            fillOpacity="0.1"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 1.5 }}
-          />
-
-          {/* Data Path: Ultra-thin precise line */}
-          <motion.path
-            d={pathData}
-            fill="none"
-            stroke={color}
-            strokeWidth="1.2"
-            initial={isSSR ? { pathLength: 1, opacity: 1 } : { pathLength: 0, opacity: 0 }}
-            whileInView={{ pathLength: 1, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }} 
-          />
-
-          {/* Data High-points: Small square markers instead of circles */}
-          {points.map((p, i) => (
-            <motion.rect
-              key={i}
-              x={p[0] - 1.5}
-              y={p[1] - 1.5}
-              width="3"
-              height="3"
-              fill="white"
-              stroke={color}
-              strokeWidth="1"
-              initial={isSSR ? { scale: 1 } : { scale: 0 }}
-              whileInView={{ scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: (isSSR ? 0 : 1 + i * 0.1) }}
-            />
-          ))}
-
-          {/* Typography: Small, tracked-out caps */}
-          {data.map((d, i) => {
-            const isFirst = i === 0;
-            const isLast = i === data.length - 1;
-            const labelClass = (!isFirst && !isLast)
-              ? "hidden @md:block text-[8px] font-medium fill-slate-300 select-none uppercase tracking-widest"
-              : "text-[8px] font-black fill-slate-900 select-none uppercase tracking-widest";
-
-            return (
-              <text
-                key={i}
-                x={points[i][0]}
-                y={baseHeight - 10}
-                textAnchor="middle"
-                className={labelClass}
-              >
-                {d.label}
-              </text>
-            );
-          })}
-        </svg>
+      <div className="hidden @portrait:block px-[5cqw] py-[3cqh] border-t border-slate-100 bg-slate-50 relative">
+        <p className="m-0 text-[min(13px,3cqh)] text-slate-900 leading-tight font-bold tracking-tight">
+          Baseline audit confirms trend stability.
+        </p>
       </div>
-    </div>
-  );
-}
 
-/**
- * Editorial Insight Card
- * Side-accent style, magazine feel.
- */
-export function InsightCard({ title, icon: Icon, children }) {
-  return (
-    <div className="flex gap-4 p-5 border border-slate-100 rounded-2xl bg-[#ceead2]/10 @container shadow-[0_16px_32px_-12px_rgba(59,175,73,0.06)]">
-      <div className="shrink-0 text-[#3baf49] @[width<200px]:hidden">
-        <Icon size={18} strokeWidth={2.5} />
-      </div>
-      <div>
-        <h4 className="m-0 font-black text-[#3baf49] text-[10px] uppercase tracking-widest mb-2 leading-tight">
-          {title}
-        </h4>
-        <div className="text-[12px] text-slate-700 leading-relaxed font-medium italic">
-          "{children}"
+      <div className="px-[4cqw] py-[1cqh] border-t border-slate-50 flex justify-between items-center bg-white shrink-0">
+        <div className="flex items-center gap-[1.5cqw]">
+          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+          <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase tracking-widest">Asset_Render / Success</span>
         </div>
+        <span className="text-[min(8px,1.6cqh)] font-black text-emerald-600 bg-emerald-50 px-[1.5cqw] rounded-sm uppercase tracking-tighter">
+          Ver-v1.0
+        </span>
       </div>
     </div>
   );
