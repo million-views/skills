@@ -14,19 +14,23 @@ We propose a shift toward **Literate Infrastructure**—where the document is no
 
 > Like most stuff you find on the Internet, this is fiction. We pose no threat to Figma or Storybook. Having said that we do believe that **Literate UI/UX** pow-wowing the `Reactive MD` way will grow on you and with you!
 
-```jsx live id="strategic-intent" device=tablet orientation=landscape zoom=none
+```jsx live id="strategic-intent" orientation=landscape
 import { DataModule } from './proto-kit.jsx';
 
 export default function Intent() {
   const sidebar = (
-    <div className="space-y-[2cqh]">
-      <div className="p-[2cqw] bg-white border border-slate-100 rounded-sm">
-        <span className="text-[min(8px,1.6cqh)] font-black text-emerald-600 uppercase tracking-widest">PARAMETER_01</span>
-        <p className="m-0 text-[min(11px,2.4cqh)] font-bold text-slate-900 mt-[0.5cqh]">The sidecar pattern eliminates layout drift.</p>
+    <div className="space-y-[3cqh]">
+      <div className="p-[3cqw] bg-white border border-slate-200/60 rounded-[2px] shadow-sm">
+        <span className="text-[min(8px,1.8cqh)] font-black text-indigo-600 uppercase tracking-[0.2em]">PARAMETER_ALPHA</span>
+        <p className="m-0 text-[min(11px,2.4cqh)] font-medium text-slate-600 leading-snug mt-2">
+          The sidecar pattern eliminates layout drift by enforcing a single source of truth.
+        </p>
       </div>
-      <div className="p-[2cqw] bg-white border border-slate-100 rounded-sm">
-        <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase tracking-widest">PARAMETER_02</span>
-        <p className="m-0 text-[min(11px,2.4cqh)] font-bold text-slate-900 mt-[0.5cqh]">Logical truth is the only stable anchor.</p>
+      <div className="p-[3cqw] bg-white border border-slate-200/60 rounded-[2px] shadow-sm">
+        <span className="text-[min(8px,1.8cqh)] font-black text-slate-300 uppercase tracking-[0.2em]">PARAMETER_BETA</span>
+        <p className="m-0 text-[min(11px,2.4cqh)] font-medium text-slate-600 leading-snug mt-2">
+          Logical truth is the only stable anchor in high-entropy systems.
+        </p>
       </div>
     </div>
   );
@@ -37,14 +41,14 @@ export default function Intent() {
       subtitle="Eliminating the Abstraction Gap via Literate Systems"
       sidebar={sidebar}
     >
-      <div className="h-full flex flex-col justify-center p-[6cqw] gap-[2cqh]">
-        <div className="h-0.5 w-[10cqw] bg-emerald-500" />
-        <p className="text-[min(16px,3.8cqh)] font-black text-slate-950 leading-tight uppercase tracking-tight italic">
-          "The distance between design and code is the primary source of technical debt."
-        </p>
-        <div className="flex items-center gap-[2cqw] mt-[2cqh]">
-           <span className="text-[min(9px,2cqh)] font-black text-slate-300 uppercase tracking-widest">Directive 01-A</span>
-           <div className="w-[15cqw] h-px bg-slate-100" />
+      <div className="h-full flex flex-col justify-center p-[8cqw] gap-[3cqh]">
+        <div className="h-1 w-[12cqw] bg-indigo-600 shadow-[0_0_12px_rgba(79,70,229,0.3)]" />
+        <h2 className="m-0 text-[min(28px,6.5cqh)] font-black text-slate-950 leading-[1.1] uppercase tracking-[-0.04em] italic">
+          "The distance between design and code is the primary source of entropy."
+        </h2>
+        <div className="flex items-center gap-[3cqw] mt-[2cqh]">
+           <span className="text-[min(10px,2.2cqh)] font-black text-slate-400 font-mono uppercase tracking-[0.3em]">DIRECTIVE_01A</span>
+           <div className="flex-1 h-px bg-slate-100" />
         </div>
       </div>
     </DataModule>
@@ -58,7 +62,7 @@ export default function Intent() {
 
 Analysis of design-system maturity reveals a critical hockey-stick transition. Teams that adopt "Sidecar Extraction" and "Stable Viewports" experience a 4x reduction in logic-related regressions during handovers.
 
-```jsx live id="adoption-trend" device=tablet orientation=landscape zoom=none
+```jsx live id="adoption-trend" orientation=landscape
 import { DataModule, SVGTrendChart } from './proto-kit.jsx';
 
 export default function Trend() {
@@ -68,17 +72,18 @@ export default function Trend() {
     { label: 'Q3', value: 15 },
     { label: 'Q4', value: 24 },
     { label: 'Q5', value: 45 },
-    { label: 'Q6', value: 100 }
+    { label: 'Q6', value: 82 },
+    { label: 'Q7', value: 100 }
   ];
 
   return (
     <DataModule 
       title="Velocity Multiplier" 
-      subtitle="Exponential gains from Literate Infrastructure"
+      subtitle="Exponential gains from Literate Infrastructure adoption"
     >
       <SVGTrendChart
         data={data}
-        color="#10b981"
+        color="#4f46e5"
       />
     </DataModule>
   );
@@ -93,25 +98,31 @@ export default function Trend() {
 
 The wide layout below demonstrates **Density Scaling**. Note how the right-hand panel (Statistical Overview) only populates when there is sufficient horizontal clearance.
 
-```jsx live id="deep-analysis" device=desktop zoom=auto
+```jsx live id="deep-analysis" orientation=landscape
 import { DataModule, ComparisonMatrix } from './proto-kit.jsx';
 
 export default function AuditModule() {
   const scores = [
     { name: 'Literate (R-MD)', score: 98 },
-    { name: 'Sidecar-Logic', score: 82 },
-    { name: 'Design-Sync', score: 64 },
-    { name: 'Stateless Docs', score: 32 }
+    { name: 'Sidecar Extraction', score: 85 },
+    { name: 'Stable Viewports', score: 72 },
+    { name: 'Legacy Docs', score: 24 }
   ];
 
   const sidebar = (
-    <div className="space-y-[2cqh]">
-       <div className="flex flex-col gap-[0.5cqh]">
-         <span className="text-[min(8px,1.6cqh)] font-black text-slate-300 uppercase tracking-widest">REGRESSION_INDEX</span>
-         <div className="h-[2cqh] w-full bg-slate-100 rounded-full overflow-hidden">
-           <div className="h-full w-[12%] bg-emerald-500" />
+    <div className="space-y-[4cqh]">
+       <div className="flex flex-col gap-[1.5cqh]">
+         <span className="text-[min(8px,1.8cqh)] font-black text-slate-400 uppercase tracking-[0.25em]">REGRESSION_INDEX</span>
+         <div className="h-[2cqh] w-full bg-slate-100/60 rounded-full overflow-hidden shadow-inner">
+           <div className="h-full w-[14%] bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.3)]" />
          </div>
-         <span className="text-[min(8px,1.6cqh)] font-bold text-emerald-600">Stable Logic Baseline</span>
+         <span className="text-[min(9px,2cqh)] font-bold text-indigo-600 italic uppercase">Logic Baseline Stable</span>
+       </div>
+
+       <div className="p-[4cqw] border border-indigo-100 bg-indigo-50/30 rounded-[2px]">
+          <p className="m-0 text-[min(10px,2.2cqh)] font-medium text-slate-500 leading-relaxed italic">
+            Automated containment eliminates the need for manual @container definitions in the root component.
+          </p>
        </div>
     </div>
   );
@@ -119,7 +130,7 @@ export default function AuditModule() {
   return (
     <DataModule 
       title="Strategy Benchmark" 
-      subtitle="Comparative audit of workflow efficiency"
+      subtitle="Comparative audit of workflow efficiency and system stability"
       sidebar={sidebar}
     >
       <ComparisonMatrix data={scores} />
@@ -130,27 +141,31 @@ export default function AuditModule() {
 
 ## Functional Capability Matrix
 
-A side-by-side audit of core infrastructure capabilities required for professional design-to-logic workflows.
+A side-by-side audit of core infrastructure capabilities required for professional design-to-logic workflows. This matrix highlights the specific technical requirements for eliminating design-system entropy.
 
-```jsx live id="capability-matrix" device=tablet orientation=landscape zoom=none
+```jsx live id="capability-matrix" orientation=landscape
 import { DataModule, FeatureMatrix } from './proto-kit.jsx';
 
 export default function Audit() {
   const capabilities = [
-    { name: 'Sidecar Extraction', ours: true, compA: false, compB: false },
-    { name: 'VMS Resolution', ours: true, compA: false, compB: false },
-    { name: 'Viewport Emulation', ours: true, compA: false, compB: false },
-    { name: 'Context Injection', ours: true, compA: false, compB: true },
-    { name: 'React 19 Runtime', ours: true, compA: false, compB: false },
-    { name: 'Atomic Transforms', ours: true, compA: false, compB: false }
+    { name: 'Logical Truth Emulation', delta: '0.992', ours: true, compA: false, compB: false },
+    { name: 'Sidecar Code Extraction', delta: '4.2x', ours: true, compA: false, compB: false },
+    { name: 'Contextual Scaling (CQ)', delta: 'ADAPTIVE', ours: true, compA: false, compB: true },
+    { name: 'Zero-JS SSR Hydration', delta: 'STATIC', ours: true, compA: true, compB: false },
+    { name: 'VMS Dirty Buffer Support', delta: 'SYNC', ours: true, compA: false, compB: false },
+    { name: 'Live Viewport Emulation', delta: '1:1_SCALE', ours: true, compA: false, compB: false },
+    { name: 'Stable ID State Anchoring', delta: 'PERSISTENT', ours: true, compA: false, compB: false }
   ];
 
   return (
     <DataModule 
       title="Capability Audit" 
-      subtitle="Functional infrastructure requirement analysis"
+      subtitle="Structural requirements for eliminating design-to-implementation entropy"
     >
-      <FeatureMatrix features={capabilities} />
+      <FeatureMatrix 
+        features={capabilities} 
+        columns={["REACTIVE_MD", "FIGMA_SPECS", "LIVING_STYLE"]}
+      />
     </DataModule>
   );
 }
@@ -162,7 +177,7 @@ Most design teams treat Storybook as a graveyard: it is where components go to d
 
 **Literate Infrastructure** collapses these dimensions. The narrative **is** the implementation.
 
-```jsx live id="final-projection" device=mobile orientation=landscape zoom=none
+```jsx live id="final-projection" orientation=landscape
 import { DataModule } from './proto-kit.jsx';
 
 export default function Outlook() {

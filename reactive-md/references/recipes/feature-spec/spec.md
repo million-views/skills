@@ -81,15 +81,19 @@ export default function Demo() {
 
 ### Empty State Example
 
-```jsx live
+```jsx live id="empty-state"
 export default function EmptyState() {
   return (
-    <div className="@container text-center py-12 text-gray-500 bg-white rounded-xl">
-      <div className="text-4xl mb-4">📭</div>
-      <h3 className="font-medium mb-2">No items yet</h3>
-      <p className="text-sm mb-6">When you have items, they'll show up here.</p>
-      <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-        Create your first item
+    <div className="flex flex-col items-center justify-center py-[10cqh] px-[6cqw] bg-white border border-slate-100 rounded-[2px] text-center">
+      <div className="w-[12cqh] h-[12cqh] bg-slate-50 rounded-full flex items-center justify-center mb-[4cqh] border border-slate-100/50">
+        <span className="text-[min(24px,6cqh)] grayscale opacity-40">📭</span>
+      </div>
+      <h3 className="text-[min(16px,3.8cqh)] font-black text-slate-950 uppercase tracking-tight mb-[1.5cqh]">NO_ACTIVE_INCIDENTS</h3>
+      <p className="text-[min(11px,2.4cqh)] font-medium text-slate-500 leading-relaxed mb-[4cqh] max-w-[200px] mx-auto">
+        Your notification buffer is currently clear. Critical alerts will appear here as they are detected by the oversight system.
+      </p>
+      <button className="px-[5cqw] py-[2cqh] bg-slate-100 hover:bg-slate-200 text-slate-500 text-[min(10px,2.2cqh)] font-black uppercase tracking-widest rounded-[1px] transition-colors">
+        REFRESH_BUFFER
       </button>
     </div>
   );
@@ -98,18 +102,31 @@ export default function EmptyState() {
 
 ### Error State Example
 
-```jsx live
+```jsx live id="error-state"
 export default function ErrorState() {
   return (
-    <div className="max-w-md mx-auto p-6 bg-red-50 rounded-lg border border-red-200">
-      <div className="text-sm text-red-600 mb-4">⚠️ Error</div>
-      <h3 className="font-bold text-red-800 mb-2">Something went wrong</h3>
-      <p className="text-red-700 text-sm mb-6">
-        We couldn't load your data. Please check your connection and try again.
-      </p>
-      <button className="w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
-        Retry
-      </button>
+    <div className="p-[6cqw] bg-white border-2 border-red-50/50 rounded-[4px] relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-[0.5cqh] bg-red-500/20" />
+      <div className="flex gap-[4cqw] items-start">
+        <div className="p-[2cqw] bg-red-50 rounded-[2px]">
+           <span className="text-[min(18px,4cqh)]">⚠️</span>
+        </div>
+        <div className="flex-1">
+          <span className="text-[min(7px,1.4cqh)] font-black text-red-500 uppercase tracking-[0.2em] mb-[1cqh] block">ERROR_SIGNAL_DETECTED</span>
+          <h3 className="text-[min(18px,4cqh)] font-black text-slate-950 tracking-tight leading-none mb-[2cqh]">Service Connection Failure</h3>
+          <p className="text-[min(11px,2.4cqh)] font-medium text-slate-600 leading-snug mb-[3cqh]">
+            The notification orchestration layer is currently unreachable (Ref: ERR_CON_503). Retrying may restore the baseline stream.
+          </p>
+          <div className="flex gap-[2cqw]">
+            <button className="px-[4cqw] py-[1.5cqh] bg-red-600 text-white text-[min(9px,2cqh)] font-black uppercase tracking-widest rounded-[1px] hover:bg-red-700 transition-colors">
+              RETRY_CONNECTION
+            </button>
+            <button className="px-[4cqw] py-[1.5cqh] bg-slate-50 text-slate-400 text-[min(9px,2cqh)] font-black uppercase tracking-widest rounded-[1px]">
+              OVERSIGHT_DASHBOARD
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -117,13 +134,17 @@ export default function ErrorState() {
 
 ### Loading State Example
 
-```jsx live
+```jsx live id="loading-state"
 export default function LoadingState() {
   return (
-    <div className="space-y-4">
-      <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-      <div className="h-4 bg-gray-200 rounded animate-pulse w-5/6"></div>
-      <div className="h-4 bg-gray-200 rounded animate-pulse w-4/6"></div>
+    <div className="space-y-[3cqh] p-[4cqw]">
+      <div className="flex justify-between items-center mb-[2cqh]">
+         <div className="h-[1.5cqh] w-[30%] bg-slate-100 rounded-[1px] animate-pulse" />
+         <div className="h-[2cqh] w-[2cqh] bg-slate-100 rounded-full animate-pulse" />
+      </div>
+      <div className="h-[5cqh] bg-slate-50 border border-slate-100/50 rounded-[2px] animate-pulse" />
+      <div className="h-[3cqh] w-5/6 bg-slate-50/80 rounded-[1px] animate-pulse" />
+      <div className="h-[3cqh] w-4/6 bg-slate-50/60 rounded-[1px] animate-pulse" />
     </div>
   );
 }
@@ -131,25 +152,23 @@ export default function LoadingState() {
 
 ### Disabled State Example
 
-```jsx live
+```jsx live id="disabled-state"
 export default function DisabledState() {
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg border border-gray-200">
-      <h3 className="font-bold text-gray-900 mb-4">Feature Locked</h3>
-      <p className="text-gray-600 text-sm mb-6">
-        Upgrade your plan to unlock this feature.
+    <div className="p-[6cqw] bg-slate-50/30 border border-slate-200/60 rounded-[4px] relative grayscale opacity-60 pointer-events-none">
+      <div className="flex justify-between mb-[3cqh]">
+        <span className="text-[min(7px,1.4cqh)] font-black text-slate-400 uppercase tracking-[0.2em]">ACCESS_RESTRICTED</span>
+        <div className="px-[2cqw] py-[0.5cqh] bg-slate-200 text-slate-500 text-[min(8px,1.6cqh)] font-black uppercase tracking-tighter rounded-[1px]">TIER_LIMIT</div>
+      </div>
+      <h3 className="text-[min(18px,4cqh)] font-black text-slate-950 tracking-tight leading-none mb-[2cqh]">Protocol Governance</h3>
+      <p className="text-[min(11px,2.4cqh)] font-medium text-slate-500 leading-snug mb-[4cqh]">
+        Advanced oversight protocols require an Elite-tier subscription. Contact orchestration for upgrade parameters.
       </p>
-      <input
-        type="text"
-        disabled
-        placeholder="This field is disabled"
-        className="w-full px-4 py-2 border rounded bg-gray-100 text-gray-500 cursor-not-allowed mb-4"
-      />
-      <button
-        disabled
-        className="w-full px-4 py-2 bg-gray-300 text-gray-500 rounded cursor-not-allowed"
-      >
-        Action unavailable
+      <div className="h-[5cqh] bg-slate-100 border border-slate-200 rounded-[2px] mb-[4cqh] flex items-center px-[3cqw]">
+        <div className="w-[40%] h-[1.5cqh] bg-slate-200 rounded-[1px]" />
+      </div>
+      <button className="w-full py-[2cqh] bg-slate-200 text-slate-400 text-[min(10px,2.2cqh)] font-black uppercase tracking-widest rounded-[1px]">
+        ACTION_LOCKED
       </button>
     </div>
   );

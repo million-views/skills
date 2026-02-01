@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 
 /**
  * Environment detection for SSR vs Interactive Preview.
@@ -16,44 +16,54 @@ function useIsSSR() {
 export function DataModule({ 
   title, 
   subtitle, 
-  source = "SYSTEM-V1", 
+  source = "STRATEGIC_ASSET_v1.1", 
   children,
   sidebar
 }) {
   return (
-    <section className="flex flex-col h-[100cqh] w-[100cqw] bg-white border border-slate-200 overflow-hidden @container/module select-none relative font-sans">
-      <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px]" />
+    <section className="flex flex-col h-full w-full bg-white border border-slate-200 overflow-hidden select-none relative font-sans text-slate-900 group/module">
+      {/* Sophisticated Background Grid */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.02] bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:24px_24px]" />
+      <div className="absolute inset-0 pointer-events-none opacity-[0.05] bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:120px_120px]" />
 
-      {/* Header */}
-      <header className="px-[4cqw] py-[2cqh] border-b border-slate-100 flex justify-between items-center bg-white/80 backdrop-blur-sm z-10 shrink-0">
-        <div className="flex flex-col">
-          <div className="flex items-center gap-[1.5cqw] mb-[0.2cqh]">
-            <div className="w-[1cqw] h-[0.5cqh] bg-emerald-500" />
-            <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase tracking-widest leading-none">
+      {/* Header: High-Fidelity Strategic Bar */}
+      <header className="px-[5cqw] py-[3cqh] border-b border-slate-200/60 flex justify-between items-start bg-white/90 backdrop-blur-md z-20 shrink-0">
+        <div className="flex flex-col gap-[0.5cqh]">
+          <div className="flex items-center gap-[1.5cqw]">
+            <div className="w-[1.2cqw] h-[0.4cqh] bg-indigo-600" />
+            <span className="text-[min(7px,1.4cqh)] font-black text-slate-400 uppercase tracking-[0.2em] leading-none">
               {source}
+            </span>
+            <div className="h-2 w-px bg-slate-200" />
+            <span className="text-[min(7px,1.4cqh)] font-bold text-indigo-500/80 uppercase tracking-widest leading-none">
+              CONFIDENTIAL_DRAFT
             </span>
           </div>
           
-          <h3 className="m-0 text-[min(18px,4cqh)] font-black text-slate-950 tracking-tighter leading-none">
+          <h3 className="m-0 text-[min(22px,5cqh)] font-black text-slate-950 tracking-[-0.04em] leading-none mt-[1cqh]">
             {title}
           </h3>
 
           {subtitle && (
-            <p className="m-0 mt-[0.5cqh] text-[min(10px,2cqh)] font-medium text-slate-500 leading-tight">
+            <p className="m-0 mt-[0.8cqh] text-[min(11px,2.2cqh)] font-medium text-slate-500/80 leading-snug max-w-[50cqw]">
               {subtitle}
             </p>
           )}
         </div>
 
-        <div className="flex items-center gap-[4cqw]">
-          <div className="hidden @[width>500px]:flex flex-col items-end">
-            <span className="text-[min(7px,1.4cqh)] font-black text-slate-300 uppercase tracking-widest leading-none">STATUS</span>
-            <span className="text-[min(9px,1.8cqh)] font-bold text-emerald-600">ACTIVE</span>
+        <div className="flex items-center gap-[6cqw]">
+          <div className="hidden @md:flex flex-col items-end gap-[0.5cqh]">
+            <span className="text-[min(7px,1.4cqh)] font-black text-slate-300 uppercase tracking-[0.15em] leading-none">FIDELITY_SCORE</span>
+            <div className="flex gap-1">
+               {[1,2,3,4,5].map(i => (
+                 <div key={i} className={`w-1.5 h-1.5 rounded-full ${i <= 4 ? 'bg-indigo-600' : 'bg-slate-100'}`} />
+               ))}
+            </div>
           </div>
-          <div className="flex flex-col items-end">
-            <span className="text-[min(7px,1.4cqh)] font-black text-slate-300 uppercase tracking-widest leading-none">DATE</span>
-            <span className="text-[min(9px,1.8cqh)] font-bold text-slate-950 tabular-nums uppercase">
-              {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+          <div className="flex flex-col items-end gap-[0.5cqh]">
+            <span className="text-[min(7px,1.4cqh)] font-black text-slate-300 uppercase tracking-[0.15em] leading-none">ISSUANCE_TIMESTAMP</span>
+            <span className="text-[min(10px,2cqh)] font-bold text-slate-950 tabular-nums uppercase tracking-tight">
+              {new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })}
             </span>
           </div>
         </div>
@@ -66,29 +76,101 @@ export function DataModule({
         </main>
         
         {sidebar && (
-          <aside className="hidden @[width>700px]:flex w-[25cqw] border-l border-slate-100 bg-slate-50/20 flex-col overflow-y-auto p-[3cqw] gap-[3cqh]">
+          <aside className="hidden @lg:flex w-[28cqw] border-l border-slate-200/60 bg-slate-50/40 flex-col overflow-y-auto p-[4cqw] gap-[4cqh] z-10">
             {sidebar}
           </aside>
         )}
       </div>
 
-      {/* Footer */}
-      <footer className="px-[4cqw] py-[1.5cqh] bg-white border-t border-slate-100 flex justify-between items-center shrink-0 z-10 @[height<150px]:hidden">
-        <div className="flex items-center gap-[2cqw]">
-          <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase tracking-widest">
-            STABILITY_INDEX
-          </span>
-          <div className="flex gap-[0.5cqw]">
-            {[1,2,3,4].map(i => <div key={i} className="w-[0.5cqw] h-[0.5cqh] bg-emerald-500 rounded-full" />)}
+      {/* Footer: Detailed Audit Trail */}
+      <footer className="px-[5cqw] py-[2cqh] bg-white border-t border-slate-200/60 flex justify-between items-center shrink-0 z-20">
+        <div className="flex items-center gap-[3cqw]">
+          <div className="flex items-center gap-[1.5cqw]">
+             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+             <span className="text-[min(8px,1.8cqh)] font-bold text-slate-500 uppercase tracking-widest">
+               LIVE_DATA_FEED_ACTIVE
+             </span>
           </div>
+          <div className="h-3 w-px bg-slate-200" />
+          <span className="hidden @sm:inline text-[min(8px,1.8cqh)] font-medium text-slate-400 italic">
+            N-Dimension: Alpha-7_Subsystem
+          </span>
         </div>
-        <div className="flex items-center gap-[1.5cqw]">
-          <span className="text-[min(8px,1.6cqh)] font-black text-emerald-600 uppercase tracking-widest bg-emerald-50 px-[1.5cqw] py-[0.5cqh] rounded-sm">
-            VERIFIED_ASSET
+
+
+        
+        <div className="flex items-center gap-[2cqw]">
+          <span className="text-[min(8px,1.8cqh)] font-black text-white bg-slate-950 px-[1.5cqw] py-[0.6cqh] rounded-[2px] uppercase tracking-widest">
+            AUTHENTICATED_ACCESS
           </span>
         </div>
       </footer>
     </section>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <div className="flex items-center justify-center">
+      <div className="bg-indigo-600 text-white text-[min(7px,1.5cqh)] font-black px-[1cqw] py-[0.4cqh] rounded-[2px] leading-none uppercase tracking-[0.05em] shadow-[0_1px_3px_rgba(0,0,0,0.1)]">
+        ACTIVE
+      </div>
+    </div>
+  );
+}
+
+function CrossIcon() {
+  return (
+    <div className="flex items-center justify-center">
+      <div className="w-[0.8cqw] h-[0.8cqw] rounded-full border-2 border-slate-200" />
+    </div>
+  );
+}
+
+function MatrixRow({ item, index, isSSR }) {
+  return (
+    <motion.div
+      key={item.name}
+      initial={isSSR ? false : { x: -10, opacity: 0 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.04, ease: "easeOut" }}
+      className="px-[5cqw] py-[3cqh] @md:py-[2.5cqh] flex justify-between items-center hover:bg-slate-50/80 transition-all cursor-default group/row border-b border-slate-100 last:border-0"
+    >
+      <div className="flex items-center gap-[4cqw]">
+        <div className="flex flex-col">
+          <span className="text-slate-300 text-[min(7px,1.5cqh)] font-black uppercase tracking-widest mb-1 group-hover/row:text-indigo-400 transition-colors">SEC_0{index + 1}</span>
+          <span className="text-slate-900 text-[min(15px,3.4cqh)] font-black tracking-tight uppercase italic leading-none">{item.name}</span>
+        </div>
+      </div>
+
+      <div className="flex flex-col items-end gap-[1.2cqh]">
+        <div className="h-[0.8cqh] w-[25cqw] bg-slate-100 rounded-full overflow-hidden relative shadow-inner">
+          <div className="absolute inset-0 opacity-40 bg-[linear-gradient(90deg,transparent_20%,rgba(255,255,255,0.4)_21%,transparent_22%,transparent_40%,rgba(255,255,255,0.4)_41%,transparent_42%)] bg-[size:20cqw_100%] z-10" />
+          <motion.div 
+            style={{ width: isSSR ? `${item.score}%` : 0 }}
+            initial={isSSR ? false : { width: 0 }}
+            animate={{ width: `${item.score}%` }}
+            transition={{ duration: 1.2, delay: 0.1 + index * 0.06, ease: [0.16, 1, 0.3, 1] }}
+            className="h-full bg-gradient-to-r from-indigo-500 to-indigo-600 relative overflow-hidden" 
+          >
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.2)_0%,transparent_100%)]" />
+          </motion.div>
+        </div>
+        <div className="flex items-center gap-2">
+           <span className="text-indigo-600 text-[min(13px,3cqh)] font-black tabular-nums tracking-tighter saturate-150 leading-none">{item.score}%</span>
+           <div className={`w-1 h-1 rounded-full ${item.score > 80 ? 'bg-emerald-500' : 'bg-amber-400'}`} />
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function TrendBar({ height }) {
+  return (
+    <div 
+      style={{ height: `${height}%` }} 
+      className="flex-1 bg-indigo-600/10 border-t border-indigo-600/30 group-hover:bg-indigo-600/20 transition-all duration-500" 
+    />
   );
 }
 
@@ -99,290 +181,330 @@ export function ComparisonMatrix({ data = [] }) {
   const isSSR = useIsSSR();
 
   return (
-    <div className="h-full w-full bg-white flex flex-col @container/matrix overflow-hidden font-sans group">
-      <div className="p-[4cqw] border-b border-slate-100 flex justify-between items-end bg-slate-50/50">
+    <div className="h-full w-full bg-white flex flex-col overflow-hidden font-sans group">
+      <div className="px-[5cqw] py-[3cqh] border-b border-slate-100 flex justify-between items-end bg-slate-50/30">
         <div className="flex flex-col gap-[0.5cqh]">
-          <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase tracking-widest leading-none">Market_Sector / Performance</span>
-          <h3 className="m-0 text-[min(18px,4cqh)] font-black tracking-tight text-slate-950 uppercase italic">
-            Comparative Analysis
+          <span className="text-[min(8px,1.8cqh)] font-black text-indigo-600/60 uppercase tracking-[0.2em] leading-none">MARKET_VELOCITY_AUDIT</span>
+          <h3 className="m-0 text-[min(20px,4.5cqh)] font-black tracking-[-0.03em] text-slate-950 uppercase italic">
+            Sector Benchmark Alpha
           </h3>
         </div>
-        <div className="hidden @[width>500px]:flex flex-col items-end">
-          <span className="text-[min(8px,1.6cqh)] font-black text-slate-300 uppercase">AVG_SCORE</span>
-          <span className="text-[min(18px,4cqh)] font-black text-emerald-600 tabular-nums">84.2</span>
+        <div className="hidden @md:flex flex-col items-end">
+          <span className="text-[min(8px,1.8cqh)] font-black text-slate-300 uppercase tracking-widest leading-none mb-1">AGGREGATE_SIGMA</span>
+          <span className="text-[min(22px,5cqh)] font-black text-slate-950 tabular-nums leading-none tracking-tighter italic saturate-150">
+            84.2%
+          </span>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto custom-scrollbar flex @[width>750px]:flex-row flex-col">
+      <div className="flex-1 overflow-y-auto flex @lg:flex-row flex-col">
         <div className="flex-1 divide-y divide-slate-100">
           {data.map((item, i) => (
-            <motion.div
-              key={item.name}
-              initial={{ x: -10, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: i * 0.05 }}
-              className="p-[4cqw] @[width>600px]:p-[3cqw] flex justify-between items-center hover:bg-slate-50 transition-colors"
-            >
-              <div className="flex flex-col">
-                <span className="text-slate-300 text-[min(8px,1.6cqh)] font-black uppercase tracking-wider mb-[0.2cqh]">0{i+1}</span>
-                <span className="text-slate-900 text-[min(14px,3.2cqh)] font-bold tracking-tight uppercase italic">{item.name}</span>
-              </div>
-              <div className="flex flex-col items-end gap-[1cqh]">
-                <div className="h-[0.8cqh] w-[20cqw] bg-slate-100 rounded-full overflow-hidden">
-                  <motion.div 
-                    initial={isSSR ? { width: `${item.score}%` } : { width: 0 }}
-                    animate={{ width: `${item.score}%` }}
-                    transition={{ duration: 1, delay: 0.2 + i * 0.05 }}
-                    className="h-full bg-emerald-500" 
-                  />
-                </div>
-                <span className="text-emerald-600 text-[min(12px,2.4cqh)] font-black tabular-nums">{item.score}%</span>
-              </div>
-            </motion.div>
+            <MatrixRow key={item.name} item={item} index={i} isSSR={isSSR} />
           ))}
         </div>
 
-        <div className="hidden @[width>750px]:flex w-[35%] bg-slate-50 border-l border-slate-100 p-[4cqw] flex-col gap-[3cqh]">
+        <div className="hidden @lg:flex w-[38%] bg-slate-50/30 border-l border-slate-200/60 p-[5cqw] flex-col gap-[4cqh]">
            <div className="flex flex-col gap-[1cqh]">
-              <span className="text-[min(9px,1.8cqh)] font-black text-slate-400 uppercase tracking-widest">Statistical_Overview</span>
-              <div className="h-px bg-slate-200 w-full" />
+              <span className="text-[min(9px,2cqh)] font-black text-slate-400 uppercase tracking-[0.25em] leading-none">STRATEGIC_OVERSIGHT</span>
+              <div className="h-px bg-slate-200 w-1/3" />
            </div>
 
-           <div className="space-y-[4cqh] mt-[2cqh]">
+           <div className="space-y-[4.5cqh] mt-[1cqh]">
              <div className="flex flex-col">
-                <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase mb-[0.5cqh]">Variance_Delta</span>
-                <span className="text-[min(24px,5cqh)] font-black text-slate-950 tabular-nums tracking-tighter leading-none">12.4%</span>
-                <p className="mt-[1cqh] text-[min(10px,2cqh)] text-slate-500 italic font-medium leading-relaxed">
-                  Calculated against the sector baseline for {new Date().getFullYear()}.
+                <span className="text-[min(7.5px,1.6cqh)] font-black text-slate-400 uppercase mb-[0.8cqh] tracking-widest">VARIANCE_DELTA_v2</span>
+                <span className="text-[min(28px,6.5cqh)] font-black text-slate-950 tabular-nums tracking-[-0.05em] leading-none mb-2">+12.42</span>
+                <p className="m-0 text-[min(11px,2.2cqh)] text-slate-500/80 italic font-medium leading-[1.6]">
+                  Calculated against the sector-weighted baseline of the previous fiscal period. Error margin: ±0.03.
                 </p>
              </div>
 
-             <div className="space-y-[1cqh]">
-                <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase">Trend_Projection</span>
-                <div className="h-[8cqh] w-full flex items-end gap-[2px]">
-                   {[30, 45, 35, 60, 50, 80, 75, 95].map((h, i) => (
-                     <div key={i} style={{ height: `${h}%` }} className="flex-1 bg-emerald-500/10 border-t border-emerald-500/30" />
+             <div className="space-y-[1.5cqh]">
+                <div className="flex justify-between items-end">
+                   <span className="text-[min(7.5px,1.6cqh)] font-black text-slate-400 uppercase tracking-widest">TREND_PROJECTION</span>
+                   <span className="text-[min(9px,2cqh)] font-bold text-indigo-600 uppercase">HIGH_FIDELITY</span>
+                </div>
+                <div className="h-[10cqh] w-full flex items-end gap-[3px]">
+                   {[30, 45, 35, 60, 50, 80, 75, 95, 85, 100].map((h, i) => (
+                     <TrendBar key={i} height={h} />
                    ))}
                 </div>
              </div>
            </div>
         </div>
       </div>
-      
-      <div className="px-[4cqw] py-[1cqh] border-t border-slate-100 bg-white flex justify-between items-center group-hover:bg-slate-50 transition-colors">
-        <div className="flex items-center gap-[1.5cqw]">
-          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-          <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase tracking-widest">System_Rendering / Stable</span>
-        </div>
-        <span className="text-[min(8px,1.6cqh)] font-bold text-slate-300 tabular-nums uppercase">
-           Fidelity: High
-        </span>
-      </div>
     </div>
+  );
+}
+
+function FeatureComparisonRow({ feature, index, columns, isSSR }) {
+  const cellStyle = "flex items-center justify-center p-[2cqh] border-l border-slate-100/50 relative";
+  const labelStyle = "text-[min(7.5px,1.6cqh)] font-black text-slate-300 uppercase tracking-widest absolute top-1 left-1.5 opacity-0 @sm:opacity-100";
+
+  return (
+    <motion.div 
+      initial={isSSR ? false : { opacity: 0, y: 5 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.03 }}
+      className="grid grid-cols-[1.5fr_1fr_1fr_1fr] border-b border-slate-100 hover:bg-slate-50/30 transition-colors group/row"
+    >
+      <div className="p-[2.5cqh] flex flex-col justify-center min-w-0">
+        <span className="text-[min(12px,2.8cqh)] font-black text-slate-950 uppercase tracking-tight italic leading-tight truncate">
+          {feature.name}
+        </span>
+        {feature.delta && (
+          <span className="text-[min(7px,1.5cqh)] font-black text-indigo-500 mt-1 uppercase">
+            Δ {feature.delta}
+          </span>
+        )}
+      </div>
+
+      <div className={`${cellStyle} bg-indigo-50/10`}>
+        <span className={`${labelStyle} text-indigo-400`}>{columns[0]}</span>
+        {feature.ours ? <CheckIcon /> : <CrossIcon />}
+      </div>
+
+      <div className={cellStyle}>
+        <span className={labelStyle}>{columns[1]}</span>
+        {feature.compA ? <CheckIcon /> : <CrossIcon />}
+      </div>
+
+      <div className={cellStyle}>
+        <span className={labelStyle}>{columns[2]}</span>
+        {feature.compB ? <CheckIcon /> : <CrossIcon />}
+      </div>
+    </motion.div>
   );
 }
 
 /**
  * Feature Comparison Matrix
  */
-export function FeatureMatrix({ features = [] }) {
-  const [activeRow, setActiveRow] = React.useState(null);
-
-  const Check = () => (
-    <div className="flex items-center justify-center">
-      <div className="bg-emerald-500 text-white text-[min(8px,1.6cqh)] font-black px-[1.5cqw] py-[0.5cqh] rounded-sm leading-none uppercase tracking-tighter">
-        YES
-      </div>
-    </div>
-  );
-  
-  const Cross = () => (
-    <div className="flex items-center justify-center opacity-10">
-      <div className="w-[1cqw] h-[1cqw] rounded-full bg-slate-400" />
-    </div>
-  );
+export function FeatureMatrix({ 
+  features = [], 
+  columns = ["REACTIVE_MD", "LEGACY_A", "LEGACY_B"] 
+}) {
+  const isSSR = useIsSSR();
 
   return (
-    <div className="h-full w-full @container/matrix bg-white relative group">
-      <div className="hidden @[width>500px]:block h-full p-[4cqw] overflow-hidden">
-        <table className="w-full text-left border-collapse table-fixed">
-          <thead>
-            <tr className="border-b border-slate-900">
-              <th className="py-[1.5cqh] pr-[2cqw] font-black text-[min(10px,2cqh)] uppercase tracking-widest text-slate-950 w-[45%]">Capability</th>
-              <th className="py-[1.5cqh] px-[1cqw] text-center font-black text-[min(10px,2cqh)] uppercase tracking-widest text-emerald-600 bg-emerald-50/30">CURRENT</th>
-              <th className="py-[1.5cqh] px-[1cqw] text-center font-black text-[min(10px,2cqh)] uppercase tracking-widest text-slate-300">CORE_A</th>
-              <th className="py-[1.5cqh] px-[1cqw] text-center font-black text-[min(10px,2cqh)] uppercase tracking-widest text-slate-300">CORE_B</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {features.map((f, i) => (
-              <motion.tr 
-                key={f.name}
-                onMouseEnter={() => setActiveRow(i)}
-                onMouseLeave={() => setActiveRow(null)}
-                className="group hover:bg-slate-50 transition-colors"
-              >
-                <td className="py-[1.5cqh] pr-[2cqw] font-black text-slate-900 tracking-tight italic">
-                  <div className="flex items-center gap-[1.5cqw]">
-                    <span className="text-[min(11px,2.4cqh)] uppercase">{f.name}</span>
-                    {activeRow === i && (
-                      <motion.div layoutId="ptr" className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                    )}
-                  </div>
-                </td>
-                <td className="py-[1.5cqh] px-[1cqw] bg-emerald-50/10">{f.ours ? <Check /> : <Cross />}</td>
-                <td className="py-[1.5cqh] px-[1cqw]">{f.compA ? <Check /> : <Cross />}</td>
-                <td className="py-[1.5cqh] px-[1cqw]">{f.compB ? <Check /> : <Cross />}</td>
-              </motion.tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="h-full w-full bg-white relative group flex flex-col overflow-hidden font-sans border-t border-slate-200">
+      {/* Header: Fixed Column Labels */}
+      <div className="grid grid-cols-[1.5fr_1fr_1fr_1fr] bg-slate-950 border-b border-slate-900 sticky top-0 z-30">
+        <div className="p-[2cqh] px-[2.5cqh] flex items-center">
+           <span className="text-[min(8px,1.8cqh)] font-black text-slate-400 uppercase tracking-[0.2em]">CAPABILITY_AUDIT</span>
+        </div>
+        {columns.map((col, i) => (
+          <div key={col} className={`p-[2cqh] flex items-center justify-center border-l border-white/5 ${i === 0 ? 'bg-indigo-600/20' : ''}`}>
+            <span className={`text-[min(8.5px,2cqh)] font-black uppercase tracking-[0.15em] ${i === 0 ? 'text-indigo-400' : 'text-slate-500'}`}>
+              {col}
+            </span>
+          </div>
+        ))}
       </div>
 
-      <div className="block @[width>500px]:hidden h-full p-[5cqw] overflow-hidden">
-        <div className="flex flex-col gap-[1cqh]">
-          {features.slice(0, 5).map((f, i) => (
-            <motion.div 
-              key={f.name}
-              initial={{ opacity: 0, x: -5 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.05 }}
-              className="p-[3cqw] border-l-2 border-slate-950 bg-slate-50 flex flex-col gap-[1cqh]"
-            >
-              <h4 className="m-0 font-black text-[min(11px,2.4cqh)] text-slate-950 uppercase tracking-tight italic">
-                {f.name}
-              </h4>
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-[2cqw]">
-                  <span className="text-[min(8px,1.6cqh)] font-black text-emerald-600">STATE:</span>
-                  {f.ours ? <Check /> : <Cross />}
-                </div>
-                <div className="flex items-center gap-[1.5cqw] opacity-40">
-                   <div className="flex gap-[0.5cqw]">
-                      <div className={`w-1 h-1 rounded-full ${f.compA ? 'bg-emerald-500' : 'bg-slate-300'}`} />
-                      <div className={`w-1 h-1 rounded-full ${f.compB ? 'bg-emerald-500' : 'bg-slate-300'}`} />
-                   </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+      {/* Rows: Scrollable Grid */}
+      <div className="flex-1 overflow-y-auto overflow-x-hidden">
+        {features.map((f, i) => (
+          <FeatureComparisonRow 
+            key={f.name} 
+            feature={f} 
+            index={i} 
+            columns={columns}
+            isSSR={isSSR} 
+          />
+        ))}
       </div>
     </div>
   );
 }
 
+function GridLine({ index, paddingX, paddingY, baseWidth, baseHeight }) {
+  const y = paddingY + (index / 4) * (baseHeight - paddingY * 2);
+  return (
+    <line 
+      x1={paddingX} 
+      y1={y} 
+      x2={baseWidth - paddingX} 
+      y2={y} 
+      className="stroke-slate-900" 
+      strokeWidth="1" 
+    />
+  );
+}
+
 /**
- * Animated SVG Trend Chart
+ * High-Fidelity Animated SVG Chart
  */
 export function SVGTrendChart({
   data = [],
-  color = "#10b981"
+  color = "#4f46e5"
 }) {
   const isSSR = useIsSSR();
   const [povIndex, setPovIndex] = React.useState(null);
 
-  if (data.length === 0) return <div className="h-full w-full flex items-center justify-center text-slate-300 text-[min(10px,2cqh)] uppercase font-black tracking-widest bg-slate-50">NO_DATA</div>;
+  if (data.length === 0) {
+    return (
+      <div className="h-full w-full flex items-center justify-center bg-slate-50 border border-dashed border-slate-200">
+        <span className="text-[min(10px,2cqh)] uppercase font-black tracking-[0.3em] text-slate-300">VOID_DATA</span>
+      </div>
+    );
+  }
 
-  const baseWidth = 400;
-  const baseHeight = 220;
+  const baseWidth = 500;
+  const baseHeight = 280;
   const paddingX = 40;
-  const paddingY = 50;
+  const paddingY = 60;
 
   const maxValue = Math.max(...data.map(d => d.value));
   const minValue = Math.min(...data.map(d => d.value));
   const avgValue = data.reduce((acc, curr) => acc + curr.value, 0) / data.length;
   const range = maxValue - minValue || 1;
 
-  const points = data.map((d, i) => {
-    const x = paddingX + (i / (data.length - 1)) * (baseWidth - paddingX * 2);
+  function calculatePoint(d, i) {
+    const divisor = data.length > 1 ? data.length - 1 : 1;
+    const x = paddingX + (i / divisor) * (baseWidth - paddingX * 2);
     const y = (baseHeight - paddingY) - ((d.value - minValue) / range) * (baseHeight - paddingY * 2.0);
     return [x, y];
-  });
+  }
+
+  const points = data.map(calculatePoint);
 
   const pathData = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p[0]} ${p[1]}`).join(' ');
+  const areaData = `${pathData} L ${points[points.length - 1][0]} ${baseHeight - paddingY} L ${points[0][0]} ${baseHeight - paddingY} Z`;
+
+  function handleMouseMove(e) {
+    if (isSSR) return;
+    const bounds = e.currentTarget.getBoundingClientRect();
+    const xProp = (e.clientX - bounds.left) / bounds.width;
+    const index = Math.round(xProp * (data.length - 1));
+    if (index >= 0 && index < data.length) {
+      setPovIndex(index);
+    }
+  }
 
   return (
     <div 
-      className="h-full w-full relative @container/chart bg-white overflow-hidden flex flex-col font-sans"
+      className="h-full w-full relative bg-white overflow-hidden flex flex-col font-sans group/chart"
       onMouseLeave={() => setPovIndex(null)}
     >
       <div className="flex-1 flex overflow-hidden">
         <div className="flex-1 relative flex flex-col min-w-0">
-          <div className="absolute top-[4cqw] left-[4cqw] flex items-center gap-[2cqw] z-20">
-            <div className="w-1.5 h-[1.5cqh] bg-emerald-500" />
-            <span className="text-[min(10px,2.4cqh)] font-black text-slate-950 uppercase tracking-widest">Macro_Velocity</span>
+          <div className="absolute top-[4cqh] left-[5cqw] flex flex-col gap-[0.3cqh] z-30">
+            <div className="flex items-center gap-[1.5cqw]">
+              <div className="w-4 h-0.5 bg-indigo-600" />
+              <span className="text-[min(9px,2cqh)] font-black text-slate-950 uppercase tracking-[0.25em] leading-none">ALPHA_MOMENTUM</span>
+            </div>
+            <span className="text-[min(11.5px,2.6cqh)] font-black text-slate-300 uppercase tracking-widest mt-1">Real-Time Vector Engine</span>
           </div>
 
           <div className="flex-1 w-full relative p-[2cqw] flex items-center justify-center bg-transparent min-h-0 cursor-crosshair">
             <svg
               viewBox={`0 0 ${baseWidth} ${baseHeight}`}
-              className="w-full h-full max-h-full overflow-visible transition-transform duration-700 ease-out"
+              className="w-full h-full max-h-full overflow-visible transition-all duration-700 ease-out"
               preserveAspectRatio="xMidYMid meet"
-              onMouseMove={(e) => {
-                if (isSSR) return;
-                const bounds = e.currentTarget.getBoundingClientRect();
-                const xProp = (e.clientX - bounds.left) / bounds.width;
-                const index = Math.round(xProp * (data.length - 1));
-                if (index >= 0 && index < data.length) setPovIndex(index);
-              }}
+              onMouseMove={handleMouseMove}
             >
-              <g className="opacity-30">
-                <line x1={paddingX} y1={baseHeight-paddingY+10} x2={baseWidth-paddingX} y2={baseHeight-paddingY+10} stroke="#e2e8f0" strokeWidth="1" />
+              <defs>
+                <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={color} stopOpacity="0.1" />
+                  <stop offset="100%" stopColor={color} stopOpacity="0" />
+                </linearGradient>
+              </defs>
+
+              {/* Sophisticated Grid Lines */}
+              <g className="opacity-[0.05]">
+                {[0, 1, 2, 3, 4].map(i => (
+                  <GridLine 
+                    key={i} 
+                    index={i} 
+                    paddingX={paddingX} 
+                    paddingY={paddingY} 
+                    baseWidth={baseWidth} 
+                    baseHeight={baseHeight} 
+                  />
+                ))}
               </g>
 
+              {/* Area & Line */}
               <motion.path
-                d={pathData} fill="none" stroke={color} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
+                d={areaData} fill="url(#areaGradient)"
+                initial={isSSR ? { opacity: 0.8 } : { opacity: 0 }} 
+                animate={{ opacity: 1 }}
+                transition={{ duration: 2, delay: 0.5 }}
+              />
+              <motion.path
+                d={pathData} fill="none" stroke={color} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"
                 initial={isSSR ? { pathLength: 1 } : { pathLength: 0 }} animate={{ pathLength: 1 }}
-                transition={{ duration: 1.5, ease: "easeOut" }} 
+                transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }} 
               />
               
+              {/* Contextual Focus Point */}
               {!isSSR && povIndex !== null && (
-                <circle cx={points[povIndex][0]} cy={points[povIndex][1]} r="6" fill={color} stroke="white" strokeWidth="2" />
+                <g>
+                  <line x1={points[povIndex][0]} y1={paddingY} x2={points[povIndex][0]} y2={baseHeight - paddingY} stroke={color} strokeWidth="1" strokeDasharray="4 2" className="opacity-40" />
+                  <circle cx={points[povIndex][0]} cy={points[povIndex][1]} r="7" fill={color} stroke="white" strokeWidth="3" className="shadow-lg" />
+                  <text 
+                    x={points[povIndex][0]} y={points[povIndex][1] - 15} 
+                    textAnchor="middle" 
+                    className="text-[12px] font-black fill-slate-950 tabular-nums select-none"
+                  >
+                    {data[povIndex].value.toFixed(1)}
+                  </text>
+                </g>
               )}
             </svg>
           </div>
         </div>
 
-        <div className="hidden @[width>700px]:flex w-[30%] border-l border-slate-100 bg-slate-50/50 flex-col p-[4cqw] relative">
-          <div className="flex flex-col gap-[1cqh]">
-            <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase tracking-widest">Analytics_Feed</span>
-            <div className="h-px bg-slate-200 w-full" />
+        <div className="hidden @[width>780px]:flex w-[32%] border-l border-slate-200/60 bg-slate-50/40 flex-col p-[5cqw] relative z-20">
+          <div className="flex flex-col gap-[0.5cqh] mb-[4cqh]">
+            <span className="text-[min(8px,1.8cqh)] font-black text-slate-400 uppercase tracking-[0.2em] leading-none">ANALYTIC_FEED_BETA</span>
+            <div className="h-0.5 w-[5cqw] bg-indigo-600" />
           </div>
           
-          <div className="mt-[4cqh] flex-1 flex flex-col gap-[4cqh]">
-            <div className="flex flex-col">
-               <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase mb-[0.2cqh]">High_Signal</span>
-               <span className="text-[min(24px,6cqh)] font-black text-slate-950 tabular-nums leading-none tracking-tighter">{maxValue.toFixed(1)}</span>
+          <div className="flex-1 flex flex-col gap-[5cqh]">
+            <div className="flex flex-col group/metric">
+               <span className="text-[min(7.5px,1.6cqh)] font-black text-slate-400 uppercase mb-[0.8cqh] tracking-widest leading-none">PEAK_AMPLITUDE</span>
+               <div className="flex items-baseline gap-1">
+                 <span className="text-[min(28px,6.5cqh)] font-black text-slate-950 tabular-nums leading-none tracking-[-0.05em]">{maxValue.toFixed(1)}</span>
+                 <span className="text-[min(10px,2cqh)] font-black text-indigo-500 uppercase">UNIT</span>
+               </div>
             </div>
 
-            <div className="flex flex-col">
-               <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase mb-[0.2cqh]">Avg_Velocity</span>
-               <span className="text-[min(24px,6cqh)] font-black text-slate-950 tabular-nums leading-none tracking-tighter">{avgValue.toFixed(1)}</span>
+            <div className="flex flex-col group/metric">
+               <span className="text-[min(7.5px,1.6cqh)] font-black text-slate-400 uppercase mb-[0.8cqh] tracking-widest leading-none">NORM_AVERAGE</span>
+               <div className="flex items-baseline gap-1">
+                 <span className="text-[min(28px,6.5cqh)] font-black text-slate-950 tabular-nums leading-none tracking-[-0.05em]">{avgValue.toFixed(1)}</span>
+                 <span className="text-[min(10px,2cqh)] font-black text-amber-500 uppercase">MEAN</span>
+               </div>
             </div>
 
-            <div className="mt-auto space-y-[2cqh]">
-               <p className="text-[min(10px,2.2cqh)] text-slate-500 leading-relaxed italic font-medium">
-                  Baseline confirms consistent stability across the Documented infrastructure.
+            <div className="mt-auto pt-[4cqh] border-t border-slate-200/60">
+               <p className="m-0 text-[min(11px,2.4cqh)] text-slate-500 leading-relaxed italic font-medium">
+                  Recursive audit confirms 99.8% vector stability across the strategic infrastructure landscape.
                </p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="hidden @portrait:block px-[5cqw] py-[3cqh] border-t border-slate-100 bg-slate-50 relative">
-        <p className="m-0 text-[min(13px,3cqh)] text-slate-900 leading-tight font-bold tracking-tight">
-          Baseline audit confirms trend stability.
+      <div className="hidden @portrait:block px-[6cqw] py-[3.5cqh] border-t border-slate-200 bg-indigo-50/50 relative">
+        <div className="flex items-center gap-[2cqw] mb-1">
+           <div className="w-1.5 h-1.5 rounded-full bg-indigo-600" />
+           <span className="text-[min(8px,1.8cqh)] font-black text-indigo-600 uppercase tracking-widest">MOBILE_SUMMARY</span>
+        </div>
+        <p className="m-0 text-[min(14px,3.2cqh)] text-slate-900 leading-[1.4] font-bold tracking-tight uppercase italic">
+          Audit cycle complete. No significant variance detected in baseline trajectory.
         </p>
       </div>
 
-      <div className="px-[4cqw] py-[1cqh] border-t border-slate-50 flex justify-between items-center bg-white shrink-0">
+      <div className="px-[5cqw] py-[2cqh] border-t border-slate-50 flex justify-between items-center bg-white shrink-0">
         <div className="flex items-center gap-[1.5cqw]">
-          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-          <span className="text-[min(8px,1.6cqh)] font-black text-slate-400 uppercase tracking-widest">Asset_Render / Success</span>
+          <div className="w-1.5 h-1.5 rounded-full bg-indigo-600" />
+          <span className="text-[min(8px,1.8cqh)] font-black text-slate-400 uppercase tracking-widest">STRATEGIC_ASSET / ACTIVE</span>
         </div>
-        <span className="text-[min(8px,1.6cqh)] font-black text-emerald-600 bg-emerald-50 px-[1.5cqw] rounded-sm uppercase tracking-tighter">
-          Ver-v1.0
+        <span className="text-[min(8px,1.8cqh)] font-black text-indigo-600 bg-indigo-50 px-[1.5cqw] rounded-[2px] uppercase tracking-tighter">
+          Ver-v1.1
         </span>
       </div>
     </div>
