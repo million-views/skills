@@ -56,10 +56,10 @@ import { ZoomDiagnostic, OrientationIndicator } from './FidelityToolkit.tsx';
 
 export default function RotationAudit() {
   return (
-    <div className="h-[100cqh] flex flex-col items-center justify-center p-8 transition-colors duration-700 @portrait:bg-blue-50 @landscape:bg-emerald-50">
+    <div className="h-[100cqh] flex flex-col items-center justify-center p-4 transition-colors duration-700 @portrait:bg-blue-50 @landscape:bg-emerald-50">
       <ZoomDiagnostic title="Rotation Truth" />
 
-      <div className="mt-8 flex flex-col @landscape:flex-row items-center gap-8">
+      <div className="mt-4 @md:mt-8 flex flex-col @landscape:flex-row items-center gap-8">
         <OrientationIndicator />
 
         <div className="p-6 bg-white rounded-2xl border-4 border-slate-200 @landscape:border-emerald-500 transition-all shadow-sm">
