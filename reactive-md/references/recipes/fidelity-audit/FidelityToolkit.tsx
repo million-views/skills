@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 
 /**
  * FidelityToolkit: A high-fidelity diagnostic suite for design system auditing.
- * 
+ *
  * This toolkit demonstrates how to verify "Logical Truth" in Reactive MD by
- * comparing the Logical Intent (requested via DSL) against the 
+ * comparing the Logical Intent (requested via DSL) against the
  * Experienced Reality (measured in the browser).
  *
- * It uses the public DOM contract provided by the ViewportFrame to read
- * metadata without relying on extension-internal globals.
+ * It uses the public DOM contract provided by the 4-Tier ViewportFrame:
+ * - Tier 0 (Scroller): .canvas-scroller
+ * - Tier 1 (Bezel): .physical-viewport
+ * - Tier 2 (Lens): .display-container
+ * - Tier 3 (Artboard): .content-normalizer (Sovereign Neutrality applies here)
  */
 
 /**
@@ -25,18 +28,22 @@ export function ZoomDiagnostic({ title = 'Fidelity Audit' }) {
 
     const update = () => {
       const bezel = el.closest('.physical-viewport') as HTMLElement;
+      // V1.1.2 FIDELITY FIX: We measure the Display Container (Tier 2) or Artboard (Tier 3)
+      // instead of the Bezel (Tier 1). The Bezel accounts for physical borders (+2px),
+      // while the inner containers represent the "Logical Screen" (Artboard).
+      const artboard = el.closest('.display-container') as HTMLElement;
       const scroller = el.closest('.canvas-scroller') as HTMLElement;
 
-      if (bezel && scroller) {
+      if (bezel && artboard && scroller) {
         const style = getComputedStyle(bezel);
-        const rect = bezel.getBoundingClientRect();
+        const rect = artboard.getBoundingClientRect();
 
         setIntent({
-          width: parseInt(style.getPropertyValue('--logical-width')) || 0,
-          height: parseInt(style.getPropertyValue('--logical-height')) || 0,
-          zoom: scroller.getAttribute('data-zoom-mode') || 'unknown',
-          orientation: bezel.getAttribute('data-orientation') || 'unknown',
-          label: bezel.getAttribute('data-device-label') || 'unknown'
+          width: parseInt(style.getPropertyValue('--rmd-logical-width')) || 0,
+          height: parseInt(style.getPropertyValue('--rmd-logical-height')) || 0,
+          zoom: scroller.getAttribute('data-rmd-zoom-mode') || 'unknown',
+          orientation: bezel.getAttribute('data-rmd-orientation') || 'unknown',
+          label: bezel.getAttribute('data-rmd-device-label') || 'unknown'
         });
 
         setExperienced({
@@ -88,6 +95,83 @@ export function ZoomDiagnostic({ title = 'Fidelity Audit' }) {
             {scale.toFixed(4)}x
           </span>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * GutterDiagnostic: Measures exact browser-to-artboard physical offset for synchronizing scrollbar headers.
+ * Useful for finding the 'Universal Gutter' constant via fine-grained measurement.
+ */
+export function GutterDiagnostic() {
+  const [offsets, setOffsets] = useState({ left: 0, right: 0, windowWidth: 0, scrollerLeft: 0 });
+  const [vars, setVars] = useState({ target: '...', ext: '...' });
+  const ref = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const update = () => {
+      const bezel = ref.current?.closest('.physical-viewport');
+      const scroller = ref.current?.closest('.canvas-scroller');
+      if (bezel && scroller) {
+        const rect = bezel.getBoundingClientRect();
+        const scRect = scroller.getBoundingClientRect();
+        setOffsets({
+          left: Math.round(rect.left),
+          right: Math.round(window.innerWidth - rect.right),
+          windowWidth: window.innerWidth,
+          scrollerLeft: Math.round(scRect.left)
+        });
+
+        // Read real-time parity constants from CSS variables
+        const style = getComputedStyle(document.documentElement);
+        setVars({
+          target: style.getPropertyValue('--rmd-parity-target-total-gutter').trim() || 'N/A',
+          ext: style.getPropertyValue('--rmd-parity-external-body-padding').trim() || 'N/A'
+        });
+      }
+    };
+    window.addEventListener('resize', update);
+    update();
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  const internalGutter = offsets.left - offsets.scrollerLeft;
+
+  return (
+    <div ref={ref} className="bg-slate-900 text-white rounded-lg p-3 font-mono text-[9px] shadow-2xl border border-white/10 uppercase tracking-widest flex flex-col gap-1">
+      <div className="flex justify-between border-b border-white/10 pb-1 mb-1 font-black text-emerald-400">
+        <span>Gutter Calibration</span>
+        <span>{offsets.windowWidth}px</span>
+      </div>
+      <div className="flex justify-between">
+        <span className="text-slate-500">Scroller Start</span>
+        <span className="text-white font-bold">{offsets.scrollerLeft}px</span>
+      </div>
+      <div className="flex justify-between">
+        <span className="text-slate-500">Bezel Left (Abs)</span>
+        <span className="text-emerald-400 font-bold">{offsets.left}px</span>
+      </div>
+      <div className="flex justify-between">
+        <span className="text-slate-500">Internal Gutter</span>
+        <span className="text-orange-400 font-bold">{internalGutter}px</span>
+      </div>
+      <div className="flex justify-between">
+        <span className="text-slate-500">Right Offset</span>
+        <span className="text-emerald-400 font-bold">{offsets.right}px</span>
+      </div>
+      <div className="mt-2 pt-2 border-t border-white/10 flex flex-col gap-1">
+        <div className="flex justify-between">
+          <span className="text-slate-500 text-[7px] uppercase tracking-tighter">Target Gutter</span>
+          <span className="text-white/50 text-[7px] px-1 rounded bg-white/5 select-all">{vars.target}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-slate-500 text-[7px] uppercase tracking-tighter">Ext Padding</span>
+          <span className="text-white/50 text-[7px] px-1 rounded bg-white/5 select-all">{vars.ext}</span>
+        </div>
+      </div>
+      <div className="mt-2 text-[8px] text-slate-400 leading-tight italic">
+        * Match offsets between views for exact scrollbar parity.
       </div>
     </div>
   );

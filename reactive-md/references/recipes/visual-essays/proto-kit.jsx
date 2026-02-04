@@ -17,11 +17,12 @@ export function DataModule({
   title, 
   subtitle, 
   source = "STRATEGIC_ASSET_v1.1", 
+  status,
   children,
   sidebar
 }) {
   return (
-    <section className="flex flex-col h-full w-full bg-white border border-slate-200 overflow-hidden select-none relative font-sans text-slate-900 group/module">
+    <section className="flex flex-col h-full w-full bg-white border border-slate-200 overflow-hidden relative font-sans text-slate-900 group/module">
       {/* Sophisticated Background Grid */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.02] bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:24px_24px]" />
       <div className="absolute inset-0 pointer-events-none opacity-[0.05] bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:120px_120px]" />
@@ -36,7 +37,7 @@ export function DataModule({
             </span>
             <div className="h-2 w-px bg-slate-200" />
             <span className="text-[min(7px,1.4cqh)] font-bold text-indigo-500/80 uppercase tracking-widest leading-none">
-              CONFIDENTIAL_DRAFT
+              {status || "CONFIDENTIAL_DRAFT"}
             </span>
           </div>
           
@@ -71,7 +72,7 @@ export function DataModule({
 
       {/* Content Area */}
       <div className="flex-1 flex overflow-hidden">
-        <main className="flex-1 overflow-hidden relative">
+        <main className="flex-1 overflow-hidden relative flex flex-col">
           {children}
         </main>
         
@@ -456,7 +457,7 @@ export function SVGTrendChart({
           </div>
         </div>
 
-        <div className="hidden @[width>780px]:flex w-[32%] border-l border-slate-200/60 bg-slate-50/40 flex-col p-[5cqw] relative z-20">
+        <div className="hidden @4xl:flex w-[32%] border-l border-slate-200/60 bg-slate-50/40 flex-col p-[5cqw] relative z-20">
           <div className="flex flex-col gap-[0.5cqh] mb-[4cqh]">
             <span className="text-[min(8px,1.8cqh)] font-black text-slate-400 uppercase tracking-[0.2em] leading-none">ANALYTIC_FEED_BETA</span>
             <div className="h-0.5 w-[5cqw] bg-indigo-600" />

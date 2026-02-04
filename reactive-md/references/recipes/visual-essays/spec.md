@@ -8,7 +8,7 @@ tags: ["strategy", "fidelity", "literate-design"]
 
 # The Case for Literate Infrastructure
 
-In high-performance engineering cultures, the distance between "The Intent" (design) and "The Implementation" (code) is the primary source of entropy. Static documentation is a legacy anchor that creates friction, drift, and technical debt. 
+In high-performance engineering cultures, the distance between "The Intent" (design) and "The Implementation" (code) is the primary source of entropy. Static documentation is a legacy anchor that creates friction, drift, and technical debt.
 
 We propose a shift toward **Literate Infrastructure**—where the document is not merely a description of the system, but a functional node *within* the system.
 
@@ -21,14 +21,14 @@ export default function Intent() {
   const sidebar = (
     <div className="space-y-[3cqh]">
       <div className="p-[3cqw] bg-white border border-slate-200/60 rounded-[2px] shadow-sm">
-        <span className="text-[min(8px,1.8cqh)] font-black text-indigo-600 uppercase tracking-[0.2em]">PARAMETER_ALPHA</span>
-        <p className="m-0 text-[min(11px,2.4cqh)] font-medium text-slate-600 leading-snug mt-2">
+        <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.2em] whitespace-nowrap">PARAMETER_ALPHA</span>
+        <p className="m-0 text-[12px] font-medium text-slate-600 leading-snug mt-2">
           The sidecar pattern eliminates layout drift by enforcing a single source of truth.
         </p>
       </div>
       <div className="p-[3cqw] bg-white border border-slate-200/60 rounded-[2px] shadow-sm">
-        <span className="text-[min(8px,1.8cqh)] font-black text-slate-300 uppercase tracking-[0.2em]">PARAMETER_BETA</span>
-        <p className="m-0 text-[min(11px,2.4cqh)] font-medium text-slate-600 leading-snug mt-2">
+        <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] whitespace-nowrap">PARAMETER_BETA</span>
+        <p className="m-0 text-[12px] font-medium text-slate-600 leading-snug mt-2">
           Logical truth is the only stable anchor in high-entropy systems.
         </p>
       </div>
@@ -36,18 +36,18 @@ export default function Intent() {
   );
 
   return (
-    <DataModule 
-      title="Strategic Intent" 
+    <DataModule
+      title="Strategic Intent"
       subtitle="Eliminating the Abstraction Gap via Literate Systems"
       sidebar={sidebar}
     >
       <div className="h-full flex flex-col justify-center p-[8cqw] gap-[3cqh]">
         <div className="h-1 w-[12cqw] bg-indigo-600 shadow-[0_0_12px_rgba(79,70,229,0.3)]" />
-        <h2 className="m-0 text-[min(28px,6.5cqh)] font-black text-slate-950 leading-[1.1] uppercase tracking-[-0.04em] italic">
+        <h2 className="m-0 text-2xl @lg:text-3xl font-black text-slate-950 leading-[1.1] uppercase tracking-[-0.04em] italic">
           "The distance between design and code is the primary source of entropy."
         </h2>
         <div className="flex items-center gap-[3cqw] mt-[2cqh]">
-           <span className="text-[min(10px,2.2cqh)] font-black text-slate-400 font-mono uppercase tracking-[0.3em]">DIRECTIVE_01A</span>
+           <span className="text-[10px] font-black text-slate-400 font-mono uppercase tracking-[0.3em]">DIRECTIVE_01A</span>
            <div className="flex-1 h-px bg-slate-100" />
         </div>
       </div>
@@ -77,8 +77,8 @@ export default function Trend() {
   ];
 
   return (
-    <DataModule 
-      title="Velocity Multiplier" 
+    <DataModule
+      title="Velocity Multiplier"
       subtitle="Exponential gains from Literate Infrastructure adoption"
     >
       <SVGTrendChart
@@ -112,15 +112,15 @@ export default function AuditModule() {
   const sidebar = (
     <div className="space-y-[4cqh]">
        <div className="flex flex-col gap-[1.5cqh]">
-         <span className="text-[min(8px,1.8cqh)] font-black text-slate-400 uppercase tracking-[0.25em]">REGRESSION_INDEX</span>
+         <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.25em]">REGRESSION_INDEX</span>
          <div className="h-[2cqh] w-full bg-slate-100/60 rounded-full overflow-hidden shadow-inner">
            <div className="h-full w-[14%] bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.3)]" />
          </div>
-         <span className="text-[min(9px,2cqh)] font-bold text-indigo-600 italic uppercase">Logic Baseline Stable</span>
+         <span className="text-[11px] font-bold text-indigo-600 italic uppercase">Logic Baseline Stable</span>
        </div>
 
        <div className="p-[4cqw] border border-indigo-100 bg-indigo-50/30 rounded-[2px]">
-          <p className="m-0 text-[min(10px,2.2cqh)] font-medium text-slate-500 leading-relaxed italic">
+          <p className="m-0 text-[11px] font-medium text-slate-500 leading-relaxed italic">
             Automated containment eliminates the need for manual @container definitions in the root component.
           </p>
        </div>
@@ -128,8 +128,8 @@ export default function AuditModule() {
   );
 
   return (
-    <DataModule 
-      title="Strategy Benchmark" 
+    <DataModule
+      title="Strategy Benchmark"
       subtitle="Comparative audit of workflow efficiency and system stability"
       sidebar={sidebar}
     >
@@ -158,12 +158,12 @@ export default function Audit() {
   ];
 
   return (
-    <DataModule 
-      title="Capability Audit" 
+    <DataModule
+      title="Capability Audit"
       subtitle="Structural requirements for eliminating design-to-implementation entropy"
     >
-      <FeatureMatrix 
-        features={capabilities} 
+      <FeatureMatrix
+        features={capabilities}
         columns={["REACTIVE_MD", "FIGMA_SPECS", "LIVING_STYLE"]}
       />
     </DataModule>
@@ -182,13 +182,13 @@ import { DataModule } from './proto-kit.jsx';
 
 export default function Outlook() {
   return (
-    <DataModule 
-      title="Strategic Outlook" 
+    <DataModule
+      title="Strategic Outlook"
       subtitle="Final directives for transition to Literate Systems"
       status="LOCKED"
     >
       <div className="h-full flex flex-col items-center justify-center p-[8cqw] bg-slate-50/50">
-        <p className="text-[min(12px,4cqh)] font-black text-slate-950 uppercase tracking-[0.4em] text-center leading-relaxed mb-4">
+        <p className="text-sm @md:text-lg font-black text-slate-950 uppercase tracking-[0.4em] text-center leading-relaxed mb-4">
           Stop drawing software.<br/>Start writing it.
         </p>
         <div className="w-12 h-px bg-slate-900/10" />
