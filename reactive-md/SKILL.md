@@ -9,199 +9,141 @@ metadata:
 
 # Reactive MD
 
-Generate functional markdown documents with embedded interactive React components for product design collaboration.
+Generate functional markdown documents with embedded interactive React components. This skill is optimized for creating high-fidelity, emulated prototypes where the "Logical Reality" of the device is preserved regardless of the editor's width.
 
-## Reference Documentation
+## The Senior's Quality Bar (Philosophy)
 
-**[GUIDE.md](references/GUIDE.md)** - Complete technical reference, troubleshooting, patterns, and dos/donts
-**[use-cases.md](references/use-cases.md)** - Example implementations for each primary use case
+To reach senior-level expertise in Literate UI/UX, follow these three non-negotiable principles:
 
-(Consult these resources throughout for detailed guidance, pattern examples, and reference implementations.)
+1.  **The Document is the Product**: Your markdown is not just documentation; it is a functional prototype. If the code is messy, the design is considered unverified.
+2.  **Logical Truth over Literal Appearance**: Never design for the "now" (what you see in your sidebar). Design for the "target" (the emulated device). Use **Container Queries** exclusively.
+3.  **Clean Spines, Rich Sidecars**: Keep the primary `.md` file (The Spine) focused on the narrative "Why." Move the "How" (implementation details) into sidecar `.jsx` files.
 
-## When to Use This Skill
+## Primary Use Cases & Triggers
 
-Use reactive-md when the user asks to create:
+Use this skill when the user mentions:
+- **Product Specs / PRDs**: "Draft a spec for...", "Create a PRD with a prototype..."
+- **Visual Essays**: "Write a data story about...", "Create a visual essay for..."
+- **Interactive Demos**: "Build a clickable mockup...", "Prototype the login flow..."
+- **Fidelity Audits**: "Check the responsive behavior of...", "Audit the mobile UI..."
+- **Living Docs**: "Create a component gallery...", "Document this design system..."
 
-**Primary Use Cases:**
-- Product specs with working prototypes
-- User flow wireframes and interactive demos
-- Feature prototypes, concept exploration, and visual demos
-- A/B tests, dashboards, component galleries
-- Interactive documentation and living specifications
-- Data journalism and visual essays (narrative storytelling with animated visualizations)
+---
 
-**Aliases**: "visual essay", "data story", "live doc", "prototype", "POC", "interactive spec" all refer to reactive-md documents.
+## Technical Directives
 
-## Core Capabilities
+### 1. The Hub-and-Spoke Workflow
+Always treat a project as a multi-file system.
+- **`spec.md`**: The narrative entry point. Start here. Use prose to set the stage.
+- **Sidecar Libraries**: Implementation modules (e.g., `proto-kit.jsx`, `idea-kit.jsx`). Use these as shared libraries to serve multiple fences across your document. Extract logic here if a fence exceeds 30 lines.
+- **`styles.css`**: Design tokens and advanced layout hacks.
 
-Reactive-md documents support:
+### 2. Viewport Specification (DSL)
+Establish the "Reality" in the first line of the code fence:
+` ```jsx live id="stable-name" device=mobile orientation=portrait `
+- **`id`**: **MANDATORY**. Prevents state loss during prose edits. Use kebab-case.
+- **`device`**: `mobile` | `tablet` | `desktop` | `none` (liquid).
+- **`orientation`**: `portrait` | `landscape`.
+- **`zoom`**: `auto` (default) | `fill` (stretch) | `none` (1:1).
 
-**Two Preview Modes:**
-1. **Markdown Preview**: Offline, bundled packages only, server-side rendering
-2. **Interactive Preview** (`Cmd+K P`): Browser-based webview, supports CDN packages and platform APIs
+### 3. Styling Logic (The Container First Rule)
+- **PROHIBITED**: Standard Media Queries (`md:`, `lg:`) and `vw`/`vh` units. They break during emulation.
+- **REQUIRED**: **Container Queries** (`@md:`, `@lg:`) and Container Units (`cqw`, `cqh`). Use them for everything responsive.
+- **Native CSS**: Supported via `css live` or imported files. Use for "UI Grid" precision.
 
-**Interactive Fences (CRITICAL):**
+## The Integrity Checklist (The Senior's Pass)
 
-**When to use `live` modifier:**
-- User wants to **see/interact** with the component
-- Creating a working demo or prototype
-- Showing how something works in practice
-- All primary use cases (prototypes, concept exploration, specs, wireframes, demos)
+Before delivering, run this mental audit:
+1.  **Is it resilient?** Do exported components have full default props? (Ensures stability when previewed directly in Gallery Mode).
+2.  **Is it stable?** Is there a stable `id` on the main interactive fence?
+3.  **Is it clean?** Are all helper components defined **BEFORE** the `export default` in sidecar files?
+4.  **Is it local?** No external CDNs. Only use bundled packages (Lucide, Motion, etc.).
+5.  **Is it narrated?** Does the prose explain the *intent* of the prototype or the screen that is being designed?
 
-**When to use regular fences (no `live`):**
-- Explaining **how** something works (discourse about the code)
-- Showing anti-patterns or broken examples
-- Comparing different approaches side-by-side
-- Code snippets that are incomplete or won't run standalone
+### Styling Strategy
+Reactive MD supports both native CSS and Tailwind CSS (v4) in both preview modes.
+- **Logical Reality**: Always use **Container Queries** (`@md:`) instead of Media Queries (`md:`). Elements respond to the emulated frame size, not the global window.
+- **Native CSS**: Supported via `css live` fences or imported `.css` files. Use for advanced UI iteration and fine-grained layout control.
+- **Tailwind v4**: Available out-of-the-box. Use the `@` prefix for responsive variants (e.g., `@md:grid-cols-2`, `@lg:p-8`).
+- **Orientation Variants**: Use `@landscape:` and `@portrait:` for responsive layouts that adapt to emulated device rotation.
 
-**Syntax:**
-- `` ```jsx live `` - JavaScript + JSX components (executable)
-- `` ```tsx live `` - TypeScript + JSX components (executable)
-- `` ```css live `` - CSS stylesheets (executable)
-- `` ```jsx `` - Code examples for discussion (non-executable)
-- `` ```tsx `` - Code snippets for illustration (non-executable)
-- `` ```css `` - CSS snippets for illustration (non-executable)
+## Authoring Reference
 
-**Modifiers & Anchors:**
-- **`id="stable-name"`** - Prevents a **Component Refresh** (reload) when editing the surrounding narrative. Essential for maintaining state while writing.
-- **`device="mobile"`** - Sets the initial emulation viewport (also `tablet`, `desktop`).
-- **`orientation="portrait"`** - Sets the initial rotation: `portrait` or `landscape`.
-- **`lock-view`** - Standalone flag to strictly enforce DSL viewport settings.
+### Fence Specification & Anchors
+` ```jsx live [id] [device] [orientation] [zoom] [mid] [lock-view] `
 
-**For Anti-Patterns and Discourse:**
-When showing anti-patterns or broken examples in documentation, wrap the code fence in markdown backticks to prevent execution:
+| Anchor | Type | Principle |
+| :--- | :--- | :--- |
+| **`id="stable-id"`** | string | **Stability**. Prevents app-remount on prose edits. Essential for forms/state. |
+| **`device="mobile"`** | enum | **Context**. Targets `mobile`, `tablet`, `desktop`. Default is `none` (liquid). |
+| **`orientation="landscape"`** | enum | **Perspective**. Sets rotation. Triggers `@landscape` CSS variants. |
+| **`zoom="fill"`** | enum | **Presentation**. `auto` is default; `fill` expands to sidebar width. |
+| **`lock-view`** | flag | **Intent**. Standardizes UI by hiding manual emulator controls. |
 
-````markdown
-<!-- ❌ Wrong: Top-level JSX with imports doesn't work -->
-```jsx live
-import Card from './Card.jsx';
-<Card />
-```
-````
+### Visual Storytelling Rules
+- **Non-Executable Discourse**: For anti-patterns or broken code, wrap regular fences in markdown backticks.
+- **Library Discipline**: Sidecars are libraries, not just snippets. Export multiple components to be composed in the `spec.md`. 
+- **Preview Resilience**: Always use **default props** for presentation components. This ensures that when you open the sidecar file directly, every component is previewable in **Gallery Mode** without crashing.
+- **The Ideal Fence**: Import complex UI from your sidecars; keep the fence under 10 lines of "glue code."
+- **Import Patterns**:
+  - `import './styles.css'` (Native CSS)
+  - `import data from './data.json' with { type: 'json' }` (Mock Data)
+  - `import { motion } from 'motion/react'` (Animation)
 
-This clearly signals the wrapped code fence is for **illustration only** (showing what NOT to do), not for execution.
-
-**The correct `jsx live` pattern** always imports and wraps JSX in a component function:
-```jsx live
-import { useState } from 'react';
-import Card from './references/recipes/feature-spec/proto-kit.jsx';
-
-function Demo() {
-  return <Card />;
-}
-```
-
-**Default behavior:** When in doubt, use `live` - reactive-md's purpose is interactive demos.
-
-**File Types:**
-- **Markdown (`.md`)** - Primary document only (entry point for preview)
-- **JSX/TSX (`.jsx`, `.tsx`)** - Primary viewable OR dependent (can be imported)
-- **Logic & Utils (`.js`, `.mjs`, `.ts`)** - Dependent only (logic/utilities imported by components)
-- **CSS (`.css`)** - Dependent only (imported by JSX or via `css live` fences)
-- **JSON (`.json`)** - Dependent only (imported by JSX/TSX)
-
-**Hot Module Reload:** Edit any file → preview updates automatically
-
-**Import Patterns (Where and How):**
-- **In `.jsx`/`.tsx` files or `jsx live` fences:** Use `import './style.css'` or `import data from './data.json' with { type: 'json' }`
-- **In `.css` files or `css live` fences:** Use `@import './other.css'`
+## Boundaries & Refusals
+- **No CDNs**: Refuse `axios`, `swr`, `recharts`, or external scripts. Use native `fetch` and bundled registry.
+- **No DevOps**: Refuse Docker, deployment, or database setup.
+- **Scoped Prototypes**: Steer complex "Full-App" requests toward high-fidelity User Flows and interactive specs.
 
 ## Technical Integrity Checklist
 
 Before delivering, ensure:
-1.  **Pathing**: Are all local imports using absolute-relative paths (e.g., `./proto-kit.jsx`)?
-2.  **Sidecars**: Has logic/UI exceeding 30 lines been extracted to a sidecar file? (Follow the "Project Folder" model).
-3.  **Single Entry Point**: Does the `live` fence have exactly one primary component or top-level JSX element to render? (Consult **GUIDE.md** for sidecar library discipline and export rules).
-4.  **Preview Safety**: Do exported sidecar components have default prop values? (Ensures the **Interactive Preview** doesn't crash with "Minified React error #130" when rendering components in standalone Gallery mode without parent data).
-5.  **Stable ID (Optional)**: If the component has interactive state (forms, filters), does the fence have a stable `id="..."` to prevent state loss during narrative edits?
-
+1.  **Pathing**: All local imports use absolute-relative paths (e.g., `./proto-kit.jsx` or `./idea-kit.jsx`).
+2.  **Sidecars**: Logic/UI exceeding 30 lines is extracted to a sidecar file.
+3.  **Single Entry Point**: The `live` fence has exactly one primary component function or top-level element.
+4.  **Helper Placement**: Non-exported helper components in sidecar files are defined **BEFORE** the `export default`.
+5.  **Preview Safety**: Exported components provide default prop values to prevent rendering crashes in standalone gallery view.
+6.  **Stable ID**: Fences with state (forms, filters) must have a stable `id="..."`.
 
 ## Package & Data Reference (Offline Registry)
 
-The following libraries are available **offline** in both preview modes:
-- **Icons & Motion**: `lucide-react`, `@heroicons/react`, `motion/react`.
-- **State & Logic**: `zustand`, `jotai`, `react-hook-form`, `uuid`.
-- **Utilities**: `dayjs`, `es-toolkit`, `clsx`, `tailwind-merge`, `class-variance-authority`.
+The following libraries are available **offline** (no CDN required) in both previews:
 
-### Remote Data Pattern
-Always initialize state with defaults for **Markdown Preview** SSR compatibility.
+| Category | Packages |
+| :--- | :--- |
+| **Motion** | `motion/react` (exported as `motion`) |
+| **Icons** | `lucide-react`, `@heroicons/react` |
+| **State** | `zustand`, `jotai`, `react-hook-form` |
+| **Logic** | `es-toolkit`, `dayjs`, `uuid` |
+| **Styles** | `clsx`, `tailwind-merge` (`twMerge`), `class-variance-authority` (`cva`) |
 
-```jsx live id="data-fetcher"
-import { useState, useEffect } from 'react';
-import { Display, LoadingState } from './references/recipes/feature-spec/proto-kit.jsx';
+### Rule: No External CDNs
+Prototypes are local-first. Refuse requests for `recharts`, `axios`, `swr`, or `react-query`. Use native `fetch()` and SVG/Tailwind for visualizations (refer to `chart-components.jsx`).
 
-function DataDemo() {
-  const [data, setData] = useState(null);
-  useEffect(() => {
-    fetch('https://api.example.com/data').then(r => r.json()).then(setData);
-  }, []);
-  return <div>{data ? <Display data={data} /> : <LoadingState />}</div>;
-}
-```
+## Workflow: The "Project Folder" Model
 
-## Styling
-Reactive MD uses a `container-first` styling system:
+Treat every literate doc as a **Hub-and-Spoke** system.
 
-- **Tailwind v4 (Primary)**: Standard utility classes + Container Query variants.
-- **CSS Context (`css live`)**: Use for document-wide custom properties or brand tokens. Apply these to subsequent components via semantic classes.
-- **Sidecar CSS**: For complex, component-specific styles (import in `.jsx`).
+1.  **The Hub (`spec.md`)**: Narrative-driven entry point.
+2.  **The Spokes**: `.jsx`, `.css`, and `.json` sidecars for implementation.
 
-### Rule #1 (The Responsive Root)
-Reactive MD uses a **Logical Truth** model where components respond to their *emulated device size* rather than the global IDE window.
-
-1.  **Automated Containment**: You do **not** need to manually add `@container` or `container-type: size`. The `ViewportFrame` provides this automatically for every component.
-2.  **Container Queries**: Use the Tailwind `@` prefix for all responsive variants (e.g., `@md:grid-cols-2`, `@lg:p-12`). These respond to the emulated frame size.
-3.  **Forbidden**: Do NOT use standard Media Query variants (e.g., `md:`, `lg:` in Tailwind) as they target the entire IDE window and ignore emulation settings.
-
-
-## File Organization: The "Project Folder" Model
-
-Treat every literate doc as a hub-and-spoke system.
-
-- **The Hub**: A clean `.md` narrative that explains the "Why" and "How."
-- **The Spokes**: Sidecar `.jsx`, `.css`, and `.json` files for implementation details.
-- **Extraction Rule**: If a component or logic fence exceeds **30 lines**, extract it to a sidecar file.
-
-### Multi-File Architecture
-Always prefer a structured project folder approach for non-trivial tasks (anything requiring more than one component).
-
-**Example structure:**
+**Multi-File Architecture (Example):**
 ```
 feature-name/
-  spec.md              (The Hub: Narrative + High-level Demo)
-  component-name.jsx   (The Spoke: Implementation)
-  styles.css           (The Spoke: Custom styles/tokens)
-  data.json            (The Spoke: Mock data)
+  spec.md              <- Narrative explaining "Why" and "How"
+  idea-kit.jsx         <- Implementation library (Shared across fences)
+  styles.css           <- Design system tokens and brand CSS
+  data.json            <- Mock payload for prototypes
 ```
 
-**Workflow:**
-1.  **Analyze**: Determine the core components and data structures needed to narrate the story effectively.
-2.  **Scaffold**: Create the sidecar files (`.jsx`, `.css`, `.json`) first.
-3.  **Narrate**: Write the primary `.md` file, importing the components into live fences.
-4.  **Stable Identity**: ALWAYS use `id="unique-string"` in fences that have interactive state (forms, filters) to prevent unmounting during narrative edits.
-
+## Boundaries & Refusals
+- **Infrastructure**: Refuse requests for Docker, CI/CD, databases, or real-time WebSockets.
+- **Complexity**: If a user asks for a full-scale app, steer them toward a high-fidelity "Literate Prototype" that demonstrates the core user flows and UX intent rather than full system implementation.
 
 ## Examples
-
-**Read example files in [references/recipes/](references/recipes/) to see how to write functional live docs:**
-
-- **[references/recipes/feature-spec/](references/recipes/feature-spec/)** - Product specification with working components and edge case handling
-- **[references/recipes/a-b-test-proposal/](references/recipes/a-b-test-proposal/)** - A/B test methodology with business metrics and comparison widget
-- **[references/recipes/visual-essays/](references/recipes/visual-essays/)** - Data journalism, market research, and visual storytelling using SVG charts and matrices
-- **[references/recipes/user-flow/](references/recipes/user-flow/)** - Multi-step flows with validation, error handling, and success states
-- **[references/recipes/dark-mode-toggle/](references/recipes/dark-mode-toggle/)** - Multi-file imports, external `.jsx` and `.css` files
-- **[references/recipes/notification-system/](references/recipes/notification-system/)** - Multi-component architecture, folder organization
-- **[references/recipes/data-loading/](references/recipes/data-loading/)** - JSON imports and API fetch patterns
-
-## Boundaries & Refusals (CRITICAL)
-
-### Unsupported Libraries (Pre-Bundled Only)
-Reactive MD uses a pre-bundled library model (no external CDNs). Do NOT attempt to import or use these packages as they are not available in the offline registry:
-- `recharts`: Not bundled. Use SVG/Tailwind for custom charts (see `chart-components.jsx`).
-- `swr`: Not bundled. Use standard `fetch()` + `useState`.
-- `@tanstack/react-query`: Not bundled. Use `zustand` for state management.
-- `axios`: Not bundled. Use native `fetch()`.
-
-### Infrastructure
-Refuse requests for deployment, Docker, databases, or real-time WebSockets. Prototypes are client-side only (local persistence via `localStorage` is okay).
+Refer to these recipes for pattern matching:
+- **[A/B Test Proposal](references/recipes/a-b-test-proposal/spec.md)**: Compare components with business metrics.
+- **[Fidelity Audit](references/recipes/fidelity-audit/spec.md)**: Test responsive boundaries and safe areas.
+- **[Visual Essays](references/recipes/visual-essays/spec.md)**: Narrative storytelling with SVG charts.
+- **[Multi-File Imports](references/recipes/notification-system/spec.md)**: Complex component organization.
 

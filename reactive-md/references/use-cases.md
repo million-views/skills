@@ -72,15 +72,15 @@ Use these workflows to understand where reactive-md excels.
 ### 6. Audit Design Fidelity
 
 **The Job**: Verify that components are responsive and look exactly as intended across different device viewports.
-  > Prove your implementation works on the target device, not just your monitor.
+  > Prove your implementation works on the target device, regardless of your workspace layout.
 
 **Workflow**:
-1. Wrap your component in a `@container`.
-2. Use the `device` and `orientation` modifiers to test specific hardware viewports.
-3. Validate that `@container` queries trigger correctly at the logical boundaries.
-4. Use the [Fidelity Audit recipe](./recipes/fidelity-audit/spec.md) to inspect precise dimensions and safe areas.
+1. Use **Hardware Emulation** presets (`device=mobile`, `mid=iphone-15-pro`) to establish the **Logical Truth** of the viewport.
+2. Leverage the **Steadycam Engine** to see the scaled view in your sidebar without layout reflow.
+3. Use **Container Queries** (`@md:`, `@lg:`) to validate responsive boundaries.
+4. Verify exact typography and pixel alignment using the **1:1 Native Zoom** toggle.
 
-*tags: fidelity, audit, mobile, responsive, testing*
+*tags: fidelity, audit, mobile, hardware-emulation, testing*
 
 ### 7. Narrative & Data Storytelling
 
@@ -98,14 +98,14 @@ Use these workflows to understand where reactive-md excels.
 
 ### 8. Communicate Ideas Asynchronously
 
-**The Job**: Share working prototypes with your team without meetings.
-  > Iterate faster through version-controlled markdown.
+**The Job**: Share working prototypes that are easy to navigate and review.
+  > Iterate faster through version-controlled markdown and interactive feedback loops.
 
 **Workflow**:
-1. Create a markdown file with your idea, mockups, and interactive demo
-2. Commit to version control with clear commit messages
-3. Share the file with your team for feedback
-4. Iterate based on feedback without context-switching
+1. Draft your narrative in `spec.md` accompanied by linked implementations in sidecar files.
+2. Use **Navigation & Focus** (Cursor Sync) to ensure reviewers can jump instantly from a UI element in the preview back to its location in the source code.
+3. Commit to version control; teammates can run the spec locally with identical high-fidelity results.
+4. Use the **Sovereign Reset** to ensure styles are consistent across all developer environments.
 
-*tags: communication, async, collaboration, prototyping*
+*tags: communication, async, collaboration, navigation*
 
