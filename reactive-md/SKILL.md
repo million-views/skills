@@ -3,7 +3,7 @@ name: reactive-md
 description: Literate UI/UX for product teams - accelerate from idea to working prototype in minutes using markdown with embedded interactive React components. Use for fast iteration and async collaboration on product specs, wireframes, user flows, feature demos, and design documentation. Replaces static documentation and handoff tools (like Figma or Storybook) with executable specs in version control.
 license: MIT
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   author: million-views (https://m5nv.com)
 ---
 
@@ -27,6 +27,7 @@ Use this skill when the user mentions:
 - **Interactive Demos**: "Build a clickable mockup...", "Prototype the login flow..."
 - **Fidelity Audits**: "Check the responsive behavior of...", "Audit the mobile UI..."
 - **Living Docs**: "Create a component gallery...", "Document this design system..."
+- **Publishing / Sharing**: "Publish this to the web...", "Share this with the client...", "Deploy this prototype..."
 
 ---
 
@@ -90,9 +91,20 @@ Reactive MD supports both native CSS and Tailwind CSS (v4) in both preview modes
   - `import data from './data.json' with { type: 'json' }` (Mock Data)
   - `import { motion } from 'motion/react'` (Animation)
 
+### 4. Publishing (`reactiveMd.publish`)
+
+When a user asks to share or publish a prototype, guide them through the built-in publish workflow rather than any external tooling.
+
+- **`Reactive MD: Publish`**: builds the site and deploys to their VPS over SSH. Prompts for slug and access model on first run; subsequent publishes are one-click.
+- **`Reactive MD: Preview Published Output`**: build-only, opens result in the browser. Recommend this before the first deploy.
+- **Access model**: Public (`/{slug}/`) or Protected (`/{token}/{slug}/` + browser passphrase gate). Suggest Protected for early-stage client work.
+- **Config file**: `reactive-md.publish.json` in the project folder holds the slug, token, and entry point. Suggest gitignoring it if the passphrase is stored.
+- **Server requirement**: SSH access + any static file server. No nginx config changes. rsync must be available on the client machine (scp fallback otherwise).
+- **Entry detection order**: `entry` field → `main.md` → `index.md` → sole `.md` file → error.
+
 ## Boundaries & Refusals
 - **No CDNs**: Refuse `axios`, `swr`, `recharts`, or external scripts. Use native `fetch` and bundled registry.
-- **No DevOps**: Refuse Docker, deployment, or database setup.
+- **No DevOps**: Refuse Docker, deployment, or database setup. Publishing to the user's **own** VPS via `reactiveMd.publish` is supported and encouraged.
 - **Scoped Prototypes**: Steer complex "Full-App" requests toward high-fidelity User Flows and interactive specs.
 
 ## Technical Integrity Checklist
