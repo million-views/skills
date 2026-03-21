@@ -114,6 +114,7 @@ The following libraries are available **offline** (no CDN required) in both prev
 | **Motion** | `motion/react` (exported as `motion`) |
 | **Icons** | `lucide-react`, `@heroicons/react` |
 | **State** | `zustand`, `jotai`, `react-hook-form` |
+| **Validation** | `zod`, `@hookform/resolvers/zod` (`zodResolver`) |
 | **Logic** | `es-toolkit`, `dayjs`, `uuid` |
 | **Styles** | `clsx`, `tailwind-merge` (`twMerge`), `class-variance-authority` (`cva`) |
 
