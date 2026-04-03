@@ -83,9 +83,12 @@ Reactive MD supports both native CSS and Tailwind CSS (v4) in both preview modes
 
 ### Visual Storytelling Rules
 - **Non-Executable Discourse**: For anti-patterns or broken code, wrap regular fences in markdown backticks.
-- **Library Discipline**: Sidecars are libraries, not just snippets. Export multiple components to be composed in the `spec.md`. 
+- **Library Discipline**: Sidecars are libraries, not just snippets. Export multiple components to be composed in the `spec.md`.
 - **Preview Resilience**: Always use **default props** for presentation components. This ensures that when you open the sidecar file directly, every component is previewable in **Gallery Mode** without crashing.
 - **The Ideal Fence**: Import complex UI from your sidecars; keep the fence under 10 lines of "glue code."
+- **Fence Entry Patterns**: A fence can have multiple top-level components. The entry is identified by `export default` (preferred) or by convention — the last top-level PascalCase function. Both patterns are supported:
+  - **Inner functions** (drafting): `function Entry() { function Helper() {...}; return <Helper />; }`
+  - **Explicit export** (production-style): define helpers first, then `export default function Entry() {...}`
 - **Import Patterns**:
   - `import './styles.css'` (Native CSS)
   - `import data from './data.json' with { type: 'json' }` (Mock Data)
@@ -112,7 +115,7 @@ When a user asks to share or publish a prototype, guide them through the built-i
 Before delivering, ensure:
 1.  **Pathing**: All local imports use absolute-relative paths (e.g., `./proto-kit.jsx` or `./idea-kit.jsx`).
 2.  **Sidecars**: Logic/UI exceeding 30 lines is extracted to a sidecar file.
-3.  **Single Entry Point**: The `live` fence has exactly one primary component function or top-level element.
+3.  **Single Export**: The `live` fence renders one component. Use `export default` to identify it explicitly, or rely on the convention that the last top-level PascalCase function is the entry.
 4.  **Helper Placement**: Non-exported helper components in sidecar files are defined **BEFORE** the `export default`.
 5.  **Preview Safety**: Exported components provide default prop values to prevent rendering crashes in standalone gallery view.
 6.  **Stable ID**: Fences with state (forms, filters) must have a stable `id="..."`.
