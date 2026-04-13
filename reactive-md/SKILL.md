@@ -133,6 +133,64 @@ export function Demo() {
 - **Helper Components**: Non-exported helpers are supported. JavaScript hoisting handles placement.
 - **Library Discipline**: Use named exports for utilities; reserve `export default` for the primary "App" component.
 - **Pure Presentation**: Props control all behavior. Components should support flexible prop types (e.g., `period: number | object`) and provide sensible defaults. Never hard-code data inside a reusable component — receive it via props from the Demo fence.
+- **Resilient Defaults**: When a sidecar is opened directly, the extension renders all exports in Gallery Mode with empty props. Always default props that are used as components or iterated over:
+  ```jsx
+  // Fragile — crashes if Icon is undefined
+  export function FeatureIcon({ icon: Icon }) {
+    return <Icon size={24} />;
+  }
+  // Resilient — safe in Gallery Mode
+  export function FeatureIcon({ icon: Icon = () => null }) {
+    return <Icon size={24} />;
+  }
+  ```
+
+### 6. Theme & CSS Variables
+
+Use `css live` fences for document-scoped styles. The system injects `--rmd-bg` and `--rmd-fg` variables that adapt to the active VS Code theme — use them to keep components readable in both light and dark modes.
+
+```css live
+:root {
+  --accent: var(--rmd-fg);
+}
+.brand-card {
+  border: 1px solid var(--accent);
+  background: var(--rmd-bg);
+}
+```
+
+### 7. Common Pitfalls
+- **React hooks must be imported explicitly**: `import { useState, useEffect } from 'react'`. The JSX transform is automatic, but hooks are not globals.
+- **Local file access**: Always use ESM `import` for local files (`import data from './data.json'`). Never use `fetch()` for local files.
+- **External APIs**: Wrap `fetch()` calls in `useEffect` so they don't block the Markdown Preview's static render.
+
+---
+
+## Spec Template
+
+When starting a new document, use this skeleton. Adapt the sections to the use case — a feature spec needs edge cases, a visual essay needs data narratives, a fidelity audit needs device comparisons.
+
+````markdown
+# Feature Name
+
+## The Problem
+What user problem does this solve? Why does it matter?
+
+## Interactive Demo
+```jsx live id="main-demo" device=mobile
+import { Feature } from './proto-kit.jsx';
+
+export function Demo() {
+  return <Feature />;
+}
+```
+
+## Edge Cases
+Showcase loading, empty, and error states in separate fences.
+
+## Decision
+Summarize the recommendation and next steps.
+````
 
 ---
 
