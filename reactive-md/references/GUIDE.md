@@ -11,8 +11,8 @@ To use Reactive MD effectively, a document architect must distinguish between th
 
 ### Code Fence Modes
 The system distinguishes between **interactive prototypes** and **static examples** based on the fence info string:
-- **`jsx live` / `css live`**: Code that is utilized to render a React component in both preview modes.
-- **`jsx` / `css` / `json`**: Static syntax highlighting only. Use these for snippets that shouldn't be executed.
+- **`jsx live` / `tsx live` / `css live`**: Code that is utilized to render a React component in both preview modes.
+- **`jsx` / `tsx` / `css` / `json`**: Static syntax highlighting only. Use these for snippets that shouldn't be executed.
 
 ## The Literate Prototype
 
@@ -46,29 +46,14 @@ my-prototype/
 ```
 
 ### 2. Markdown Code Fences
-Each `jsx live` fence is treated as a standalone component.
-- **One Component per Fence**: Define exactly one primary component to be the entry point for the fence.
-- **Scope Helpers**: If you need small helper components, define them **inside** your main component function to keep your fence focused on a single, clear entry point.
+Each `jsx live` fence renders one exported component.
+- **One Export per Fence**: A fence can define multiple top-level functions, but exactly one should be the entry point. The entry is determined by `export default` if present; otherwise the last PascalCase function in the fence is used.
 - **The 30-Line Rule**: If a `live` fence exceeds 30 lines of code, extract the implementation to a sidecar file and `import` it.
 
-#### Example: The Ideal Fence (Reference)
-Keep your narrative focused on the "Why." Move complex UI logic and large blocks of CSS/Tailwind into external files.
+There are two styles for organizing fences with helpers. Use whichever feels natural:
 
-```jsx live
-import { TicketList } from './lib/ui/TicketList.jsx';
-
-// The fence just provides the context/usage
-function Demo() {
-  return (
-    <div className="p-8 bg-slate-50">
-      <TicketList limit={5} />
-    </div>
-  );
-}
-```
-
-#### Example: The Iterative Fence (Drafting)
-When rapidly prototyping a concept *within* the document, keep helpers scoped inside your main entry point. Once the design stabilizes, move them to a sidecar file.
+#### Pattern A: Inner Functions
+Helpers scoped inside the entry component. Great for rapid drafting — the entry point is self-evident.
 
 ```jsx live
 function PricingStory() {
@@ -86,11 +71,45 @@ function PricingStory() {
 }
 ```
 
+#### Pattern B: Top-Level Helpers with `export default`
+Helpers defined at the top level, entry component marked with `export default`. Reads more like production code.
+
+```jsx live
+function Badge({ children }) {
+  return <span className="bg-blue-100 px-2 py-1 rounded">{children}</span>;
+}
+
+export default function PricingStory() {
+  return (
+    <div className="flex flex-col gap-4">
+      <h3>Professional Plan <Badge>Recommended</Badge></h3>
+      <p>The perfect choice for growing teams.</p>
+    </div>
+  );
+}
+```
+
+#### Example: The Ideal Fence (Reference)
+Keep your narrative focused on the "Why." Move complex UI logic and large blocks of CSS/Tailwind into external files.
+
+```jsx live
+import { TicketList } from './lib/ui/TicketList.jsx';
+
+// The fence just provides the context/usage
+function Demo() {
+  return (
+    <div className="p-8 bg-slate-50">
+      <TicketList limit={5} />
+    </div>
+  );
+}
+```
+
 ### 3. External Files (`.jsx` | `.tsx`)
 External files are for shared libraries. They require explicit exports to work with the editor's "Preview" features.
 - **Inline Exports**: Use `export function Component()`. This ensures the **▶ Preview** button appears exactly where you defined the code.
 - **Avoid Tail-End Exports**: Do not place `export default` at the very bottom of a file. This separates the preview controls from the source code.
-- **Helper Components**: When using `export default function`, you can utilize helper components (non-exported functions) defined in the same file. To ensure they are correctly included in the preview, always define these helpers **before** the main `export default` function.
+- **Helper Components**: When using `export default function`, non-exported helper components in the same file are fully supported — placement doesn't matter since JavaScript hoisting handles it.
 - **Library Discipline**: Use named exports for utilities; reserve `export default` for your primary "App" component.
 
 ### 4. Component Resilience (Preview Safety)
@@ -123,7 +142,7 @@ Organize data and logic into sidecar files.
 | **`.css`**  | Shared styles. | `import './theme.css'` (JSX) or `@import './theme.css'` (CSS) |
 | **`.ts`**   | Type-safe logic. | `import { util } from './util.ts'` |
 
-### 5. Recommended Template
+### 6. Recommended Template
 Maintain conceptual integrity across your team by following a standard structure:
 
 ````markdown
@@ -160,6 +179,8 @@ Use these modifiers in the opening fence header (e.g., ` ```jsx live device=mobi
 | **`device`** | Device | General category preset: `mobile`, `tablet`, `desktop`, or **`none`** (Natural Liquid). |
 | **`orientation`**| Viewport | Sets the initial rotation: `portrait` or `landscape`. |
 | **`zoom`** | Viewport | Sets the zoom strategy: `fill`, `auto` (default/capped), or `none` (1:1). |
+| **`lock-view`** | Flag | Hides emulation controls in Interactive Preview, strictly enforcing your header settings. |
+| **`no-placeholder`** | Flag | Suppresses the guidance cards that normally explain why a component isn't rendering. |
 
 > **Precedence**: For device emulation, keywords are resolved in this order: **`mid`** > **`model`** > **`device`**.
 
@@ -171,15 +192,9 @@ If no device modifiers are specified, the system defaults to **`device=none`** (
 
 ### Standard Device Viewports
 Reactive MD uses these logical device dimensions (derived from physical hardware standards):
-- **Mobile (`mobile`)**: 375 × 667 (iPhone SE / Logical Truth)
-- **Tablet (`tablet`)**: 768 × 1024 (iPad Classic / Logical Truth)
-- **Desktop (`desktop`)**: 1920 × 1080 (Desktop HD / Logical Truth)
-
-### Specification Flags
-Flags are standalone keywords added to the fence header (no `=` required).
-
-- **`lock-view`**: Hides emulation controls in Interactive Preview, strictly enforcing your header settings.
-- **`no-placeholder`**: Suppresses the helpful guidance cards that normally explain why a component isn't rendering (such as missing libraries or security restrictions).
+- **Mobile (`mobile`)**: 375 × 667 (iPhone SE)
+- **Tablet (`tablet`)**: 768 × 1024 (iPad Classic)
+- **Desktop (`desktop`)**: 1920 × 1080 (Desktop HD)
 
 
 ## Styling & Visual System
@@ -200,39 +215,31 @@ To ensure your UI responds to the **Logical Truth** of the emulated device size 
 
 - **No manual setup**: You do not need to add `@container` to your root element; the frame itself provides the context.
 - **Hardware Fidelity**: When a specific device model is selected (e.g., `mid=iphone-15-pro`), the system emulates physical hardware features such as the **Dynamic Island**, notches, and safe-area insets.
-- **Support for @ Variants**: Tailwind v4 utilities using the `@` prefix (e.g., `@md:p-8`) will automatically respond to the emulated device viewport. You can even use `@landscape` and `@portrait` variants to target orientation changes.
+- **Container Query Support**: Tailwind v4 container variants (e.g., `@md:p-8`) and native CSS `@container` rules automatically respond to the emulated device viewport. Orientation variants (`@landscape`, `@portrait`) target rotation changes.
 
 ### Technical Truth Scaling (Automated Zoom)
-The system uses a "Zoom, Not Scale" model to ensure both pixel accuracy and ergonomic design:
-- **Logical Truth**: Elements are always rendered at 1:1 scale (1 logical pixel = 1 CSS pixel). This ensures that `@container` queries and media queries calculate correctly.
-- **Visual Zoom**: By default, the entire artifact is "zoomed" visually to fit your sidebar using CSS transforms.
-- **Adaptive Zoom (`auto`)**: This is the default. It automatically shrinks content to fit the available panel width without reflowing, **capping at 1.0x** to preserve pixel-perfect sharpness.
-- **Responsive Fill (`fill`)**: Forces the artifact to stretch to the full width of the panel, regardless of its logical size.
-- **Verification**: If you need to verify exact pixel crispness or typography at native size, use the **1:1** toggle (Zoom: None) in the header. This may result in horizontal scrolling but preserves literal fidelity.
+Components always render at 1:1 scale so `@container` queries calculate correctly against the emulated device dimensions. The entire artifact is then zoomed to fit your sidebar via CSS transforms:
+- **Adaptive Zoom (`auto`)**: Default. Shrinks to fit the panel width, capped at 1.0× to preserve pixel-perfect sharpness.
+- **Responsive Fill (`fill`)**: Stretches to the full panel width regardless of logical size.
+- **1:1 (Zoom: None)**: Use the toggle in the header to verify exact pixel crispness. May cause horizontal scrolling.
 
 ### Zero-Clipping Physics
 To prevent the common "right-edge clipping" issues found in standard markdown previews, Reactive MD injects a mandatory **2px "Environmental Air"** buffer around your prototypes. This ensures that focused borders, shadows, and sub-pixel details are never cut off by the container walls.
 
-### 1. Styling Strategy: Native CSS & Tailwind
-Reactive MD is styling-neutral. Whether you are a master of design system precision (Pure CSS) or a master of utility speed (Tailwind), the system ensures your prototypes remain high-fidelity in both **Markdown** and **Interactive** previews.
+### Styling Strategy: Native CSS & Tailwind
+Reactive MD is styling-neutral and **Container-First**. Components respond to the emulated device dimensions (Logical Truth), not the VS Code window. This means you must use **Container Queries** instead of standard media queries.
 
-#### The Concept: Logical vs. Literal Truth
-High-fidelity prototyping in a side-panel environment like VS Code requires a choice between two "Truths":
+Standard media queries — and Tailwind's unprefixed responsive variants (`md:`, `lg:`, `sm:`) — target the global VS Code window and **will not respond** to device presets.
 
-- **Literal Truth (Standard Media Queries)**: These queries respond to the standard browser window. In Reactive MD, this means they respond to the entire VS Code application window. This is "Literally" true to the browser, but it's useless for testing how a component behaves inside a specific mobile device.
-- **Logical Truth (Container Queries)**: These queries respond to the *immediate container* of the component (the emulated device). This ensures that a component set to "Mobile" always triggers the correct mobile styles, even if your VS Code window is 4000 pixels wide.
+**Tailwind v4**: Use the `@` prefix for responsive container variants. These respond to the emulated device frame, not the window.
+- `@md:grid-cols-2`, `@lg:p-8` (container-aware)
+- `@landscape:flex-row`, `@portrait:flex-col` (orientation-aware)
 
-**Reactive MD is designed for Logical Truth.**
+**Native CSS**: Use `@container` rules and container units (`cqw`, `cqh`) instead of `@media` and viewport units (`vw`, `vh`).
+- `@container (min-width: 768px) { ... }` (container-aware)
+- `@container (orientation: landscape) { ... }` (orientation-aware)
 
-- **Native CSS (The Design System Way)**: For architects building custom design systems, Native CSS is a first-class citizen. Use `css live` fences or imported `.css` files to refine the "UI Grind" with precise control. All Reactive MD emulation features (safe areas, device presets) are available via standard CSS properties and Container Queries.
-- **Tailwind v4 (The Utility Way)**: For rapid iteration, Tailwind v4 is available out-of-the-box. Use standard utility classes directly in your JSX.
-- **Container Queries (The Golden Standard)**: Regardless of your chosen engine, Reactive MD is a **Container-First** environment.
-  - In **CSS**: Use `@container (min-width: ...)` to respond to the emulated frame.
-  - In **Tailwind**: Use the `@` prefix for responsive variants (e.g., `@md:p-8`, `@lg:grid-cols-2`).
-- **Orientation Variants**: The system provides custom hooks for orientation change. For Tailwind, use `@landscape:flex-row`. For CSS, the `physical-viewport` element is attribute-tagged for orientation-specific styling.
-- **Avoid standard Media Queries**: Media queries (and Tailwind's `md:`, `lg:` variants) target the global VS Code window and will not respond to emulated device presets.
-
-### 2. The CSS Context (`css live`)
+### The CSS Context (`css live`)
 Use `css live` fences to define document-specific styles, such as custom properties or unique brand tokens. These styles apply to every subsequent component in the document.
 
 - **Theme-Aware Variables**: The system automatically injects CSS variables that adapt to the active VS Code theme. Use `--rmd-bg` and `--rmd-fg` to ensure your components remain readable in both light and dark modes.
@@ -247,14 +254,14 @@ Use `css live` fences to define document-specific styles, such as custom propert
 }
 ```
 
-### 3. External Stylesheets
+### External Stylesheets
 For larger design systems, move your CSS to external `.css` files. These can then be imported in either `jsx` or `css` live fences as below:
 - **In JSX**: `import './theme.css';`
 - **In CSS Fences**: `@import './theme.css';`
 
 ## The Library Ecosystem
 
-Reactive MD is designed to work **100% offline**. To ensure high performance and zero configuration, a curated selection of the most popular libraries is pre-bundled directly into the extension's Tier 2 registry.
+Reactive MD is designed to work **100% offline**. To ensure high performance and zero configuration, a curated selection of the most popular libraries is pre-bundled directly into the extension.
 
 ### Pre-bundled Libraries (Available Offline)
 The following libraries are available in both **Markdown Preview** and **Interactive Preview**. They are maintained at their latest stable versions for full compatibility:
@@ -262,6 +269,7 @@ The following libraries are available in both **Markdown Preview** and **Interac
 - **Animation**: `motion/react` (Framer Motion).
 - **Iconography**: `lucide-react`, `@heroicons/react`.
 - **State & Logic**: `zustand`, `jotai`, `react-hook-form`, `uuid`.
+- **Validation**: `zod`, `@hookform/resolvers/zod` (use `zodResolver` with `react-hook-form` for schema-driven forms).
 - **Utilities**: `dayjs`, `es-toolkit`, `clsx`, `tailwind-merge`, `class-variance-authority` (cva).
 
 ### How to use
@@ -322,6 +330,14 @@ Reactive MD includes a robust diagnostic framework to help you debug prototypes 
 - **High-Fidelity Error Cards**: If a component fails to render due to a library error or security restriction, instead of a blank screen, you'll see a branded diagnostic card providing clear instructions on how to fix it.
 - **Blank Animation Detection**: If your component is blank because it's waiting for an animation that only triggers in Interactive Preview, the Markdown Preview will provide a helpful hint to switch views.
 - **Safety Precedence**: Critical errors (like syntax mistakes) will always break through "hidden" states (like `no-placeholder`) to ensure you never lose visibility into the system's state.
+
+## Deploying Your Prototype
+
+Once your prototype is ready, deploy it to your own server with a single command.
+See **[DEPLOY.md](./DEPLOY.md)** for the complete guide — server setup, SSH configuration,
+project config, access control, and static site publishing.
+
+---
 
 ## Troubleshooting
 

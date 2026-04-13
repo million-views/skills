@@ -76,7 +76,7 @@ Use these workflows to understand where reactive-md excels.
 
 **Workflow**:
 1. Use **Hardware Emulation** presets (`device=mobile`, `mid=iphone-15-pro`) to establish the **Logical Truth** of the viewport.
-2. Leverage the **Steadycam Engine** to see the scaled view in your sidebar without layout reflow.
+2. Leverage the **Visual Zoom** system to see the scaled view in your sidebar without layout reflow.
 3. Use **Container Queries** (`@md:`, `@lg:`) to validate responsive boundaries.
 4. Verify exact typography and pixel alignment using the **1:1 Native Zoom** toggle.
 

@@ -17,7 +17,7 @@ To reach senior-level expertise in Literate UI/UX, follow these three non-negoti
 
 1.  **The Document is the Product**: Your markdown is not just documentation; it is a functional prototype. If the code is messy, the design is considered unverified.
 2.  **Logical Truth over Literal Appearance**: Never design for the "now" (what you see in your sidebar). Design for the "target" (the emulated device). Use **Container Queries** exclusively.
-3.  **Clean Spines, Rich Sidecars**: Keep the primary `.md` file (The Spine) focused on the narrative "Why." Move the "How" (implementation details) into sidecar `.jsx` files.
+3.  **Clean Spines, Rich Sidecars**: Keep the primary `.md` file (The Spine) focused on the narrative "Why." Move the "How" (implementation details) into sidecar `.jsx`/`.tsx` files.
 
 ## Primary Use Cases & Triggers
 
@@ -27,7 +27,6 @@ Use this skill when the user mentions:
 - **Interactive Demos**: "Build a clickable mockup...", "Prototype the login flow..."
 - **Fidelity Audits**: "Check the responsive behavior of...", "Audit the mobile UI..."
 - **Living Docs**: "Create a component gallery...", "Document this design system..."
-- **Publishing / Sharing**: "Publish this to the web...", "Share this with the client...", "Deploy this prototype..."
 
 ---
 
@@ -37,88 +36,119 @@ Use this skill when the user mentions:
 Always treat a project as a multi-file system.
 - **`spec.md`**: The narrative entry point. Start here. Use prose to set the stage.
 - **Sidecar Libraries**: Implementation modules (e.g., `proto-kit.jsx`, `idea-kit.jsx`). Use these as shared libraries to serve multiple fences across your document. Extract logic here if a fence exceeds 30 lines.
-- **`styles.css`**: Design tokens and advanced layout hacks.
+- **`styles.css`**: Design tokens and advanced layout.
+
+**Flat structure** (simple projects, few components):
+```
+feature-name/
+  spec.md              <- Narrative explaining "Why" and "How"
+  proto-kit.jsx        <- Implementation library (shared across fences)
+  styles.css           <- Design system tokens and brand CSS
+  data.json            <- Mock payload for prototypes
+```
+
+**Nested structure** (larger projects, many components):
+```
+feature-name/
+  spec.md              <- Narrative (prose + live demos)
+  lib/ui/              <- Components >100 lines or reused across fences
+    Component.jsx
+  data/                <- Mock data, fixtures
+    sample.json
+  styles.css           <- Design tokens
+```
+
+**Extraction thresholds:**
+- **<50 lines, single-use**: Keep inline in the fence.
+- **>30 lines in a fence**: Extract to a top-level sidecar (e.g., `proto-kit.jsx`).
+- **>100 lines, reused, or complex logic**: Promote to `lib/ui/`.
 
 ### 2. Viewport Specification (DSL)
-Establish the "Reality" in the first line of the code fence:
+Establish the "Reality" in the fence info string:
 ` ```jsx live id="stable-name" device=mobile orientation=portrait `
-- **`id`**: **MANDATORY**. Prevents state loss during prose edits. Use kebab-case.
-- **`device`**: `mobile` | `tablet` | `desktop` | `none` (liquid).
-- **`orientation`**: `portrait` | `landscape`.
-- **`zoom`**: `auto` (default) | `fill` (stretch) | `none` (1:1).
 
-### 3. Styling Logic (The Container First Rule)
-- **PROHIBITED**: Standard Media Queries (`md:`, `lg:`) and `vw`/`vh` units. They break during emulation.
-- **REQUIRED**: **Container Queries** (`@md:`, `@lg:`) and Container Units (`cqw`, `cqh`). Use them for everything responsive.
-- **Native CSS**: Supported via `css live` or imported files. Use for "UI Grid" precision.
-
-## The Integrity Checklist (The Senior's Pass)
-
-Before delivering, run this mental audit:
-1.  **Is it resilient?** Do exported components have full default props? (Ensures stability when previewed directly in Gallery Mode).
-2.  **Is it stable?** Is there a stable `id` on the main interactive fence?
-3.  **Is it clean?** Are all helper components defined **BEFORE** the `export default` in sidecar files?
-4.  **Is it local?** No external CDNs. Only use bundled packages (Lucide, Motion, etc.).
-5.  **Is it narrated?** Does the prose explain the *intent* of the prototype or the screen that is being designed?
-
-### Styling Strategy
-Reactive MD supports both native CSS and Tailwind CSS (v4) in both preview modes.
-- **Logical Reality**: Always use **Container Queries** (`@md:`) instead of Media Queries (`md:`). Elements respond to the emulated frame size, not the global window.
-- **Native CSS**: Supported via `css live` fences or imported `.css` files. Use for advanced UI iteration and fine-grained layout control.
-- **Tailwind v4**: Available out-of-the-box. Use the `@` prefix for responsive variants (e.g., `@md:grid-cols-2`, `@lg:p-8`).
-- **Orientation Variants**: Use `@landscape:` and `@portrait:` for responsive layouts that adapt to emulated device rotation.
-
-## Authoring Reference
-
-### Fence Specification & Anchors
-` ```jsx live [id] [device] [orientation] [zoom] [mid] [lock-view] `
-
-| Anchor | Type | Principle |
+| Modifier | Type | Principle |
 | :--- | :--- | :--- |
-| **`id="stable-id"`** | string | **Stability**. Prevents app-remount on prose edits. Essential for forms/state. |
+| **`id="stable-id"`** | string | **Stability**. Prevents component remount on prose edits. Essential for forms/state. Use kebab-case. |
 | **`device="mobile"`** | enum | **Context**. Targets `mobile`, `tablet`, `desktop`. Default is `none` (liquid). |
+| **`mid="iphone-15-pro"`** | string | **Hardware Fidelity**. Specific Model ID for exact viewport and safe-area emulation. |
+| **`model="iPhone 14"`** | string | **Fuzzy Match**. Human-readable device name; system finds the closest match. |
 | **`orientation="landscape"`** | enum | **Perspective**. Sets rotation. Triggers `@landscape` CSS variants. |
-| **`zoom="fill"`** | enum | **Presentation**. `auto` is default; `fill` expands to sidebar width. |
-| **`lock-view`** | flag | **Intent**. Standardizes UI by hiding manual emulator controls. |
+| **`zoom="fill"`** | enum | **Presentation**. `auto` (default/capped at 1.0x), `fill` (stretch to sidebar), `none` (1:1). |
+| **`lock-view`** | flag | **Intent**. Hides emulation controls; strictly enforces header settings. |
+| **`no-placeholder`** | flag | Suppresses guidance cards for non-rendering components. |
 
-### Visual Storytelling Rules
-- **Non-Executable Discourse**: For anti-patterns or broken code, wrap regular fences in markdown backticks.
-- **Library Discipline**: Sidecars are libraries, not just snippets. Export multiple components to be composed in the `spec.md`.
-- **Preview Resilience**: Always use **default props** for presentation components. This ensures that when you open the sidecar file directly, every component is previewable in **Gallery Mode** without crashing.
-- **The Ideal Fence**: Import complex UI from your sidecars; keep the fence under 10 lines of "glue code."
-- **Fence Entry Patterns**: A fence can have multiple top-level components. The entry is identified by `export default` (preferred) or by convention — the last top-level PascalCase function. Both patterns are supported:
-  - **Inner functions** (drafting): `function Entry() { function Helper() {...}; return <Helper />; }`
-  - **Explicit export** (production-style): define helpers first, then `export default function Entry() {...}`
-- **Import Patterns**:
-  - `import './styles.css'` (Native CSS)
-  - `import data from './data.json' with { type: 'json' }` (Mock Data)
-  - `import { motion } from 'motion/react'` (Animation)
+> **Precedence**: `mid` > `model` > `device`.
 
-### 4. Publishing (`reactiveMd.publish`)
+> **`id` is mandatory** for any fence with user state (forms, filters, tabs). Always use it.
 
-When a user asks to share or publish a prototype, guide them through the built-in publish workflow rather than any external tooling.
+### 3. Styling Logic (The Container-First Rule)
 
-- **`Reactive MD: Publish`**: builds the site and deploys to their VPS over SSH. Prompts for slug and access model on first run; subsequent publishes are one-click.
-- **`Reactive MD: Preview Published Output`**: build-only, opens result in the browser. Recommend this before the first deploy.
-- **Access model**: Public (`/{slug}/`) or Protected (`/{token}/{slug}/` + browser passphrase gate). Suggest Protected for early-stage client work.
-- **Config file**: `reactive-md.publish.json` in the project folder holds the slug, token, and entry point. Suggest gitignoring it if the passphrase is stored.
-- **Server requirement**: SSH access + any static file server. No nginx config changes. rsync must be available on the client machine (scp fallback otherwise).
-- **Entry detection order**: `entry` field → `main.md` → `index.md` → sole `.md` file → error.
+Reactive MD wraps every component in a containment context (`container-type: size`). Your layout must respond to the **emulated device dimensions**, not the VS Code window.
 
-## Boundaries & Refusals
-- **No CDNs**: Refuse `axios`, `swr`, `recharts`, or external scripts. Use native `fetch` and bundled registry.
-- **No DevOps**: Refuse Docker, deployment, or database setup. Publishing to the user's **own** VPS via `reactiveMd.publish` is supported and encouraged.
-- **Scoped Prototypes**: Steer complex "Full-App" requests toward high-fidelity User Flows and interactive specs.
+- **PROHIBITED**: Standard media queries and viewport units. In Tailwind, this means `md:`, `lg:`, `sm:` (no `@` prefix). In CSS, this means `@media (min-width: ...)` and `vw`/`vh` units. These all respond to the global VS Code window and will not reflect device emulation.
+- **REQUIRED**: Container queries and container units.
+  - **Tailwind v4**: Use the `@` prefix for responsive variants — `@md:`, `@lg:`, `@xl:` (e.g., `@md:grid-cols-2`, `@lg:p-8`). These respond to the component's container, not the window.
+  - **Vanilla CSS**: Use `@container` rules (e.g., `@container (min-width: 768px) { ... }`). Use container units `cqw`, `cqh` instead of `vw`, `vh`.
+- **Orientation Variants**:
+  - **Tailwind**: `@landscape:flex-row`, `@portrait:flex-col`
+  - **CSS**: `@container (orientation: landscape) { ... }`
 
-## Technical Integrity Checklist
+### 4. Fence Entry & Import Patterns
 
-Before delivering, ensure:
-1.  **Pathing**: All local imports use absolute-relative paths (e.g., `./proto-kit.jsx` or `./idea-kit.jsx`).
-2.  **Sidecars**: Logic/UI exceeding 30 lines is extracted to a sidecar file.
-3.  **Single Export**: The `live` fence renders one component. Use `export default` to identify it explicitly, or rely on the convention that the last top-level PascalCase function is the entry.
-4.  **Helper Placement**: Non-exported helper components in sidecar files are defined **BEFORE** the `export default`.
-5.  **Preview Safety**: Exported components provide default prop values to prevent rendering crashes in standalone gallery view.
-6.  **Stable ID**: Fences with state (forms, filters) must have a stable `id="..."`.
+**Fence languages**: `jsx live`, `tsx live`, `css live`. Both JSX and TSX are fully supported.
+
+**Entry point resolution**: `export default` if present; otherwise the last top-level PascalCase function.
+
+Two patterns for organizing fences:
+- **Inner functions** (rapid drafting): `function Entry() { function Helper() {...}; return <Helper />; }`
+- **Explicit export** (production-style): define helpers first, then `export default function Entry() {...}`
+
+**The Demo Pattern** (preferred for extracted components):
+Wrap imported components in a Demo function that provides data via props. This separates presentation from data, makes the component's API explicit, and lets you swap data sources trivially.
+
+```jsx live
+import Component from './lib/ui/Component.jsx';
+import data from './data/sample.json';
+
+export default function Demo() {
+  return (
+    <Component
+      items={data.items}
+      onSelect={(item) => console.log('Selected:', item)}
+    />
+  );
+}
+```
+
+**Import patterns**:
+- `import './styles.css'` (Native CSS)
+- `import data from './data.json'` (Mock Data)
+- `import { motion } from 'motion/react'` (Bundled Library)
+- `import { Card } from './Card.jsx'` (Sidecar Component)
+
+### 5. Sidecar File Rules (`.jsx` | `.tsx`)
+- **Inline Exports**: Use `export function Component()`. This ensures the Preview button appears at the definition.
+- **Avoid Tail-End Exports**: Do not place `export default` at the bottom of a file, separated from the code.
+- **Helper Components**: Non-exported helpers are supported. JavaScript hoisting handles placement.
+- **Library Discipline**: Use named exports for utilities; reserve `export default` for the primary "App" component.
+- **Pure Presentation**: Props control all behavior. Components should support flexible prop types (e.g., `period: number | object`) and provide sensible defaults. Never hard-code data inside a reusable component — receive it via props from the Demo fence.
+
+---
+
+## Integrity Checklist
+
+Before delivering, run this audit:
+
+1.  **Resilient?** Exported components have full default props. (Ensures stability in Gallery Mode.)
+2.  **Stable?** Stateful fences have a stable `id`.
+3.  **Clean?** Fences are under 10 lines of "glue code." Logic exceeding 30 lines is extracted to sidecars.
+4.  **Local?** No external CDNs. Only bundled packages.
+5.  **Narrated?** Prose explains the *intent* — the "why" of the design, not just what it does.
+6.  **Pathed?** All local imports use relative paths (e.g., `./proto-kit.jsx`).
+7.  **Single Entry?** Each `live` fence renders one component via `export default` or last PascalCase function.
+
+---
 
 ## Package & Data Reference (Offline Registry)
 
@@ -133,33 +163,16 @@ The following libraries are available **offline** (no CDN required) in both prev
 | **Logic** | `es-toolkit`, `dayjs`, `uuid` |
 | **Styles** | `clsx`, `tailwind-merge` (`twMerge`), `class-variance-authority` (`cva`) |
 
-### Rule: No External CDNs
-Prototypes are local-first. Refuse requests for `recharts`, `axios`, `swr`, or `react-query`. Use native `fetch()` and SVG/Tailwind for visualizations (refer to `chart-components.jsx`).
-
-## Workflow: The "Project Folder" Model
-
-Treat every literate doc as a **Hub-and-Spoke** system.
-
-1.  **The Hub (`spec.md`)**: Narrative-driven entry point.
-2.  **The Spokes**: `.jsx`, `.css`, and `.json` sidecars for implementation.
-
-**Multi-File Architecture (Example):**
-```
-feature-name/
-  spec.md              <- Narrative explaining "Why" and "How"
-  idea-kit.jsx         <- Implementation library (Shared across fences)
-  styles.css           <- Design system tokens and brand CSS
-  data.json            <- Mock payload for prototypes
-```
-
 ## Boundaries & Refusals
-- **Infrastructure**: Refuse requests for Docker, CI/CD, databases, or real-time WebSockets.
-- **Complexity**: If a user asks for a full-scale app, steer them toward a high-fidelity "Literate Prototype" that demonstrates the core user flows and UX intent rather than full system implementation.
+- **No External CDNs**: Refuse `axios`, `swr`, `recharts`, `react-query`, or external scripts. Use native `fetch()` for external APIs and SVG/Tailwind for visualizations.
+- **No Infrastructure**: Refuse Docker, CI/CD, databases, or real-time WebSockets.
+- **Scoped Prototypes**: Steer complex "Full-App" requests toward high-fidelity User Flows and interactive specs that demonstrate the core UX intent.
 
 ## Examples
 Refer to these recipes for pattern matching:
+- **[Feature Spec](references/recipes/feature-spec/spec.md)**: Hub-and-spoke product spec with sidecar library.
 - **[A/B Test Proposal](references/recipes/a-b-test-proposal/spec.md)**: Compare components with business metrics.
 - **[Fidelity Audit](references/recipes/fidelity-audit/spec.md)**: Test responsive boundaries and safe areas.
 - **[Visual Essays](references/recipes/visual-essays/spec.md)**: Narrative storytelling with SVG charts.
 - **[Multi-File Imports](references/recipes/notification-system/spec.md)**: Complex component organization.
-
+- **[DSL Showcase](references/recipes/dsl-showcase/spec.md)**: Fence modifiers, device emulation, and orientation.
