@@ -70,7 +70,7 @@ Establish the "Reality" in the fence info string:
 | Modifier | Type | Principle |
 | :--- | :--- | :--- |
 | **`id="stable-id"`** | string | **Stability**. Prevents component remount on prose edits. Essential for forms/state. Use kebab-case. |
-| **`device="mobile"`** | enum | **Context**. Targets `mobile`, `tablet`, `desktop`. Default is `none` (liquid). |
+| **`device="mobile"`** | enum | **Context**. Targets `mobile`, `tablet`, `desktop`. Default is `none` (no emulation). |
 | **`mid="iphone-15-pro"`** | string | **Hardware Fidelity**. Specific Model ID for exact viewport and safe-area emulation. |
 | **`model="iPhone 14"`** | string | **Fuzzy Match**. Human-readable device name; system finds the closest match. |
 | **`orientation="landscape"`** | enum | **Perspective**. Sets rotation. Triggers `@landscape` CSS variants. |
@@ -98,11 +98,11 @@ Reactive MD wraps every component in a containment context (`container-type: siz
 
 **Fence languages**: `jsx live`, `tsx live`, `css live`. Both JSX and TSX are fully supported.
 
-**Entry point resolution**: `export default` if present; otherwise the last top-level PascalCase function.
+**Entry point resolution**: the sole `export` if present; then the last top-level PascalCase function.
 
 Two patterns for organizing fences:
 - **Inner functions** (rapid drafting): `function Entry() { function Helper() {...}; return <Helper />; }`
-- **Explicit export** (production-style): define helpers first, then `export default function Entry() {...}`
+- **Explicit export** (production-style): define helpers first, then `export function Entry() {...}`
 
 **The Demo Pattern** (preferred for extracted components):
 Wrap imported components in a Demo function that provides data via props. This separates presentation from data, makes the component's API explicit, and lets you swap data sources trivially.
@@ -111,7 +111,7 @@ Wrap imported components in a Demo function that provides data via props. This s
 import Component from './lib/ui/Component.jsx';
 import data from './data/sample.json';
 
-export default function Demo() {
+export function Demo() {
   return (
     <Component
       items={data.items}
@@ -146,7 +146,7 @@ Before delivering, run this audit:
 4.  **Local?** No external CDNs. Only bundled packages.
 5.  **Narrated?** Prose explains the *intent* — the "why" of the design, not just what it does.
 6.  **Pathed?** All local imports use relative paths (e.g., `./proto-kit.jsx`).
-7.  **Single Entry?** Each `live` fence renders one component via `export default` or last PascalCase function.
+7.  **Single Entry?** Each `live` fence renders one component via `export` or last PascalCase function.
 
 ---
 
