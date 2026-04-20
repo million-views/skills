@@ -161,6 +161,8 @@ Establish the "Reality" in the fence info string:
 | `zoom=fill` | "Experience as designed" — device fills the panel |
 | `zoom=auto` | "See the device in context" — device at natural or smaller size |
 
+> **When to use `device`**: Device profiles are for **product screens** — views the end user sees on their phone, tablet, or desktop. Compositional widgets shown in isolation to explain a core concept (e.g., a mortality bar, a rating scale, a chart) should **not** specify `device` or `orientation`. They render at natural size within the document flow. The distinction: if it's *what the user holds*, give it a device. If it's *what the reader learns from*, let it breathe.
+
 ### 3. Styling Logic (The Container-First Rule)
 
 Reactive MD wraps every component in a containment context (`container-type: size`). Your layout must respond to the **emulated device dimensions**, not the VS Code window.
