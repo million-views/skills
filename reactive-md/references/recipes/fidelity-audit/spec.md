@@ -40,9 +40,16 @@ export default function BezelAudit() {
 ```
 
 **Observation Guide**:
-- Hover over the indigo bar and use your scroll wheel.
-- The scrollbar MUST appear **inside** the thin border of the device.
+- Two-finger swipe **horizontally** inside the device to reveal the horizontal scrollbar on the indigo bar.
+- The scrollbar MUST appear **inside** the thin border of the device — never on the outer bezel or the page.
 - This ensures your components handle overflow within their emulated environment correctly.
+
+> [!NOTE]
+> **macOS scrollbar visibility**: On macOS, the default "Show scroll bars: Automatically based on mouse or trackpad" setting hides scrollbars until you actively gesture. A mouse scroll wheel only produces vertical delta, so a horizontal internal scrollbar will exist but never appear. To verify this audit reliably, either:
+> - Use a **two-finger horizontal swipe** on your trackpad inside the device, or
+> - Temporarily set **System Settings → Appearance → Show scroll bars → Always** to make all scrollbars persistently visible.
+>
+> The scrollbar exists either way — the OS setting only controls whether it is rendered visibly at rest.
 
 ---
 
