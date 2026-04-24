@@ -9,9 +9,10 @@ Maps user intent (Jobs To Be Done) to the recipe in `references/recipes/` that s
 as the authoritative starting point. Each entry lists the trigger phrases that indicate the
 job, the recipe folder, and the key authoring directive from that recipe's frontmatter.
 
-> **For AI assistants**: Match the user's request to a trigger phrase. Go to the corresponding
-> recipe folder, read `spec.md`, and follow its `instruction` frontmatter exactly. Do not
-> recreate sidecar components inline — import them.
+> **For AI assistants**: Match the user's request to a trigger phrase. Open the corresponding
+> recipe folder and read `spec.md`. Follow its `instruction` frontmatter exactly.
+> For recipes with sidecar components: copy the listed sidecar files into the user's project
+> folder, then import them locally. Do not recreate sidecar components inline from scratch.
 
 ---
 
