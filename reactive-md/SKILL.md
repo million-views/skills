@@ -33,6 +33,7 @@ A reactive-md document reaches the quality bar when it passes all three lenses s
 | "Write a data story", "Visual essay about..." | Narrative with embedded charts and analysis |
 | "Audit the mobile UI", "Check responsive behavior" | Fidelity audit with device matrix |
 | "Document this design system", "Component gallery" | Living docs with live examples |
+| "Analyze the market", "Where do we stand vs. competitors" | Competitive analysis with score matrix, feature comparison, and positioning recommendation |
 
 ---
 
@@ -97,25 +98,35 @@ Always treat a project as a multi-file system.
 - **Sidecar Libraries**: Implementation modules (e.g., `proto-kit.jsx`, `idea-kit.jsx`). Use these as shared libraries to serve multiple fences across your document. Extract logic here if a fence exceeds 30 lines.
 - **`styles.css`**: Design tokens and advanced layout.
 
-**Flat structure** (simple projects, few components):
-```
-feature-name/
-  spec.md              <- Narrative explaining "Why" and "How"
-  proto-kit.jsx        <- Implementation library (shared across fences)
-  styles.css           <- Design system tokens and brand CSS
-  data.json            <- Mock payload for prototypes
-```
+**Convention**: place all reactive-md documents under `product/` in the source root. This avoids collisions with `specs/` (test suites), `docs/` (API/site tooling), and `design/` (design-system tooling). The entry point is always `spec.md` — `find product/ -name "spec.md"` finds every document in the repo.
 
-**Nested structure** (larger projects, many components):
+Two levels, no deeper:
+- `product/<name>/spec.md` — top-level vision for a product or subsystem
+- `product/<name>/<feature>/spec.md` — feature deep dive within that product
+
+Going deeper than two levels is a signal the document has become an implementation note, not a product spec.
+
+**Top-level product spec** (vision, positioning, full narrative):
 ```
-feature-name/
-  spec.md              <- Narrative (prose + live demos)
-  lib/ui/              <- Components >100 lines or reused across fences
-    Component.jsx
-  data/                <- Mock data, fixtures
-    sample.json
+product/checkout/
+  spec.md              <- Product vision: who, problem, why now
+  proto-kit.jsx        <- Shared component library
   styles.css           <- Design tokens
 ```
+
+**Feature deep dive** (sidecar-heavy, multiple fences):
+```
+product/checkout/cart/
+  spec.md              <- Feature spec with per-screen demos
+  lib/ui/              <- Components >100 lines or reused across fences
+    CartItem.jsx
+    OrderSummary.jsx
+  data/
+    demo-data.js       <- FTUE_DATA, DAILY_USE_DATA fixtures
+  styles.css
+```
+
+Folder names are stable feature identifiers — `cart`, not `cart-redesign`. Iteration history belongs in git; version status belongs in the frontmatter `status` field (`draft`, `review`, `approved`).
 
 **Extraction thresholds:**
 - **<30 lines, single-use**: Keep inline in the fence.
@@ -350,3 +361,4 @@ Refer to these recipes for pattern matching:
 - **[Multi-Sidecar Architecture](references/recipes/notification-system/spec.md)**: Multiple imported sidecar components coordinated across one document.
 - **[Data Loading Patterns](references/recipes/data-loading/spec.md)**: JSON import vs. `fetch()` — when to use each, side by side.
 - **[DSL Showcase](references/recipes/dsl-showcase/spec.md)**: Every fence modifier demonstrated — device emulation, orientation, zoom, lock-view.
+- **[Competitive Analysis](references/recipes/competitive-analysis/spec.md)**: Conclusion-first structure — executive summary → score matrix → feature comparison → strategic insights → recommendation. The document makes a call, not just shows data.

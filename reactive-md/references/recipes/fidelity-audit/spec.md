@@ -1,3 +1,9 @@
+---
+title: Fidelity Audit
+status: reference
+instruction: "Audit the same component across mobile, tablet, and desktop breakpoints using device emulation for each. Verify that @md: and @lg: Tailwind container variants and @container CSS rules fire at the correct emulated sizes — not the VS Code window size. Document what breaks at each boundary, why it breaks, and what the fix is."
+---
+
 # Design System Fidelity Audit
 
 High-fidelity UI/UX work depends on the **Logical Truth** of your environment: the certainty that a component set to `375px` behaves exactly like a `375px` device, regardless of visual scaling.
@@ -201,3 +207,6 @@ export default function EdgeCheck() {
 
 **Observation**:
 - The white bar should touch the left and right edges perfectly with no horizontal scrollbars within the device.
+
+---
+*Created with [Reactive MD](https://marketplace.visualstudio.com/items?itemName=million-views.reactive-md)*

@@ -1,3 +1,9 @@
+---
+title: DSL Showcase
+status: reference
+instruction: "Produce a working example for every fence modifier: device emulation (mobile/tablet/desktop), orientation (portrait/landscape), zoom modes (auto/fill/none), stable id anchors, lock-view, and no-placeholder. Each modifier must appear in its own fence with prose explaining what it controls and when to use it. Do not copy this document structure into product specs — it is a reference, not a template."
+---
+
 # DSL Showcase
 
 A reference document demonstrating every fence modifier in the Reactive MD DSL.
@@ -326,3 +332,6 @@ function BrandDemo() {
 | `zoom` | `auto`, `fill`, `none` | `auto` | Scaling strategy |
 | `lock-view` | (flag) | off | Hide emulation controls |
 | `no-placeholder` | (flag) | off | Suppress guidance cards |
+
+---
+*Created with [Reactive MD](https://marketplace.visualstudio.com/items?itemName=million-views.reactive-md)*

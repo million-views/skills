@@ -3,7 +3,7 @@ title: [Feature Name]
 author: @your-handle
 status: draft
 date: YYYY-MM-DD
-instruction: "Copy this template for single-feature PRDs. Fill in each section with specific details about your feature, user problems, and success metrics."
+instruction: "Write a single-feature PRD: state the user problem, define functional and non-functional requirements, show a live interactive demo, add a design decisions block after the demo, and define success metrics. Every section must answer a specific stakeholder question — cut anything that doesn't."
 tags: ["PRD", "feature-planning", "product-design"]
 related-jtbd: "Create specs"
 ---

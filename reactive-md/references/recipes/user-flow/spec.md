@@ -3,7 +3,7 @@ title: Account Signup & Plan Selection Flow
 author: @product-design
 status: implemented
 date: 2026-01-13
-instruction: "Copy this template for multi-step user journeys. Include overview, flow diagram, each step with interactive examples, error handling, and success states."
+instruction: "Build a multi-step user flow with navigation state: show each step as a live component, wire transitions between steps with shared state, handle error and empty states explicitly, and close with a first-time and returning-user scenario. The full flow must be walkable end-to-end without a presenter."
 tags: ["user-flow", "design", "UX"]
 related-jtbd: "Prototype features"
 ---

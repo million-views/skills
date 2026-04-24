@@ -3,7 +3,7 @@ title: Data Loading Patterns
 author: @engineering
 status: approved
 date: 2026-01-13
-instruction: "Master two essential data loading patterns: importing static JSON for fast prototypes, and fetching remote APIs for validation. Learn when to use each."
+instruction: "Show both data loading patterns side by side: import static JSON for offline prototypes, and use fetch() inside useEffect for live API validation. Always wrap fetch() with loading and error states. Prefer JSON import for specs and prototypes — use fetch() only when validating a real API integration."
 tags: ["data-loading", "patterns", "API-integration"]
 related-jtbd: "Build components"
 ---

@@ -1,7 +1,7 @@
 ---
 title: Product Spec Recipe — Focus Timer
 status: reference
-instruction: "This recipe demonstrates the literate document pattern for product specs: WHO/PROBLEM/WHY → per-screen exploration with design decisions → end-to-end integration. Study the structure, not just the components."
+instruction: "Follow the literate structure strictly: WHO this is for → THE PROBLEM → WHY NOW → each screen as a live demo → design decisions block after every fence → end-to-end integration with navigation state table and FTUE/daily-use scenario fixtures. Never produce a fence without prose that earns it and a design decisions block that follows it."
 ---
 
 # Focus Timer: Product Vision
@@ -41,7 +41,7 @@ Set a duration. State your intention. Go. The app steps aside until the session 
 
 The only inputs: duration (default 25 min, adjustable) and an optional intention field. The intention is not a task — it is a sentence you finish: *"By the end of this session, I will have..."* Different framing, different output.
 
-```jsx live id="session-setup" device=mobile orientation=portrait zoom=fill
+```jsx live id="session-setup" device=mobile orientation=portrait zoom=auto
 export default function SessionSetup() {
   const [minutes, setMinutes] = React.useState(25);
   const [intention, setIntention] = React.useState('');
@@ -110,7 +110,7 @@ export default function SessionSetup() {
 
 The screen goes quiet. A large countdown. Your intention, if you set one. A single abort path — requiring deliberate confirmation to prevent accidental taps.
 
-```jsx live id="active-session" device=mobile orientation=portrait zoom=fill
+```jsx live id="active-session" device=mobile orientation=portrait zoom=auto
 export default function ActiveSession() {
   const TOTAL = 25 * 60;
   const [remaining, setRemaining] = React.useState(TOTAL);
@@ -206,7 +206,7 @@ export default function ActiveSession() {
 
 When the session ends, the app offers a lightweight review. Not a rating scale — a single yes/no question: did you do what you set out to do? This primes the next session and builds a sparse-but-honest data set.
 
-```jsx live id="session-summary" device=mobile orientation=portrait zoom=fill
+```jsx live id="session-summary" device=mobile orientation=portrait zoom=auto
 export default function SessionSummary() {
   const [answered, setAnswered] = React.useState(null);
 
@@ -284,7 +284,7 @@ export default function SessionSummary() {
 
 All three screens connected. State flows through one top-level component.
 
-```jsx live id="focus-app" device=mobile orientation=portrait zoom=fill
+```jsx live id="focus-app" device=mobile orientation=portrait zoom=auto
 const DURATIONS = [15, 25, 45, 60, 90];
 
 function SetupScreen({ onStart }) {
@@ -467,3 +467,6 @@ export default function FocusApp() {
 Ship MVP with three screens: Setup → Timer → Summary. Analytics and streaks are v2 — the core habit loop must prove itself before gamification earns its place.
 
 **Next step:** User test with 5 people. Watch whether they set an intention or skip it. That split determines whether the field stays prominent or moves to a "tap to add" collapsed state.
+
+---
+*Created with [Reactive MD](https://marketplace.visualstudio.com/items?itemName=million-views.reactive-md)*

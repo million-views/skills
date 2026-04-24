@@ -3,7 +3,7 @@ title: Signup CTA Button Test
 author: @product-team
 status: ready-to-launch
 date: 2026-01-13
-instruction: "Copy this template for A/B testing proposals. Include hypothesis, metrics baseline, variant changes, audience, risk mitigation, and decision criteria."
+instruction: "Write an A/B test proposal: state the hypothesis and baseline metric, show both variants as live components side by side, define the success metric and minimum detectable effect, specify audience and duration, and close with a binary decision criteria table. A reviewer must be able to approve or reject without a follow-up meeting."
 tags: ["A/B-test", "experimentation", "conversion-optimization"]
 related-jtbd: "Prototype features"
 ---

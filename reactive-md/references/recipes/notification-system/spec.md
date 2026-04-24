@@ -3,6 +3,7 @@ title: Notification System PRD
 author: @product-manager
 status: draft
 date: 2025-12-14
+instruction: "Organize complex features using multiple focused sidecar files — one component per concern. Import all sidecars into spec.md and compose them into a coherent PRD narrative. Never put more than 30 lines of component logic inline in a fence. Each sidecar must have resilient default props so it renders safely in Gallery Mode."
 ---
 
 # Notification System

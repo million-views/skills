@@ -3,6 +3,7 @@ title: Dark Mode Toggle
 author: @design-team
 status: approved
 date: 2025-12-14
+instruction: "Use a css live fence to define document-scoped CSS variables. Reference --rmd-bg and --rmd-fg for theme-adaptive colors in all jsx live fences — never use hardcoded color values. Sidecar stylesheets follow the same rule: define tokens in css live, consume them in components."
 ---
 
 # Dark Mode Toggle
