@@ -1,32 +1,91 @@
 ---
 name: reactive-md
-description: Literate UI/UX for product teams - accelerate from idea to working prototype in minutes using markdown with embedded interactive React components. Use for fast iteration and async collaboration on product specs, wireframes, user flows, feature demos, and design documentation. Replaces static documentation and handoff tools (like Figma or Storybook) with executable specs in version control.
+description: Literate UI/UX for product teams — write product specs, PRDs, and interactive prototypes as a single Markdown document with embedded live React components. Use when a user needs to create a product spec with working demos, prototype a user flow, audit responsive behavior, or produce any document where the artifact should serve as the prototype. Designed for async collaboration — the document replaces the meeting.
 license: MIT
 metadata:
-  version: "1.2.0"
+  version: "1.2.1"
   author: million-views (https://m5nv.com)
 ---
 
 # Reactive MD
 
-Generate functional markdown documents with embedded interactive React components. This skill is optimized for creating high-fidelity, emulated prototypes where the "Logical Reality" of the device is preserved regardless of the editor's width.
+**Reactive MD** is a VS Code extension with three modes: **Markdown Preview** (static SSR render), **Interactive Preview** (live React execution with device emulation), and **Publish** (static site export of your document and its islands).
 
-## The Senior's Quality Bar (Philosophy)
+Write Markdown documents where the prose and the prototype are the same artifact. Each live fence is an executable screen or component; the surrounding prose is the spec, rationale, and review surface. The goal is a document a reviewer can read, argue with, and say yes or no to — without scheduling a follow-up meeting.
 
-To reach senior-level expertise in Literate UI/UX, follow these three non-negotiable principles:
+## The Quality Bar (Three Lenses)
 
-1.  **The Document is the Product**: Your markdown is not just documentation; it is a functional prototype. If the code is messy, the design is considered unverified.
-2.  **Logical Truth over Literal Appearance**: Never design for the "now" (what you see in your sidebar). Design for the "target" (the emulated device). Use **Container Queries** exclusively.
-3.  **Clean Spines, Rich Sidecars**: Keep the primary `.md` file (The Spine) focused on the narrative "Why." Move the "How" (implementation details) into sidecar `.jsx`/`.tsx` files.
+A reactive-md document reaches the quality bar when it passes all three lenses simultaneously:
 
-## Primary Use Cases & Triggers
+1. **Read like a narrative**: Prose leads. The problem is established before any demo appears. Each section earns the right to show a component.
+2. **Review like a spec**: After every demo, design decisions are documented — the choices that can't be seen in the UI. This is what makes async convergence possible.
+3. **Experience like a prototype**: Components are real. Device emulation reflects the true target context. The full system is wired together at the end.
 
-Use this skill when the user mentions:
-- **Product Specs / PRDs**: "Draft a spec for...", "Create a PRD with a prototype..."
-- **Visual Essays**: "Write a data story about...", "Create a visual essay for..."
-- **Interactive Demos**: "Build a clickable mockup...", "Prototype the login flow..."
-- **Fidelity Audits**: "Check the responsive behavior of...", "Audit the mobile UI..."
-- **Living Docs**: "Create a component gallery...", "Document this design system..."
+**The Document is the Product**: A messy component in thin prose is not a spec. It is an incomplete handoff.
+
+## Primary Use Cases
+
+| Trigger | Document type |
+|---------|---------------|
+| "Draft a spec for...", "Create a PRD" | Product spec with WHO/PROBLEM/SOLUTION flow |
+| "Prototype a user flow", "Mockup the checkout" | Interactive flow with navigation state and edge cases |
+| "Run an A/B test", "Compare two variants" | A/B test proposal with hypothesis, variants, and success metrics |
+| "Write a data story", "Visual essay about..." | Narrative with embedded charts and analysis |
+| "Audit the mobile UI", "Check responsive behavior" | Fidelity audit with device matrix |
+| "Document this design system", "Component gallery" | Living docs with live examples |
+
+---
+
+## Document Craft
+
+### The Literate Structure
+
+Every reactive-md document has three zones, in order:
+
+1. **Context zone** — WHO, PROBLEM, WHY NOW. No demos yet. This is the argument that makes the demos matter.
+2. **Exploration zone** — One section per screen, feature, or component. Each section: prose → demo → design decisions.
+3. **Integration zone** — The full system wired together. Navigation state. Scenario fixtures. The answer to "does this actually work end to end?"
+
+### The Design Decisions Block
+
+After every live fence in a product spec, write a design decisions block. This is not optional. It is what makes the document substitutable for a meeting. A reviewer must be able to say yes or no to the design without asking a follow-up question.
+
+A good decisions block answers:
+- What non-obvious choice was made, and why?
+- What was the rejected alternative?
+- What edge case is handled, and how?
+- What constraint shaped this decision?
+
+```markdown
+**Design decisions:**
+- **Single question on onboarding**: Birth year only. Life expectancy defaults to 90.
+  Less morbid on day one; adjustable in settings.
+- **"Neither" scores 10, not 0**: Even hard weeks count as lived time.
+  Zero would make the app punishing. This is a witness, not a judge.
+- **No leaderboard**: Score is personal — calibrated against yourself only.
+  Population percentiles would corrupt the intention.
+```
+
+### Scenario Data Fixtures
+
+For documents that show a full system, create separate named fixtures for each meaningful state of the world. Import by name.
+
+```js
+// data/demo-data.js
+export const FTUE_DATA = { user: { birthYear: 1995 }, ratings: {} };
+export const DAILY_USE_DATA = { user: { birthYear: 1990 }, ratings: { /* 2 years */ } };
+```
+
+Use `React.useMemo(() => new Date(), [])` for any date fixture — prevents animation resets on prose edits.
+
+### End-to-End Integration
+
+Product specs must close with a section that wires everything together:
+- A navigation state table (From → Trigger → To)
+- Two demo scenarios: first-time user and established user
+- What persists, and how it survives a reload
+
+Individual fences are proofs. The integration section is the argument.
 
 ---
 
@@ -59,7 +118,7 @@ feature-name/
 ```
 
 **Extraction thresholds:**
-- **<50 lines, single-use**: Keep inline in the fence.
+- **<30 lines, single-use**: Keep inline in the fence.
 - **>30 lines in a fence**: Extract to a top-level sidecar (e.g., `proto-kit.jsx`).
 - **>100 lines, reused, or complex logic**: Promote to `lib/ui/`.
 
@@ -78,9 +137,18 @@ Establish the "Reality" in the fence info string:
 | **`lock-view`** | flag | **Intent**. Hides emulation controls; strictly enforces header settings. |
 | **`no-placeholder`** | flag | Suppresses guidance cards for non-rendering components. |
 
-> **Precedence**: `mid` > `model` > `device`.
+> **Precedence**: `mid` > `model` > `device`. `id` is mandatory for any stateful fence.
 
-> **`id` is mandatory** for any fence with user state (forms, filters, tabs). Always use it.
+**Semantic device choices** — the DSL expresses design intent, not just viewport size:
+
+| Choice | When to use |
+|--------|-------------|
+| `device=mobile zoom=fill` | App screens — show them at full size, as designed |
+| `device=tablet orientation=landscape zoom=fill` | Widescreen flows — onboarding, dashboards, split views |
+| `device=none` | Components at natural width — cards, widgets, charts |
+| `device=none lock-view` | Narrative-frozen — no controls, pure illustration |
+| `zoom=fill` | "Experience as designed" — device fills the panel |
+| `zoom=auto` | "See the device in context" — device at natural or smaller size |
 
 ### 3. Styling Logic (The Container-First Rule)
 
@@ -127,6 +195,8 @@ export function Demo() {
 - `import { motion } from 'motion/react'` (Bundled Library)
 - `import { Card } from './Card.jsx'` (Sidecar Component)
 
+**Data sourcing**: `import data from './data.json'` is the preferred pattern — offline, version-controlled, and fast. Use `fetch()` only when validating a live API integration; wrap it in `useEffect`, handle loading and error states, and expect CORS constraints. See `references/recipes/data-loading/spec.md` for both patterns side by side.
+
 ### 5. Sidecar File Rules (`.jsx` | `.tsx`)
 - **Inline Exports**: Use `export function Component()`. This ensures the Preview button appears at the definition.
 - **Avoid Tail-End Exports**: Do not place `export default` at the bottom of a file, separated from the code.
@@ -168,29 +238,69 @@ Use `css live` fences for document-scoped styles. The system injects `--rmd-bg` 
 
 ## Spec Template
 
-When starting a new document, use this skeleton. Adapt the sections to the use case — a feature spec needs edge cases, a visual essay needs data narratives, a fidelity audit needs device comparisons.
+Two flavors. Match to the use case.
 
-````markdown
+### Product Spec (async team review)
+
+```markdown
 # Feature Name
 
+## Who This Is For
+One paragraph. Specific person, specific frustration.
+
 ## The Problem
-What user problem does this solve? Why does it matter?
+What they're missing and why it matters. No solutions yet.
 
-## Interactive Demo
-```jsx live id="main-demo" device=mobile
-import { Feature } from './proto-kit.jsx';
+## Why Now
+Market timing or opportunity. Why not six months ago?
 
-export function Demo() {
-  return <Feature />;
-}
-```
+## The Solution: [Framing]
+One sentence. Then the first demo.
 
-## Edge Cases
-Showcase loading, empty, and error states in separate fences.
+```jsx live id="key-screen" device=mobile zoom=fill
+import { KeyScreen } from './lib/ui/KeyScreen.jsx';
+import { DEMO_DATA } from './data/demo-data.js';
+export function Demo() { return <KeyScreen {...DEMO_DATA} />; }
+` `` `
+
+**Design decisions:**
+- **[Choice]**: [Why this, not the alternative]
+- **[Edge case]**: [How handled and why]
+
+## [Next Screen]
+...
+
+## End to End
+Navigation state table. FTUE scenario. Daily-use scenario.
 
 ## Decision
-Summarize the recommendation and next steps.
-````
+Concrete recommendation. Next step.
+```
+
+### Quick Prototype (solo iteration)
+
+```markdown
+# Feature Name
+
+## The Idea
+```jsx live id="main" device=mobile zoom=fill
+...
+` `` `
+
+## Edge Cases
+Loading, empty, error states.
+```
+
+---
+
+## Before You Generate
+
+When the request is ambiguous, ask:
+- **Type**: Product spec for async review, or quick prototype for solo iteration?
+- **Audience**: Solo exploration, or team review that needs to reach a decision?
+- **Depth**: Sketch (one screen), feature (2–5 screens), or full product (end-to-end)?
+
+A product spec for team review needs the full literate structure with context zone, design decisions, and end-to-end integration. A quick prototype does not.
 
 ---
 
@@ -198,13 +308,15 @@ Summarize the recommendation and next steps.
 
 Before delivering, run this audit:
 
-1.  **Resilient?** Exported components have full default props. (Ensures stability in Gallery Mode.)
-2.  **Stable?** Stateful fences have a stable `id`.
-3.  **Clean?** Fences are under 10 lines of "glue code." Logic exceeding 30 lines is extracted to sidecars.
-4.  **Local?** No external CDNs. Only bundled packages.
-5.  **Narrated?** Prose explains the *intent* — the "why" of the design, not just what it does.
-6.  **Pathed?** All local imports use relative paths (e.g., `./proto-kit.jsx`).
-7.  **Single Entry?** Each `live` fence renders one component via `export` or last PascalCase function.
+1.  **Arguable?** Could a reviewer say yes or no to the design without a follow-up meeting?
+2.  **Narrated?** Prose earns every demo. No fence appears without context that makes it matter.
+3.  **Decisions documented?** Non-obvious design choices explained after every fence.
+4.  **Resilient?** Exported components have full default props. (Ensures stability in Gallery Mode.)
+5.  **Stable?** Stateful fences have a stable `id`.
+6.  **Scenario-tested?** For full-system docs: distinct fixtures for first-time and established user states.
+7.  **Clean?** Fences are under 10 lines of "glue code." Logic exceeding 30 lines is extracted to sidecars.
+8.  **Local?** No external CDNs. Only bundled packages.
+9.  **Pathed?** All local imports use relative paths (e.g., `./proto-kit.jsx`).
 
 ---
 
@@ -228,9 +340,13 @@ The following libraries are available **offline** (no CDN required) in both prev
 
 ## Examples
 Refer to these recipes for pattern matching:
-- **[Feature Spec](references/recipes/feature-spec/spec.md)**: Hub-and-spoke product spec with sidecar library.
-- **[A/B Test Proposal](references/recipes/a-b-test-proposal/spec.md)**: Compare components with business metrics.
-- **[Fidelity Audit](references/recipes/fidelity-audit/spec.md)**: Test responsive boundaries and safe areas.
-- **[Visual Essays](references/recipes/visual-essays/spec.md)**: Narrative storytelling with SVG charts.
-- **[Multi-File Imports](references/recipes/notification-system/spec.md)**: Complex component organization.
-- **[DSL Showcase](references/recipes/dsl-showcase/spec.md)**: Fence modifiers, device emulation, and orientation.
+- **[Product Spec](references/recipes/product-spec/spec.md)**: Full literate structure — WHO/PROBLEM/WHY → per-screen demos with design decisions → end-to-end integration. Study this first for any async-review document.
+- **[Feature Spec](references/recipes/feature-spec/spec.md)**: Hub-and-spoke document structure with a sidecar library; the canonical single-feature PRD template.
+- **[User Flow](references/recipes/user-flow/spec.md)**: Multi-screen flow with navigation state — signup, onboarding, plan selection.
+- **[A/B Test Proposal](references/recipes/a-b-test-proposal/spec.md)**: Compare variants with hypothesis, live demos, and success metrics.
+- **[Fidelity Audit](references/recipes/fidelity-audit/spec.md)**: Test responsive boundaries and safe areas across a device matrix.
+- **[Visual Essays](references/recipes/visual-essays/spec.md)**: Narrative storytelling with embedded SVG charts.
+- **[Dark Mode Toggle](references/recipes/dark-mode-toggle/spec.md)**: `css live` blocks and sidecar CSS — the only recipe demonstrating live CSS theming.
+- **[Multi-Sidecar Architecture](references/recipes/notification-system/spec.md)**: Multiple imported sidecar components coordinated across one document.
+- **[Data Loading Patterns](references/recipes/data-loading/spec.md)**: JSON import vs. `fetch()` — when to use each, side by side.
+- **[DSL Showcase](references/recipes/dsl-showcase/spec.md)**: Every fence modifier demonstrated — device emulation, orientation, zoom, lock-view.
