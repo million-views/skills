@@ -2,7 +2,7 @@
 title: "The Case for Literate Infrastructure"
 author: "@design-strategy-group"
 status: published
-instruction: "Use this template for executive reports, data-journalism, or strategic design analysis. It showcases high-density charts, matrices, and narrative modules with multi-tier responsive behavior."
+instruction: "Weave prose and embedded SVG charts into a single narrative artifact. Lead with the argument, not the data — each chart illustrates a claim made in the surrounding prose. The document must reach a conclusion. Never embed a chart without a sentence before it that states what the reader should see."
 tags: ["strategy", "fidelity", "literate-design"]
 ---
 
@@ -15,24 +15,18 @@ We propose a shift toward **Literate Infrastructure**—where the document is no
 > Like most stuff you find on the Internet, this is fiction. We pose no threat to Figma or Storybook. Having said that we do believe that **Literate UI/UX** pow-wowing the `Reactive MD` way will grow on you and with you!
 
 ```jsx live id="strategic-intent" orientation=landscape
-import { DataModule } from './proto-kit.jsx';
+import { DataModule, SidebarPanel, SidebarCard, StatementPanel } from './proto-kit.jsx';
 
 export default function Intent() {
   const sidebar = (
-    <div className="space-y-[3cqh]">
-      <div className="p-[3cqw] bg-white border border-slate-200/60 rounded-[2px] shadow-sm">
-        <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.2em] whitespace-nowrap">PARAMETER_ALPHA</span>
-        <p className="m-0 text-[12px] font-medium text-slate-600 leading-snug mt-2">
-          The sidecar pattern eliminates layout drift by enforcing a single source of truth.
-        </p>
-      </div>
-      <div className="p-[3cqw] bg-white border border-slate-200/60 rounded-[2px] shadow-sm">
-        <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] whitespace-nowrap">PARAMETER_BETA</span>
-        <p className="m-0 text-[12px] font-medium text-slate-600 leading-snug mt-2">
-          Logical truth is the only stable anchor in high-entropy systems.
-        </p>
-      </div>
-    </div>
+    <SidebarPanel>
+      <SidebarCard label="PARAMETER_ALPHA" labelColor="indigo">
+        The sidecar pattern eliminates layout drift by enforcing a single source of truth.
+      </SidebarCard>
+      <SidebarCard label="PARAMETER_BETA">
+        Logical truth is the only stable anchor in high-entropy systems.
+      </SidebarCard>
+    </SidebarPanel>
   );
 
   return (
@@ -41,16 +35,10 @@ export default function Intent() {
       subtitle="Eliminating the Abstraction Gap via Literate Systems"
       sidebar={sidebar}
     >
-      <div className="h-full flex flex-col justify-center p-[8cqw] gap-[3cqh]">
-        <div className="h-1 w-[12cqw] bg-indigo-600 shadow-[0_0_12px_rgba(79,70,229,0.3)]" />
-        <h2 className="m-0 text-2xl @lg:text-3xl font-black text-slate-950 leading-[1.1] uppercase tracking-[-0.04em] italic">
-          "The distance between design and code is the primary source of entropy."
-        </h2>
-        <div className="flex items-center gap-[3cqw] mt-[2cqh]">
-           <span className="text-[10px] font-black text-slate-400 font-mono uppercase tracking-[0.3em]">DIRECTIVE_01A</span>
-           <div className="flex-1 h-px bg-slate-100" />
-        </div>
-      </div>
+      <StatementPanel
+        statement='"The distance between design and code is the primary source of entropy."'
+        label="DIRECTIVE_01A"
+      />
     </DataModule>
   );
 }
@@ -63,17 +51,22 @@ export default function Intent() {
 Analysis of design-system maturity reveals a critical hockey-stick transition. Teams that adopt "Sidecar Extraction" and "Stable Viewports" experience a 4x reduction in logic-related regressions during handovers.
 
 ```jsx live id="adoption-trend" orientation=landscape
-import { DataModule, SVGTrendChart } from './proto-kit.jsx';
+import { DataModule, TrendChart } from './proto-kit.jsx';
 
 export default function Trend() {
   const data = [
-    { label: 'Q1', value: 8 },
-    { label: 'Q2', value: 12 },
-    { label: 'Q3', value: 15 },
-    { label: 'Q4', value: 24 },
-    { label: 'Q5', value: 45 },
-    { label: 'Q6', value: 82 },
-    { label: 'Q7', value: 100 }
+    { label: 'Q1', value: 8   },
+    { label: 'Q2', value: 12  },
+    { label: 'Q3', value: 15  },
+    { label: 'Q4', value: 24  },
+    { label: 'Q5', value: 45  },
+    { label: 'Q6', value: 82  },
+    { label: 'Q7', value: 100 },
+  ];
+
+  const stats = [
+    { label: 'Q7 PEAK',  value: '100',  unit: '%',  note: 'Inflection confirmed at Q3 — shift from static libraries to Logical Truth emulation.' },
+    { label: 'BASELINE', value: '8',    unit: '%'  },
   ];
 
   return (
@@ -81,9 +74,13 @@ export default function Trend() {
       title="Velocity Multiplier"
       subtitle="Exponential gains from Literate Infrastructure adoption"
     >
-      <SVGTrendChart
+      <TrendChart
         data={data}
         color="#4f46e5"
+        title="Adoption Curve"
+        label="Teams adopting Literate Infrastructure"
+        stats={stats}
+        statsTitle="TRAJECTORY"
       />
     </DataModule>
   );
@@ -99,32 +96,31 @@ export default function Trend() {
 The wide layout below demonstrates **Density Scaling**. Note how the right-hand panel (Statistical Overview) only populates when there is sufficient horizontal clearance.
 
 ```jsx live id="deep-analysis" orientation=landscape
-import { DataModule, ComparisonMatrix } from './proto-kit.jsx';
+import { DataModule, ScoreChart, SidebarPanel, SidebarCard, SidebarProgress } from './proto-kit.jsx';
 
 export default function AuditModule() {
   const scores = [
-    { name: 'Literate (R-MD)', score: 98 },
+    { name: 'Literate (R-MD)',    score: 98 },
     { name: 'Sidecar Extraction', score: 85 },
-    { name: 'Stable Viewports', score: 72 },
-    { name: 'Legacy Docs', score: 24 }
+    { name: 'Stable Viewports',   score: 72 },
+    { name: 'Legacy Docs',        score: 24 },
   ];
 
   const sidebar = (
-    <div className="space-y-[4cqh]">
-       <div className="flex flex-col gap-[1.5cqh]">
-         <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.25em]">REGRESSION_INDEX</span>
-         <div className="h-[2cqh] w-full bg-slate-100/60 rounded-full overflow-hidden shadow-inner">
-           <div className="h-full w-[14%] bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.3)]" />
-         </div>
-         <span className="text-[11px] font-bold text-indigo-600 italic uppercase">Logic Baseline Stable</span>
-       </div>
+    <SidebarPanel>
+      <SidebarProgress label="REGRESSION INDEX" percent={14} status="Baseline Stable" />
+      <SidebarCard accent="indigo">
+        Automated containment eliminates the need for manual @container definitions in the root component.
+      </SidebarCard>
+    </SidebarPanel>
+  );
 
-       <div className="p-[4cqw] border border-indigo-100 bg-indigo-50/30 rounded-[2px]">
-          <p className="m-0 text-[11px] font-medium text-slate-500 leading-relaxed italic">
-            Automated containment eliminates the need for manual @container definitions in the root component.
-          </p>
-       </div>
-    </div>
+  // footer (ReactNode) — version badge, section label, or any inline element.
+  // Sits on the left when disclaimer is also present; centered when used alone.
+  const footer = (
+    <span style={{ fontSize: 'min(7px,1.4cqh)', fontWeight: 900, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.2em', lineHeight: 1 }}>
+      REV 1.0 · MARKET ANALYSIS
+    </span>
   );
 
   return (
@@ -132,8 +128,10 @@ export default function AuditModule() {
       title="Strategy Benchmark"
       subtitle="Comparative audit of workflow efficiency and system stability"
       sidebar={sidebar}
+      footer={footer}
+      disclaimer="CONFIDENTIAL · FOR INTERNAL USE ONLY"
     >
-      <ComparisonMatrix data={scores} />
+      <ScoreChart data={scores} />
     </DataModule>
   );
 }
@@ -147,14 +145,38 @@ A side-by-side audit of core infrastructure capabilities required for profession
 import { DataModule, FeatureMatrix } from './proto-kit.jsx';
 
 export default function Audit() {
-  const capabilities = [
-    { name: 'Logical Truth Emulation', delta: '0.992', ours: true, compA: false, compB: false },
-    { name: 'Sidecar Code Extraction', delta: '4.2x', ours: true, compA: false, compB: false },
-    { name: 'Contextual Scaling (CQ)', delta: 'ADAPTIVE', ours: true, compA: false, compB: true },
-    { name: 'Zero-JS SSR Hydration', delta: 'STATIC', ours: true, compA: true, compB: false },
-    { name: 'VMS Dirty Buffer Support', delta: 'SYNC', ours: true, compA: false, compB: false },
-    { name: 'Live Viewport Emulation', delta: '1:1_SCALE', ours: true, compA: false, compB: false },
-    { name: 'Stable ID State Anchoring', delta: 'PERSISTENT', ours: true, compA: false, compB: false }
+  // Column order defines value order in every feature row
+  const columns = [
+    { label: 'REACTIVE_MD',  highlight: true },
+    { label: 'FIGMA_SPECS'               },
+    { label: 'LIVING_STYLE'              },
+  ];
+
+  // values: SupportLevel[] — positional, matches column order above
+  // SupportLevel: 'full' | 'partial' | 'none' | 'na'
+  const categories = [
+    {
+      label: 'Authoring',
+      features: [
+        { name: 'Logical Truth Emulation',  values: ['full', 'none',    'none'   ], note: '0.992 fidelity' },
+        { name: 'Sidecar Code Extraction',  values: ['full', 'none',    'none'   ], note: '4.2× faster'    },
+        { name: 'Stable ID State Anchoring', values: ['full', 'none',   'none'   ]                         },
+      ],
+    },
+    {
+      label: 'Rendering',
+      features: [
+        { name: 'Contextual Scaling (CQ)',  values: ['full', 'none',    'partial'], note: 'Adaptive'        },
+        { name: 'Zero-JS SSR Hydration',    values: ['full', 'full',    'none'   ], note: 'Static'          },
+        { name: 'Live Viewport Emulation',  values: ['full', 'none',    'none'   ], note: '1:1 scale'       },
+      ],
+    },
+    {
+      label: 'Platform',
+      features: [
+        { name: 'VMS Dirty Buffer Support', values: ['full', 'none',    'none'   ]                         },
+      ],
+    },
   ];
 
   return (
@@ -162,10 +184,7 @@ export default function Audit() {
       title="Capability Audit"
       subtitle="Structural requirements for eliminating design-to-implementation entropy"
     >
-      <FeatureMatrix
-        features={capabilities}
-        columns={["REACTIVE_MD", "FIGMA_SPECS", "LIVING_STYLE"]}
-      />
+      <FeatureMatrix columns={columns} categories={categories} />
     </DataModule>
   );
 }
@@ -178,7 +197,7 @@ Most design teams treat Storybook as a graveyard: it is where components go to d
 **Literate Infrastructure** collapses these dimensions. The narrative **is** the implementation.
 
 ```jsx live id="final-projection" orientation=landscape
-import { DataModule } from './proto-kit.jsx';
+import { DataModule, StatementPanel } from './proto-kit.jsx';
 
 export default function Outlook() {
   return (
@@ -186,13 +205,13 @@ export default function Outlook() {
       title="Strategic Outlook"
       subtitle="Final directives for transition to Literate Systems"
       status="LOCKED"
+      disclaimer="CONFIDENTIAL · PREPARED FOR REACTIVE MD · MILLION VIEWS, LLC"
     >
-      <div className="h-full flex flex-col items-center justify-center p-[8cqw] bg-slate-50/50">
-        <p className="text-sm @md:text-lg font-black text-slate-950 uppercase tracking-[0.4em] text-center leading-relaxed mb-4">
-          Stop drawing software.<br/>Start writing it.
-        </p>
-        <div className="w-12 h-px bg-slate-900/10" />
-      </div>
+      <StatementPanel
+        statement={"Stop drawing software.\nStart writing it."}
+        align="center"
+        bg="slate"
+      />
     </DataModule>
   );
 }
@@ -201,3 +220,6 @@ export default function Outlook() {
 ## Strategic Outlook
 
 Reactive MD represents the only path forward for teams that value technical truth. Static mockups are the paper maps of the digital age—aesthetically pleasing, but ultimately useless for navigation in a live environment. It is time to stop drawing pictures of software and start writing it into existence.
+
+---
+*Created with [Reactive MD](https://marketplace.visualstudio.com/items?itemName=million-views.reactive-md)*
