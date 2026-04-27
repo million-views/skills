@@ -145,3 +145,26 @@ emulation", "Reference for fence modifiers"
 zoom modes, stable id anchors, lock-view, and no-placeholder. Each modifier gets its own fence
 with prose explaining what it controls and when to use it. This is a reference, not a template
 for product specs.
+
+---
+
+## 10. Brownfield UX Redesign
+
+**Triggers**: "Redesign this screen", "Audit existing UX", "Map UX debt", "Before/after
+comparison", "Fix the current UX", "Improve this flow", "What's broken in...", "Refine
+existing interface"
+
+**Recipe**: `recipes/brownfield-redesign/`  
+**Sidecar**: `compare-view.jsx` — renders a screenshot on the left and the proposed React
+component on the right. Copy into the document folder alongside `spec.md`. Do not recreate
+inline.
+
+**Directive**: The AS-IS view is always a plain Markdown image — never a React fence.
+Before writing anything, confirm screenshots exist in `screenshots/current/`. If they don't,
+ask the product owner to provide them; do not attempt to infer the current UX from code.
+Structure: context zone (WHO, THE PROBLEM, THE COST) → per-screen audit (Markdown image +
+friction callouts) → per-screen redesign (`jsx live` fence + design decisions block noting
+what changed, what was preserved, and what was rejected) → optional `CompareView` side-by-side
+→ Migration Notes (mandatory: behavioral deltas, rollout strategy, compatibility constraints)
+→ Decision. The migration zone is not optional — stakeholders must know what changes for
+existing users.

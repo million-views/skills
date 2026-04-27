@@ -2,6 +2,7 @@
 name: reactive-md
 description: Literate UI/UX for product teams — write product specs, PRDs, and interactive prototypes as a single Markdown document with embedded live React components. Use when a user needs to create a product spec with working demos, prototype a user flow, audit responsive behavior, or produce any document where the artifact should serve as the prototype. Designed for async collaboration — the document replaces the meeting.
 license: MIT
+compatibility: Requires VS Code with the Reactive MD extension (million-views.reactive-md) installed.
 metadata:
   version: "1.2.1"
   author: million-views (https://m5nv.com)
@@ -34,6 +35,7 @@ A reactive-md document reaches the quality bar when it passes all three lenses s
 | "Audit the mobile UI", "Check responsive behavior" | Fidelity audit with device matrix |
 | "Document this design system", "Component gallery" | Living docs with live examples |
 | "Analyze the market", "Where do we stand vs. competitors" | Competitive analysis with score matrix, feature comparison, and positioning recommendation |
+| "Redesign this screen", "Audit existing UX", "Map UX debt", "Before/after comparison" | Brownfield UX refinement — AS-IS audit, friction mapping, TO-BE proposal with migration notes |
 
 ---
 
@@ -77,7 +79,7 @@ export const FTUE_DATA = { user: { birthYear: 1995 }, ratings: {} };
 export const DAILY_USE_DATA = { user: { birthYear: 1990 }, ratings: { /* 2 years */ } };
 ```
 
-Use `React.useMemo(() => new Date(), [])` for any date fixture — prevents animation resets on prose edits.
+Use `useMemo(() => new Date(), [])` (imported from `'react'`) for any date fixture — prevents animation resets on prose edits.
 
 ### End-to-End Integration
 
@@ -87,6 +89,109 @@ Product specs must close with a section that wires everything together:
 - What persists, and how it survives a reload
 
 Individual fences are proofs. The integration section is the argument.
+
+---
+
+## Brownfield UX Refinement
+
+When the codebase already exists and the goal is to improve it — not build from scratch — the document structure shifts from *invention* to *diagnosis and prescription*. The document argues that the current UX fails, shows the evidence, then proposes the fix.
+
+### Input Model: Screenshots First
+
+**Do not read the codebase to recreate current screens.** The screenshot is the ground truth of what users experience — capturing rendered state, browser defaults, production data shapes, and theme inheritance that source code alone cannot convey.
+
+The preferred input model:
+
+1. **Product owner provides screenshots** of every meaningful screen state (default, loading, empty, error, success) from the running application.
+2. Screenshots are placed in `screenshots/current/` within the document folder, named descriptively.
+3. The spec embeds them as **plain Markdown images**. The screenshot *is* the AS-IS view. No React fence is needed for the current state.
+
+**When screenshots are not available**: ask the PO explicitly before proceeding. Do not infer the current UX from code.
+
+### Document Zones
+
+1. **Context zone** — WHO currently uses this, THE PROBLEM with the current UX, THE COST of not fixing it. No demos yet.
+2. **Audit zone** — One section per screen: embed the screenshot as a plain Markdown image, then annotate friction points as prose callouts below it. No fence.
+3. **Redesign zone** — Per screen: the proposed redesign as a `jsx live` fence → design decisions block (what changed, what was preserved, what was rejected).
+4. **Migration zone** — Behavioral deltas, rollout strategy, compatibility constraints. Mandatory.
+
+### AS-IS: Plain Markdown Image
+
+```markdown
+## Audit: Cart Summary
+
+![Cart Summary — current state](./screenshots/current/01-cart-summary.png)
+
+**Friction points:**
+- **No item count in header**: Users scroll back to verify cart contents before paying.
+- **"Proceed" CTA is below the fold on mobile**: 60% of users never see it without scrolling.
+- **No price breakdown**: Tax and shipping appear only at payment — surprise costs drive abandonment.
+```
+
+No fence. No React. The screenshot speaks for itself; the prose names what is wrong.
+
+### TO-BE: React Fence
+
+````markdown
+## Redesign: Cart Summary
+
+```jsx live id="proposed-cart" device=mobile zoom=fill
+import { ProposedCart } from './proposed-cart.jsx';
+export function Demo() { return <ProposedCart />; }
+```
+
+**Design decisions:**
+- **Sticky CTA**: Always visible — no scrolling required to proceed.
+- **Inline price breakdown**: Tax and shipping shown as line items. Eliminates the abandonment spike at payment.
+- **Cart count in header badge**: Persistent context without requiring scroll-back.
+````
+
+### Optional: Side-by-Side with CompareView
+
+For a direct before/after in the same view, use the `CompareView` widget. It renders the screenshot on the left and the proposed component on the right:
+
+````markdown
+```jsx live id="compare-cart" device=none
+import { CompareView } from './compare-view.jsx';
+import { ProposedCart } from './proposed-cart.jsx';
+
+export function Compare() {
+  return (
+    <CompareView screenshotSrc="./screenshots/current/01-cart-summary.png">
+      <ProposedCart />
+    </CompareView>
+  );
+}
+```
+````
+
+`CompareView` degrades gracefully: if the image path is missing or fails to load, it shows a placeholder. Copy `compare-view.jsx` from `references/recipes/brownfield-redesign/` into your document folder.
+
+> **Image resolution**: In Markdown Preview, local images always resolve. In Interactive Preview, relative paths (e.g., `./screenshots/current/foo.png`) resolve when `spec.md` and `screenshots/` share the same parent folder.
+
+### Folder Layout
+
+```
+product/checkout/ux-redesign/
+  spec.md                         <- audit → redesign → migration
+  compare-view.jsx                <- CompareView widget (copied from recipe)
+  proposed-cart.jsx               <- extracted proposed component (>30 lines)
+  screenshots/
+    current/                      <- PO-provided screenshots
+      01-cart-summary.png
+      02-payment-error.png
+  data/
+    demo-state.js
+  styles.css
+```
+
+### Key Distinctions from Greenfield
+
+- **AS-IS is a Markdown image, not React.** Never write JSX to approximate the current screen. The screenshot is the spec input — cheaper, faster, and more accurate.
+- The **context zone** argues *why the current experience fails*, not why the feature matters.
+- Friction points are prose annotations below a screenshot — not live demos.
+- Design decisions must explicitly answer: "What was preserved from the original, and why?"
+- The **migration zone** is mandatory — stakeholders need to know what changes for existing users.
 
 ---
 
@@ -188,6 +293,7 @@ Two patterns for organizing fences:
 **The Demo Pattern** (preferred for extracted components):
 Wrap imported components in a Demo function that provides data via props. This separates presentation from data, makes the component's API explicit, and lets you swap data sources trivially.
 
+````markdown
 ```jsx live
 import Component from './lib/ui/Component.jsx';
 import data from './data/sample.json';
@@ -201,6 +307,7 @@ export function Demo() {
   );
 }
 ```
+````
 
 **Import patterns**:
 - `import './styles.css'` (Native CSS)
@@ -217,6 +324,7 @@ export function Demo() {
 - **Library Discipline**: Use named exports for utilities; reserve `export default` for the primary "App" component.
 - **Pure Presentation**: Props control all behavior. Components should support flexible prop types (e.g., `period: number | object`) and provide sensible defaults. Never hard-code data inside a reusable component — receive it via props from the Demo fence.
 - **Resilient Defaults**: When a sidecar is opened directly, the extension renders all exports in Gallery Mode with empty props. Always default props that are used as components or iterated over:
+  
   ```jsx
   // Fragile — crashes if Icon is undefined
   export function FeatureIcon({ icon: Icon }) {
@@ -232,6 +340,7 @@ export function Demo() {
 
 Use `css live` fences for document-scoped styles. The system injects `--rmd-bg` and `--rmd-fg` variables that adapt to the active VS Code theme — use them to keep components readable in both light and dark modes.
 
+````markdown
 ```css live
 :root {
   --accent: var(--rmd-fg);
@@ -241,68 +350,30 @@ Use `css live` fences for document-scoped styles. The system injects `--rmd-bg` 
   background: var(--rmd-bg);
 }
 ```
+````
 
 ### 7. Common Pitfalls
-- **React hooks must be imported explicitly**: `import { useState, useEffect } from 'react'`. The JSX transform is automatic, but hooks are not globals.
-- **Local file access**: Always use ESM `import` for local files (`import data from './data.json'`). Never use `fetch()` for local files.
-- **External APIs**: Wrap `fetch()` calls in `useEffect` so they don't block the Markdown Preview's static render.
+
+Full list with code examples → **[references/pitfalls.md](references/pitfalls.md)**
+
+The most critical failures to avoid:
+- **Import all hooks explicitly** — `useState`, `useMemo`, etc. are not globals; `React.useMemo(...)` throws.
+- **Guard browser globals in `useEffect`** — `window`/`document`/`localStorage` crash Markdown Preview (SSR).
+- **No top-level `await`** — syntax error; all async work goes inside `useEffect`.
+- **Local files via `import`, never `fetch()`** — local paths are not HTTP-accessible.
+- **One export per fence** — multiple named exports create entry-point ambiguity; extras become non-exported helpers.
+- **No `forwardRef`** — React 19 removed it; `ref` is a plain prop.
 
 ---
 
-## Spec Template
+## Spec Templates
 
-Two flavors. Match to the use case.
+Starter skeletons for Product Spec, Quick Prototype, and Brownfield UX Redesign:
+→ **[references/templates.md](references/templates.md)**
 
-### Product Spec (async team review)
-
-```markdown
-# Feature Name
-
-## Who This Is For
-One paragraph. Specific person, specific frustration.
-
-## The Problem
-What they're missing and why it matters. No solutions yet.
-
-## Why Now
-Market timing or opportunity. Why not six months ago?
-
-## The Solution: [Framing]
-One sentence. Then the first demo.
-
-```jsx live id="key-screen" device=mobile zoom=fill
-import { KeyScreen } from './lib/ui/KeyScreen.jsx';
-import { DEMO_DATA } from './data/demo-data.js';
-export function Demo() { return <KeyScreen {...DEMO_DATA} />; }
-` `` `
-
-**Design decisions:**
-- **[Choice]**: [Why this, not the alternative]
-- **[Edge case]**: [How handled and why]
-
-## [Next Screen]
-...
-
-## End to End
-Navigation state table. FTUE scenario. Daily-use scenario.
-
-## Decision
-Concrete recommendation. Next step.
-```
-
-### Quick Prototype (solo iteration)
-
-```markdown
-# Feature Name
-
-## The Idea
-```jsx live id="main" device=mobile zoom=fill
-...
-` `` `
-
-## Edge Cases
-Loading, empty, error states.
-```
+Load this file when the user asks you to generate a document. Match the skeleton to the
+use case, then fill in the placeholders. For Brownfield: confirm screenshots exist in
+`screenshots/current/` before writing — the AS-IS view is a Markdown image, not a React fence.
 
 ---
 
@@ -312,8 +383,9 @@ When the request is ambiguous, ask:
 - **Type**: Product spec for async review, or quick prototype for solo iteration?
 - **Audience**: Solo exploration, or team review that needs to reach a decision?
 - **Depth**: Sketch (one screen), feature (2–5 screens), or full product (end-to-end)?
+- **Greenfield or brownfield?** If brownfield: *"Please provide screenshots of the current screens in `screenshots/current/`. I'll embed them as Markdown images, annotate the friction, then write the proposed redesign as live React fences — no codebase access needed."*
 
-A product spec for team review needs the full literate structure with context zone, design decisions, and end-to-end integration. A quick prototype does not.
+A product spec for team review needs the full literate structure with context zone, design decisions, and end-to-end integration. A quick prototype does not. A brownfield redesign needs screenshots before any fences are written.
 
 ---
 
@@ -364,3 +436,4 @@ Refer to these recipes for pattern matching:
 - **[Data Loading Patterns](references/recipes/data-loading/spec.md)**: JSON import vs. `fetch()` — when to use each, side by side.
 - **[DSL Showcase](references/recipes/dsl-showcase/spec.md)**: Every fence modifier demonstrated — device emulation, orientation, zoom, lock-view.
 - **[Competitive Analysis](references/recipes/competitive-analysis/spec.md)**: Conclusion-first structure — executive summary → score matrix → feature comparison → strategic insights → recommendation. The document makes a call, not just shows data.
+- **[Brownfield UX Refinement](references/recipes/brownfield-redesign/spec.md)**: Screenshot-as-AS-IS → friction callouts → React fence for the redesign → optional `CompareView` side-by-side → migration notes. Copy `compare-view.jsx` from this recipe into your document folder.
