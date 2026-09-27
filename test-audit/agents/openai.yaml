@@ -1,0 +1,4 @@
+interface:
+  display_name: "Test Audit"
+  short_description: "Audit tests at their owner boundaries"
+  default_prompt: "Use $test-audit to review the tests for this change and identify the smallest high-confidence test improvement."

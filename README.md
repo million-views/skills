@@ -35,6 +35,16 @@ Patch releases only.
 
 [Read skill documentation →](./takeover-from-claude/SKILL.md)
 
+### [test-audit](./test-audit/)
+
+**Category**: Developer Tools
+**Version**: 1.0.0
+
+Design, review, and prune tests at their strongest owner boundaries while
+removing low-value coverage and test-only production seams.
+
+[Read skill documentation →](./test-audit/SKILL.md)
+
 ## License
 
 MIT License. See [LICENSE](./LICENSE) for details.

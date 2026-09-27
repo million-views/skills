@@ -69,6 +69,24 @@
       "agents": [
         "./takeover-from-claude/SKILL.md"
       ]
+    },
+    {
+      "name": "test-audit",
+      "source": "./test-audit",
+      "description": "Invoke whenever writing, changing, reviewing, or sweeping tests in this project. Provides an authoring gate that every new or changed test must pass, plus an audit workflow for finding and removing low-value, implementation-coupled, or duplicative tests and the test-only production seams they keep alive.",
+      "version": "1.0.0",
+      "category": "developer-tools",
+      "keywords": [
+        "testing",
+        "test-audit",
+        "test-maintenance",
+        "regression-tests",
+        "test-architecture"
+      ],
+      "strict": false,
+      "agents": [
+        "./test-audit/SKILL.md"
+      ]
     }
   ]
 }
