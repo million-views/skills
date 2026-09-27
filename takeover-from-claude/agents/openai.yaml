@@ -1,0 +1,4 @@
+interface:
+  display_name: "Take Over from Claude"
+  short_description: "Recover Claude project context and continue work safely"
+  default_prompt: "Take over this project from Claude: collect the project memory and recent session context, reconcile it with the current repository, and prepare a concise continuation plan."

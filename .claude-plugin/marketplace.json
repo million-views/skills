@@ -51,6 +51,24 @@
       "agents": [
         "./elementary/SKILL.md"
       ]
+    },
+    {
+      "name": "takeover-from-claude",
+      "source": "./takeover-from-claude",
+      "description": "Recover Claude Code project memory and recent session context, reconcile it with the current repository, and prepare a safe continuation plan when taking over work from Claude.",
+      "version": "1.0.1",
+      "category": "developer-tools",
+      "keywords": [
+        "claude",
+        "handoff",
+        "takeover",
+        "project-context",
+        "session-memory"
+      ],
+      "strict": false,
+      "agents": [
+        "./takeover-from-claude/SKILL.md"
+      ]
     }
   ]
 }

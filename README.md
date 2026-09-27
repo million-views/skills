@@ -22,6 +22,19 @@ Token-based design system with standardized CSS custom property names, multiple 
 
 [Read skill documentation →](./elementary/SKILL.md)
 
+### [takeover-from-claude](./takeover-from-claude/)
+
+**Category**: Developer Tools
+**Version**: 1.0.1
+
+Recover Claude Code project memory and recent session context, reconcile it with
+the current repository, and prepare a safe continuation plan when taking over
+work from Claude.
+
+Patch releases only.
+
+[Read skill documentation →](./takeover-from-claude/SKILL.md)
+
 ## License
 
 MIT License. See [LICENSE](./LICENSE) for details.
