@@ -3,7 +3,7 @@ name: takeover-from-claude
 description: Recover Claude Code project memory and recent session context, reconcile it with the current repository, and prepare a safe continuation plan when taking over work from Claude.
 license: MIT
 metadata:
-  version: "1.0.1"
+  version: "1.0.2"
   author: million-views (https://m5nv.com)
 ---
 
@@ -11,7 +11,8 @@ metadata:
 
 Use this skill when a human asks Codex to continue work in a project previously handled by Claude Code.
 
-Maintainers: keep this skill on patch-only versioning after `1.0.0`.
+Maintainers: keep this skill on patch-only versioning; do not change its major
+or minor version without explicit direction.
 
 ## Collect the handoff
 

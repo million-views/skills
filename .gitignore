@@ -27,6 +27,7 @@ coverage/
 dist/
 build/
 *.zip
+*.skill
 .publish
 # Temporary files
 tmp/

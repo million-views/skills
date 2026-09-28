@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# Million Views skills launcher
+set -euo pipefail
+
+skills_root="${MILLION_VIEWS_SKILLS_HOME:-${HOME}/.million-views/skills}"
+script_path="${skills_root}/skills.mjs"
+
+if [[ ! -f "$script_path" ]]; then
+  printf 'Million Views skills are not installed at %s\n' "$skills_root" >&2
+  printf 'Run the bootstrap command from the repository README.\n' >&2
+  exit 1
+fi
+
+exec node "$script_path" "$@"

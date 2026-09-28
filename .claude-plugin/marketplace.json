@@ -7,7 +7,7 @@
   },
   "metadata": {
     "description": "Claude Agent Skills for Million Views products and tools",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "pluginRoot": "."
   },
   "plugins": [
@@ -15,7 +15,7 @@
       "name": "reactive-md",
       "source": "./reactive-md",
       "description": "Literate UI/UX for product teams - accelerate from idea to working prototype in minutes using markdown with embedded interactive React components. Use for fast iteration and async collaboration on product specs, wireframes, user flows, feature demos, and design documentation. Replaces Figma/Storybook with executable specs in version control.",
-      "version": "1.1.0",
+      "version": "1.2.2",
       "category": "productivity",
       "keywords": [
         "reactive-md",
@@ -35,7 +35,7 @@
       "name": "elementary",
       "source": "./elementary",
       "description": "Token-based design system with standardized CSS custom property names, multiple theme implementations (polished with light/dark mode, sketch), and optional component patterns. Use for themeable interfaces, design system compliance, or switching between visual fidelity levels without code changes.",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "category": "design-systems",
       "keywords": [
         "elementary",
@@ -56,7 +56,7 @@
       "name": "takeover-from-claude",
       "source": "./takeover-from-claude",
       "description": "Recover Claude Code project memory and recent session context, reconcile it with the current repository, and prepare a safe continuation plan when taking over work from Claude.",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "category": "developer-tools",
       "keywords": [
         "claude",
@@ -74,7 +74,7 @@
       "name": "test-audit",
       "source": "./test-audit",
       "description": "Invoke whenever writing, changing, reviewing, or sweeping tests in this project. Provides an authoring gate that every new or changed test must pass, plus an audit workflow for finding and removing low-value, implementation-coupled, or duplicative tests and the test-only production seams they keep alive.",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "category": "developer-tools",
       "keywords": [
         "testing",

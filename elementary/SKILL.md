@@ -1,11 +1,10 @@
 ---
 name: elementary
-description: Token-based design system with standardized CSS custom property names, multiple theme implementations (polished with light/dark mode, sketch), and optional component patterns. Use for themeable interfaces, design system compliance, or switching between visual fidelity levels without code changes.
+description: Token-based design system with standardized CSS custom property names, multiple theme implementations (polished with light/dark mode, sketch), and optional component patterns. Use with reactive-md and React frameworks such as Next.js, Remix, or Vite for themeable interfaces, design system compliance, or switching between visual fidelity levels without code changes.
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   author: million-views (https://m5nv.com)
-compatibility: Designed for reactive-md skill and React frameworks (Next.js, Remix, Vite)
 ---
 
 # Elementary Design System

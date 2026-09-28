@@ -3,7 +3,7 @@ name: test-audit
 description: Invoke whenever writing, changing, reviewing, or sweeping tests in this project. Provides an authoring gate that every new or changed test must pass, plus an audit workflow for finding and removing low-value, implementation-coupled, or duplicative tests and the test-only production seams they keep alive. Use it even when the user just says "add a test", "fix this flaky test", "clean up the test suite", "review these tests", or "reduce test bloat".
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: Claude global skill
 ---
 

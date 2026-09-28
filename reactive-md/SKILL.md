@@ -1,10 +1,9 @@
 ---
 name: reactive-md
-description: Literate UI/UX for product teams — write product specs, PRDs, and interactive prototypes as a single Markdown document with embedded live React components. Use when a user needs to create a product spec with working demos, prototype a user flow, audit responsive behavior, or produce any document where the artifact should serve as the prototype. Designed for async collaboration — the document replaces the meeting.
+description: Literate UI/UX for product teams — write product specs, PRDs, and interactive prototypes as a single Markdown document with embedded live React components. Use in VS Code with the Reactive MD extension when a user needs to create a product spec with working demos, prototype a user flow, audit responsive behavior, or produce any document where the artifact should serve as the prototype. Designed for async collaboration — the document replaces the meeting.
 license: MIT
-compatibility: Requires VS Code with the Reactive MD extension (million-views.reactive-md) installed.
 metadata:
-  version: "1.2.1"
+  version: "1.2.2"
   author: million-views (https://m5nv.com)
 ---
 
