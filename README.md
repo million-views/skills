@@ -77,6 +77,7 @@ Every command has focused help in either form:
 ```bash
 skills help install
 skills export --help
+skills --version
 ```
 
 The default local install creates direct symlinks to this checkout. Pull updates

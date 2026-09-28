@@ -18,6 +18,7 @@ import { spawnSync } from "node:child_process";
 const scriptPath = fileURLToPath(import.meta.url);
 const repoRoot = path.dirname(scriptPath);
 const catalogPath = path.join(repoRoot, ".claude-plugin", "marketplace.json");
+const CLI_VERSION = "1.0.0";
 const cveApi = "https://services.nvd.nist.gov/rest/json/cves/2.0";
 const kevFeed = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json";
 
@@ -59,6 +60,8 @@ function fail(message) {
 function usage() {
   console.log(`Usage:
   node skills.mjs list
+  node skills.mjs version
+  node skills.mjs --version
   node skills.mjs check [skill ...]
   node skills.mjs audit <skill> [--from <github-source>]
   node skills.mjs install <skill ...> --global|--project --agent <agent> [options]
@@ -85,6 +88,7 @@ Install options:
 
 Other options:
   --force                         Replace an existing destination / output
+  --version, -v                   Show the repository version
   --help                          Show this help
 
 Remote installs are GitHub-only and require a successful CVE audit by default.
@@ -159,6 +163,12 @@ for one skill or --output-dir for one or more skills.`,
   skills <command> --help
 
 Show general or command-specific help.`,
+  version: `Usage:
+  skills version
+  skills --version
+
+Print the skills CLI version. It is maintained in skills.mjs and is also
+available with -v.`,
 };
 
 function showHelp(command = null) {
@@ -185,6 +195,8 @@ function parseArgs(argv) {
     }
     if (arg === "--help" || arg === "-h") {
       options.help = true;
+    } else if (arg === "--version" || arg === "-v") {
+      options.version = true;
     } else if (arg === "--all") {
       options.all = true;
     } else if (arg === "--global") {
@@ -637,12 +649,22 @@ function exportEntry(entry, options, multiple) {
 async function main() {
   const { command, options } = parseArgs(process.argv.slice(2));
   if (options.noColor) colorEnabled = false;
+  if (options.version && !options.help) {
+    if (command === "version" && options.names.length) fail("version does not accept arguments");
+    console.log(CLI_VERSION);
+    return;
+  }
   if (options.help || command === "help") {
     const helpCommand = command === "help" ? options.names[0] : command;
     if (command === "help" && options.names.length > 1) {
       fail("help accepts at most one command name");
     }
     showHelp(helpCommand);
+    return;
+  }
+  if (command === "version") {
+    if (command === "version" && options.names.length) fail("version does not accept arguments");
+    console.log(CLI_VERSION);
     return;
   }
   if (command === "list") {
