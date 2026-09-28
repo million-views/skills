@@ -66,7 +66,6 @@ function usage() {
   node skills.mjs upgrade [skill ...] [--all]
   node skills.mjs remove <skill ...> --global|--project --agent <agent> [--force]
   node skills.mjs export <skill ...> [--output <file>|--output-dir <dir>] [--force]
-  node skills.mjs package <skill ...> [--output <file>|--output-dir <dir>] [--force]
 
 Source and selection options:
   --from <owner/repo|github-url>  Install or audit a GitHub repository
@@ -91,6 +90,84 @@ Other options:
 Remote installs are GitHub-only and require a successful CVE audit by default.
 The audit is a known-vulnerability check, not a guarantee that a skill is safe.
 `);
+}
+
+const commandHelp = {
+  list: `Usage:
+  skills list
+
+List the skills registered in this checkout's marketplace. Each entry shows its
+name, marketplace version, and description. This is informational; it does not
+install or update anything.`,
+  check: `Usage:
+  skills check [skill ...]
+
+Validate the registered skills against the Agent Skills frontmatter and
+repository layout rules. With no names, check every registered skill.`,
+  audit: `Usage:
+  skills audit <skill ...> [--from <owner/repo|github-url>] [--ref <ref>]
+
+Run the remote-skill CVE and CISA Known Exploited Vulnerabilities audit without
+installing anything. Use --from to audit skills in a GitHub repository.`,
+  install: `Usage:
+  skills install <skill ...> --global|--project --agent <agent> [options]
+  skills install --all --global|--project --agent <agent> [options]
+
+Install selected skills for Claude Code or Codex. Local skills are symlinked by
+default; use --copy for independent copies. GitHub skills are copied because
+their temporary checkout is removed after installation. Remote installs run the
+CVE audit unless --skip-security-audit is explicitly supplied.
+
+Important options:
+  --global|--project       Choose the installation scope.
+  --agent <agent>          Repeat for claude-code and/or codex.
+  --from <source>          Install from a GitHub repository.
+  --skill <name>           Select a skill from a remote marketplace.
+  --all                    Install every skill in the source.
+  --copy                   Copy a local skill instead of linking it.
+  --dry-run                Show planned changes without writing them.`,
+  update: `Usage:
+  skills update <skill ...> --global|--project --agent <agent> [options]
+
+Refresh installed skills from the selected source. Existing installations are
+replaced; missing destinations are created. The existing link-or-copy mode is
+preserved unless --copy is supplied. Other selection and source options match
+install.`,
+  upgrade: `Usage:
+  skills upgrade [skill ...]
+  skills upgrade --all
+
+Fast-forward the managed checkout at ~/.million-views/skills, validate it, and
+show the current marketplace. With skill names or --all, reinstall those skills
+for both Claude Code and Codex. With no selection, only the managed checkout is
+updated. The checkout must be clean and upgrade never rebases local history.`,
+  remove: `Usage:
+  skills remove <skill ...> --global|--project --agent <agent> [--force]
+
+Remove selected installations. The command removes only links created by this
+installer by default. Use --force when intentionally removing a copied or
+otherwise unmanaged destination.`,
+  export: `Usage:
+  skills export <skill ...> [--output <file>|--output-dir <dir>] [--force]
+
+Create a ZIP containing the skill folder at the archive root, suitable for
+uploading to Claude web. The default output is dist/<skill>.zip. Use --output
+for one skill or --output-dir for one or more skills.`,
+  help: `Usage:
+  skills help
+  skills help <command>
+  skills <command> --help
+
+Show general or command-specific help.`,
+};
+
+function showHelp(command = null) {
+  if (!command) {
+    usage();
+    return;
+  }
+  if (!commandHelp[command]) fail(`Unknown command for help: ${command}`);
+  console.log(commandHelp[command]);
 }
 
 function parseArgs(argv) {
@@ -561,7 +638,11 @@ async function main() {
   const { command, options } = parseArgs(process.argv.slice(2));
   if (options.noColor) colorEnabled = false;
   if (options.help || command === "help") {
-    usage();
+    const helpCommand = command === "help" ? options.names[0] : command;
+    if (command === "help" && options.names.length > 1) {
+      fail("help accepts at most one command name");
+    }
+    showHelp(helpCommand);
     return;
   }
   if (command === "list") {
@@ -573,7 +654,7 @@ async function main() {
     for (const entry of entries) print(`OK ${entry.name} (${entry.root})`, "green");
     return;
   }
-  if (command === "export" || command === "package") {
+  if (command === "export") {
     const entries = selectEntries(catalogEntries(), options);
     entries.forEach((entry) => exportEntry(entry, options, entries.length > 1));
     print("Claude web accepts ZIP uploads containing the skill folder at the archive root.", "gray");

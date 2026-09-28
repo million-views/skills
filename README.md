@@ -72,6 +72,13 @@ node skills.mjs check
 node skills.mjs install SKILL_NAME --global --agent claude-code --agent codex
 ```
 
+Every command has focused help in either form:
+
+```bash
+skills help install
+skills export --help
+```
+
 The default local install creates direct symlinks to this checkout. Pull updates
 and run the install command again, or use `update` explicitly. GitHub installs
 are copied because their temporary clone is removed after installation. Use
