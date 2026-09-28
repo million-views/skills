@@ -49,6 +49,7 @@ function printError(message) {
 function printEntry(entry) {
   print(`${entry.name} / ${entry.version}`, "blue");
   print(`  ${entry.description}`);
+  print();
 }
 
 function fail(message) {
