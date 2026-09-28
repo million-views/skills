@@ -46,6 +46,11 @@ function printError(message) {
   console.error(rendered);
 }
 
+function printEntry(entry) {
+  print(`${entry.name} / ${entry.version}`, "blue");
+  print(`  ${entry.description}`);
+}
+
 function fail(message) {
   throw new Error(message);
 }
@@ -282,7 +287,7 @@ function upgradeCheckout(options) {
   run("git", ["pull", "--ff-only"], { cwd: repoRoot });
   const entries = catalogEntries();
   print("Available skills from the marketplace:", "blue");
-  for (const entry of entries) print(`${entry.name}\t${entry.version}\t${entry.description}`);
+  for (const entry of entries) printEntry(entry);
   const hasSelection = options.all || options.names.length || options.skillNames.length;
   if (!hasSelection) {
     print("No skills reinstalled. Pass skill names or --all to refresh global installations.", "gray");
@@ -559,7 +564,7 @@ async function main() {
     return;
   }
   if (command === "list") {
-    for (const entry of catalogEntries()) print(`${entry.name}\t${entry.version}\t${entry.description}`, "blue");
+    for (const entry of catalogEntries()) printEntry(entry);
     return;
   }
   if (command === "check") {
