@@ -59,16 +59,16 @@ function fail(message) {
 
 function usage() {
   console.log(`Usage:
-  node skills.mjs list
-  node skills.mjs version
-  node skills.mjs --version
-  node skills.mjs check [skill ...]
-  node skills.mjs audit <skill> [--from <github-source>]
-  node skills.mjs install <skill ...> --global|--project --agent <agent> [options]
-  node skills.mjs update <skill ...> --global|--project --agent <agent> [options]
-  node skills.mjs upgrade [skill ...] [--all]
-  node skills.mjs remove <skill ...> --global|--project --agent <agent> [--force]
-  node skills.mjs export <skill ...> [--output <file>|--output-dir <dir>] [--force]
+  skills list
+  skills version
+  skills --version
+  skills check [skill ...]
+  skills audit <skill> [--from <github-source>]
+  skills install <skill ...> --global|--project --agent <agent> [options]
+  skills update <skill ...> --global|--project --agent <agent> [options]
+  skills upgrade [skill ...] [--all]
+  skills remove <skill ...> --global|--project --agent <agent> [--force]
+  skills export <skill ...> [--output <file>|--output-dir <dir>] [--force]
 
 Source and selection options:
   --from <owner/repo|github-url>  Install or audit a GitHub repository
@@ -88,7 +88,7 @@ Install options:
 
 Other options:
   --force                         Replace an existing destination / output
-  --version, -v                   Show the repository version
+  --version, -v                   Show the skills CLI version
   --help                          Show this help
 
 Remote installs are GitHub-only and require a successful CVE audit by default.
